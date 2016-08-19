@@ -2,6 +2,8 @@ const electron = require('electron')
 const readGit = require('./src/localGitAccess/localGitREAD');
 const child = require('child_process');
 const {ipcMain} = require('electron');
+const chokidar = require('chokidar');
+const path = require('path');
 
 
 // Module to control application life.
@@ -46,3 +48,11 @@ app.on('activate', function () {
     createWindow()
   }
 })
+
+
+// File watching process for local git changes
+chokidar.watch(path.join(__dirname, './.git/'), {ignoreInitial: true}).on('all', (event, path) => {
+  console.log(event, path);
+  //readGit.getNewCommit();
+  mainWindow.webContents.send('commitMade', 'file Changed');
+});

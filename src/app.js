@@ -9,6 +9,9 @@ import io from 'socket.io-client';
 //let socket = io('http://188e4ab5.ngrok.io');
 const {ipcRenderer} = require('electron')
 
+ipcRenderer.on('commitMade', function(event, arg){
+	console.log('commit made' + arg);
+})
 
 
 
@@ -45,6 +48,7 @@ class App extends Component {
 		// 	console.log(data);
 		// });
 		this.socket.on('test', this.handleData);
+
 
 
 
