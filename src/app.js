@@ -6,6 +6,7 @@ import '../scss/main.scss';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
+const {ipcRenderer} = require('electron');
 
 ipcRenderer.on('commitMade', function(event, arg){
 	console.log('commit made' + arg);
@@ -13,10 +14,6 @@ ipcRenderer.on('commitMade', function(event, arg){
 
 let Visualization = require ('./visualization');
 let Terminal = require ('./terminal');
-
-
-const {ipcRenderer} = require('electron');
-
 
 class App extends Component {
 	constructor(props) {
