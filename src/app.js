@@ -6,11 +6,11 @@ import '../scss/main.scss';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
+const {ipcRenderer} = require('electron');
 
 let Visualization = require ('./visualization');
 let Terminal = require ('./terminal');
 
-const {ipcRenderer} = require('electron');
 
 
 class App extends Component {
