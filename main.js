@@ -53,6 +53,7 @@ app.on('activate', function () {
 // File watching process for local git changes
 chokidar.watch(path.join(__dirname, './.git/'), {ignoreInitial: true}).on('all', (event, path) => {
   console.log(event, path);
-  //readGit.getNewCommit();
-  mainWindow.webContents.send('commitMade', 'file Changed');
+  console.log(readGit.getNewCommit);
+  mainWindow.webContents.send('commitMade', readGit.getNewCommit);
+  //function broadcastLastCommit()
 });
