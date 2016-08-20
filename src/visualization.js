@@ -19,13 +19,23 @@ const Visualization = React.createClass({
 		else commits = null;
 
 		return (
-			<div className="panel panel-default commits-container">
-				<div className="panel-heading">
-					<h5 className="panel-title">Commit Visualization</h5>
-				</div>
-				<div className="panel-body">
-					<ul> { commits } </ul>
-				</div>
+			<div className="commits-container">
+
+					<div className="flexbox-parent">
+					  <div className="flexbox-item-grow">
+							<div className="flexbox-item-grow">
+
+					       <div className="panel panel-default">
+						       <div className="panel-heading">
+							       <h5 className="panel-title">Commit Visualization</h5>
+						       </div>
+						       <div className="panel-body">
+							       <ul> { commits } </ul>
+						       </div>
+					       </div>
+					    </div>
+					  </div>
+					</div>
 			</div>
 		)
 	}

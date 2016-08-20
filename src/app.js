@@ -36,15 +36,13 @@ class App extends Component {
 	}
 
 	componentWillMount() {
-
     this.socket = io('http://localhost:3000');
-
 		ajax.get('https://api.github.com/repos/team-navigitor/naviGITor/commits')
 			.end((error, response) => {
 				if (!error && response) {
 					let apiData = response.body.map(function(item){
 						return { name: item.commit.author.name, date: item.commit.author.date, message: item.commit.message }
-					});
+					}).reverse();
 					this.setState({ message: apiData });
 					console.log(apiData);
 				} else {
@@ -67,9 +65,9 @@ class App extends Component {
 
 	render() {
     return (
-			<div className="containing-div-all">
+			<div className="container_wholePage">
 				<h1>naviGITor</h1>
-      		<div className="containing-div">
+      		<div className="container_visualizationAndTerminal">
 						<Visualization message={ this.state.message } />
 						<Term />
       		</div>

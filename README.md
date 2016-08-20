@@ -51,11 +51,7 @@ Express/Socket.io components will be in the __server__ folder from the root dire
 Build sources with webpack
 ```
 npm run build
+npm run package
 ```
 
-Make sure to edit the root 'main.js' file to point loadURL to the root 'index.html'. The root 'index.html' file will point to the 'build' folder with the bundled js file. Those files will need to be shipped out.
-
-
-## Important
-
-Need electron-packager to deploy properly. Refer to 'build' script : https://github.com/sindresorhus/electron-boilerplate/blob/master/boilerplate/package.json
+__Make sure to edit the root 'index.js' file to point loadURL to the root 'index.html'. The root 'index.html' file will point to the 'build' folder with the bundled js file. Those files will need to be shipped out.__
