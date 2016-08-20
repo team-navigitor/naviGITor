@@ -62,7 +62,8 @@ app.on('activate', function () {
 chokidar.watch(path.join(__dirname, './.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
   console.log('EVENT: ' + event + ' on path: ' + path);
   simpleGit.log(function(err, log) {
-    mainWindow.webContents.send('commitMade', log.latest);
+    //mainWindow.webContents.send('commitMade', log.latest);
+    console.log(log.latest);
    });
 });
 
@@ -70,8 +71,11 @@ chokidar.watch(path.join(__dirname, './.git/logs/HEAD'), {ignoreInitial: true}).
 chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
   console.log('EVENT: ' + event + ' on path: ' + path);
   simpleGit.status(function(err, status) {
-    console.log('User has changed brances to: ' + status.current);
+    if(err){console.log('error on branch event: ' + err)}
+    else {
+    console.log('User has changed branches to: ' + status);
     //mainWindow.webContents.send('commitMade', status.current);
+    }
    });
 });
 
