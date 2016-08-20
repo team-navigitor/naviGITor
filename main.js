@@ -50,18 +50,35 @@ app.on('activate', function () {
   }
 })
 
-// File watching process for local git changes
-// when triggered, calls simpleGit to parse most recent log event
+
+
+/******************************************************************************
+        *** File Watching and Emitting Events to Rendering Process ***
+*******************************************************************************/
+// Following methods, when triggered, calls simpleGit to parse log event
 // then sends that event and data to the render process (app.js)
-chokidar.watch(path.join(__dirname, './.git/'), {ignoreInitial: true}).on('all', (event, path) => {
-  console.log(event, path);
+
+// File watching process for local git COMMITS
+chokidar.watch(path.join(__dirname, './.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
+  console.log('EVENT: ' + event + ' on path: ' + path);
   simpleGit.log(function(err, log) {
-    console.log(log.latest);
     mainWindow.webContents.send('commitMade', log.latest);
    });
-  //mainWindow.webContents.send('commitMade', readGit.getLatestLogMessage());
-  //function broadcastLastCommit()
 });
+
+// File watching process for local git BRANCH CHECKOUTS
+chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
+  console.log('EVENT: ' + event + ' on path: ' + path);
+  simpleGit.status(function(err, status) {
+    console.log('User has changed brances to: ' + status.current);
+    mainWindow.webContents.send('commitMade', status.current);
+   });
+});
+
+
+/******************************************************************************
+        *** Terminal Emulation ***
+*******************************************************************************/
 
 // receive input from terminal
 ipcMain.on('term-input', function(event, input) {
