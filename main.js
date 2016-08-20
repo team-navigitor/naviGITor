@@ -4,7 +4,7 @@ const child = require('child_process');
 const {ipcMain} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-const simpleGit = require('simple-git')('./');
+const simpleGit = require('simple-git')('../testing');
 const exec = child.exec;
 
 // Module to control application life.
@@ -59,7 +59,7 @@ app.on('activate', function () {
 *******************************************************************************/
 
 // File watching process for local git COMMITS
-chokidar.watch(path.join(__dirname, './.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
+chokidar.watch(path.join(__dirname, '../testing/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
   simpleGit.log(function(err, log) {
     if(err){
       console.log('error on commit event: ' + err);
@@ -70,7 +70,7 @@ chokidar.watch(path.join(__dirname, './.git/logs/HEAD'), {ignoreInitial: true}).
 });
 
 // File watching process for local git BRANCH CHECKOUTS
-chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
+chokidar.watch(path.join(__dirname, '../testing/.git/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
   simpleGit.status(function(err, status) {
     if(err){console.log('error on branch event: ' + err)
     } else {

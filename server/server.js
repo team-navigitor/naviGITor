@@ -50,9 +50,15 @@ io.sockets.on('connection', function (socket) {
     socket.emit("echo", msg);
   });
 
-//listening for commit from local client, then transmits to all connected clients
+//listening for commit from local client, then broadcasts to all connected clients
 	socket.on('broadcastCommit', function(arg){
-		console.log(arg);
+		console.log('broadcastCommit: ' + arg);
+		io.emit('incomingCommit', arg)
+	});
+
+// listening for branch change from local client, then broadcasts to all connected clients
+	socket.on('broadcastBranch', function(arg){
+		console.log('Branch server event: ' + arg);
 		io.emit('incomingCommit', arg)
 	});
 });

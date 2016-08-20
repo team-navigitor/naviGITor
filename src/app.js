@@ -11,15 +11,17 @@ import Term from './terminal/terminal.js'
 import Visualization from './visualization';
 const {ipcRenderer} = require('electron');
 
-// listens for an git change event from main.js webContent.send
-// then sends commit string to the server via socket
+/* listens for an git commit event from main.js webContent.send
+ then sends commit string to the server via socket */
 ipcRenderer.on('commitMade', function(event, arg){
 	let socket = io('http://localhost:3000');
 	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
 })
+/* listens for an git branch checkout event from main.js webContent.send
+ then sends commit string to the server via socket */
 ipcRenderer.on('changedBranches', function(event, arg){
 	let socket = io('http://localhost:3000');
-	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
+	socket.emit('broadcastBranch', JSON.stringify(arg, null, 4))
 })
 
 
