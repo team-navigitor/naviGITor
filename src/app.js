@@ -25,15 +25,11 @@ class App extends Component {
 		this.state = {
 			message: []
 		}
-
-		// this.connect = this.connect.bind(this);
 		this.handleData = this.handleData.bind(this);
 	}
 
 	componentWillMount() {
     this.socket = io('https://fa663fef.ngrok.io');
-
-		console.log("component will mount fired")
 		ajax.get('https://api.github.com/repos/team-navigitor/naviGITor/commits')
 			.end((error, response) => {
 				if (!error && response) {
@@ -53,7 +49,7 @@ class App extends Component {
 		this.socket.on('test', this.handleData);
 		this.socket.on('incomingCommit', this.handleData);
   }
-  
+
 	handleData(dataObj) {
 		let data = JSON.parse(dataObj);
 		console.log("handledata", data);
