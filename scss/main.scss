@@ -10,10 +10,36 @@ body {
 	text-align: center;
 }
 
+#login-org,
+#login-repo {
+	color: #000;
+	display: block;
+  margin: 0 auto;
+  width: 200px;
+}
+
+.login-submit {
+  background: #fff;
+  border: 1px solid #fff;
+  color: #000;
+  border-radius: 4px;
+  transition: 0.3s all ease-in-out;
+
+  &:hover {
+  	border: 1px solid #ccc;
+  	background: #ccc;
+  }
+
+  &:active {
+  	outline: none;
+  }
+}
+
 .container_wholePage {
 	h1 {
 		letter-spacing: 2px;
 	}
+
 	text-align: center;
 	width: 85%;
 	margin-left: auto;

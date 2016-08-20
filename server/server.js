@@ -42,22 +42,20 @@ app.get('/', function(req, res) {
 });
 
 io.sockets.on('connection', function (socket) {
-  console.log("connected on backend");
-
-
+  console.log("Connected on socket server");
 
   // Socket test
   socket.once("echo", function (msg, callback) {
     socket.emit("echo", msg);
   });
 
-//listening for commit from local client, then broadcasts to all connected clients
+  //listening for commit from local client, then broadcasts to all connected clients
 	socket.on('broadcastCommit', function(arg){
 		console.log('broadcastCommit: ' + arg);
 		io.emit('incomingCommit', arg)
 	});
 
-// listening for branch change from local client, then broadcasts to all connected clients
+  // listening for branch change from local client, then broadcasts to all connected clients
 	socket.on('broadcastBranch', function(arg){
 		console.log('Branch server event: ' + arg);
 		io.emit('incomingCommit', arg)
