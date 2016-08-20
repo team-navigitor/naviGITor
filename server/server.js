@@ -6,7 +6,8 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 
-const server = app.listen(3000);
+const PORT = process.env.PORT || 3000;
+const server = app.listen(PORT);
 const io = require('socket.io').listen(server);
 
 // hands this compiler off to the middleware for hot reloading

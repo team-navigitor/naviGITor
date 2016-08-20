@@ -41,11 +41,12 @@
   },
   "scripts": {
     "install": "./node_modules/.bin/electron-rebuild",
-    "build": "NODE_ENV=production webpack -p --config webpack.config.prod.js",
     "prestart": "webpack",
-    "electron": "electron ./main.js",
+    "electron": "electron ./index.js",
     "start": "node ./server/server.js",
-    "test": "mocha --compilers js:babel-core/register --recursive"
+    "test": "mocha --compilers js:babel-core/register --recursive",
+    "build": "NODE_ENV=production webpack -p --config webpack.config.prod.js --progress",
+    "package": "electron-packager . naviGITor --platform=darwin --arch=all --overwrite"
   },
   "repository": {
     "type": "git",
