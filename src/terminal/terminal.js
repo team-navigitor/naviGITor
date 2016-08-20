@@ -9,7 +9,7 @@ class Term extends Component {
 	}
 
 	loadTerminal(node) {
-		//get DOM node
+		//get DOM node for testing
 		const DOMelem = document.getElementById('terminal');
 
 		//get height and width of DOM node
