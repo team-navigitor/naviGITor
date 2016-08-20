@@ -2,12 +2,8 @@ import React, { Component } from 'react';
 
 
 const Visualization = React.createClass({
-	// propTypes: {
-	// 	message: React.PropTypes.
-	// },
 
 	render() {
-		// console.log("in render: "+this.state.message)
 		let commits;
 			if (this.props.message !== []) {
 			let obj = this.props.message;
