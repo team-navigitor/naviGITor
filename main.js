@@ -4,7 +4,8 @@ const child = require('child_process');
 const {ipcMain} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-const simpleGit = require('simple-git')('./.git/')
+const simpleGit = require('simple-git')('./.git/');
+const exec = child.exec;
 
 // Module to control application life.
 const app = electron.app
@@ -61,3 +62,12 @@ chokidar.watch(path.join(__dirname, './.git/'), {ignoreInitial: true}).on('all',
   //mainWindow.webContents.send('commitMade', readGit.getLatestLogMessage());
   //function broadcastLastCommit()
 });
+
+// Terminal
+ipcMain.on('term-input', function(event, input) {
+  console.log('input rec')
+  exec(input, function (error, stdout, stderr) {
+    console.log(stdout)
+    event.sender.send('reply', stdout)
+  })
+})
