@@ -9,9 +9,8 @@ import io from 'socket.io-client';
 const {ipcRenderer} = require('electron');
 
 // listens for an git change event from main.js webContent.send
+// then sends commit string to the server via socket
 ipcRenderer.on('commitMade', function(event, arg){
-	// console.log('commit made: ' + arg[0]);
-	//console.log(JSON.stringify(arg, null, 4))
 	let socket = io('http://localhost:3000');
 	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
 })

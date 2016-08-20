@@ -51,6 +51,7 @@ io.sockets.on('connection', function (socket) {
     socket.emit("echo", msg);
   });
 
+//listening for commit from local client, then transmits to all connected clients
 	socket.on('broadcastCommit', function(arg){
 		console.log(arg);
 		io.emit('incomingCommit', arg)
