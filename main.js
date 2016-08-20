@@ -4,7 +4,7 @@ const child = require('child_process');
 const {ipcMain} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-const simpleGit = require('simple-git')('./.git/');
+const simpleGit = require('simple-git')('./.git');
 const exec = child.exec;
 
 // Module to control application life.
@@ -71,7 +71,7 @@ chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('a
   console.log('EVENT: ' + event + ' on path: ' + path);
   simpleGit.status(function(err, status) {
     console.log('User has changed brances to: ' + status.current);
-    mainWindow.webContents.send('commitMade', status.current);
+    //mainWindow.webContents.send('commitMade', status.current);
    });
 });
 
