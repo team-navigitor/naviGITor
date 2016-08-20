@@ -60,26 +60,24 @@ app.on('activate', function () {
 
 // File watching process for local git COMMITS
 chokidar.watch(path.join(__dirname, './.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
-  console.log('EVENT: ' + event + ' on path: ' + path);
   simpleGit.log(function(err, log) {
-    //mainWindow.webContents.send('commitMade', log.latest);
-    console.log(log.latest);
+    if(err){
+      console.log('error on commit event: ' + err);
+    } else {
+      mainWindow.webContents.send('commitMade', log.latest);
+    }
    });
 });
 
 // File watching process for local git BRANCH CHECKOUTS
 chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
-  console.log('EVENT: ' + event + ' on path: ' + path);
   simpleGit.status(function(err, status) {
-    if(err){console.log('error on branch event: ' + err)}
-    else {
-    console.log('User has changed branches to: ' + status.current);
-    //mainWindow.webContents.send('commitMade', status.current);
+    if(err){console.log('error on branch event: ' + err)
+    } else {
+    mainWindow.webContents.send('commitMade', status.current);
     }
    });
 });
-
-readGit.getCurrentBranch();
 
 /******************************************************************************
         *** Terminal Emulation ***
