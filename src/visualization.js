@@ -13,9 +13,10 @@ const Visualization = React.createClass({
 			let obj = this.props.message;
 			commits = obj.map(function(info, i){
 				return (
-					<div key={i}>
-						<p>{ info.name }: { info.message }</p>
-					</div>
+					<li key={i}>
+						<b>{ info.name }: { info.date }</b>
+						<p>{ info.message }</p>
+					</li>
 				)
 			});
 		}
@@ -27,8 +28,7 @@ const Visualization = React.createClass({
 					<h5 className="panel-title">Commit Visualization</h5>
 				</div>
 				<div className="panel-body">
-					{ commits }
-					{/* <div className="visual-body"> { commits } </div> */}
+					<ul> { commits } </ul>
 				</div>
 			</div>
 		)

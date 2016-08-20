@@ -15,7 +15,7 @@ var data = JSON.stringify([{name: 'steve', message: 'commit message by steve'}, 
 var data2 = JSON.stringify([{name: 'colin', message: 'colin commit message'}, {name: 'binh', message: 'binh commit message'}]);
 
 app.post('/postman', function(req, res) {
-	res.send("hello");
+	res.send("data");
 	io.emit('test', data);
 });
 
@@ -39,7 +39,6 @@ console.log("Polling server is running at 'http://localhost:3000'");
 app.get('/', function(req, res) {
   res.send('hello');
 });
-
 
 io.sockets.on('connection', function (socket) {
   console.log("connected on backend");
