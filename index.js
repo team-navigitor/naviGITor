@@ -6,6 +6,8 @@ const chokidar = require('chokidar');
 const path = require('path');
 const simpleGit = require('simple-git')('./.git/');
 const exec = child.exec;
+const Shell = require ('shelljs');
+
 
 // Module to control application life.
 const app = electron.app
@@ -71,8 +73,11 @@ chokidar.watch(path.join(__dirname, './.git/'), {ignoreInitial: true}).on('all',
 // receive input from terminal
 ipcMain.on('term-input', function(event, input) {
   //call child-process exec, using input
-  exec(input, function (error, stdout, stderr) {
+  Shell.exec(input, function (error, stdout, stderr) {
+    if(stderr) console.log('error!!! ' + error)
     //send response from child-process back to renderer
-    event.sender.send('reply', stdout)
+    let str;
+    stderr ? str = stderr : str = stdout
+    event.sender.send('reply', str)
   })
 })
