@@ -9,10 +9,15 @@ import io from 'socket.io-client';
 const {ipcRenderer} = require('electron');
 import ajax from 'superagent';
 
+// listens for an git change event from main.js webContent.send
+// then sends commit string to the server via socket
+ipcRenderer.on('commitMade', function(event, arg){
+	let socket = io('http://localhost:3000');
+	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
+})
+
 let Visualization = require ('./visualization');
 let Terminal = require ('./terminal');
-
-
 
 class App extends Component {
 	constructor(props) {
@@ -57,6 +62,7 @@ class App extends Component {
 	// }
 	componentDidMount() {
 		this.socket.on('test', this.handleData);
+		this.socket.on('incomingCommit', this.handleData);
   }
 	handleData(dataObj) {
 		let data = JSON.parse(dataObj);
@@ -76,5 +82,6 @@ class App extends Component {
     );
 	}
 }
+
 
 ReactDOM.render(<App />, document.getElementById('app'));

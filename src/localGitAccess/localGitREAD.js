@@ -1,4 +1,4 @@
-const simpleGit = require('simple-git')()
+const simpleGit = require('simple-git')('./.git/')
 
 module.exports = {
 
@@ -12,8 +12,8 @@ module.exports = {
 
    getLatestLogMessage: function(){
     simpleGit.log(function(err, log) {
-        return log.latest;
-    })
+      return log.latest;
+    });
   },
 
    getCurrentBranch: function(){
