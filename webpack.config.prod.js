@@ -1,6 +1,8 @@
 const webpack = require('webpack');
 
 module.exports = {
+	devtool: 'inline-source-map',
+	entry: "./src/app.js",
 	output:{
 	  path: './build',
 	  publicPath: './build',
@@ -9,10 +11,21 @@ module.exports = {
 	plugins: [
 		new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': "'production'"
-      }
+      'process.env.NODE_ENV': JSON.stringify('production')
     }),
+    new webpack.ExternalsPlugin('commonjs', [
+            'desktop-capturer',
+            'electron',
+            'ipc',
+            'ipc-renderer',
+            'native-image',
+            'remote',
+            'web-frame',
+            'clipboard',
+            'crash-reporter',
+            'screen',
+            'shell'
+        ]),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false

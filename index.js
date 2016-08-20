@@ -19,7 +19,12 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1100, height: 700})
+  mainWindow = new BrowserWindow({
+    width: 1100,
+    height: 700,
+    minWidth: 900,
+    minHeight: 600
+  })
 
   // REMOVE /dist WHEN READY TO DEPLOY
   // and load the index.html of the app.
