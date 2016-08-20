@@ -8,8 +8,12 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 const {ipcRenderer} = require('electron');
 
+// listens for an git change event from main.js webContent.send
 ipcRenderer.on('commitMade', function(event, arg){
-	console.log('commit made' + arg);
+	// console.log('commit made: ' + arg[0]);
+	//console.log(JSON.stringify(arg, null, 4))
+	let socket = io('http://localhost:3000');
+	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
 })
 
 let Visualization = require ('./visualization');
@@ -48,6 +52,7 @@ class App extends Component {
 		// 	console.log(data);
 		// });
 		this.socket.on('test', this.handleData);
+		this.socket.on('incomingCommit', this.handleData);
 
 
 
@@ -72,5 +77,6 @@ class App extends Component {
     );
 	}
 }
+
 
 ReactDOM.render(<App />, document.getElementById('app'));

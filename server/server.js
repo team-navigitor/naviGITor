@@ -44,11 +44,19 @@ app.get('/', function(req, res) {
 io.sockets.on('connection', function (socket) {
   console.log("connected on backend");
 
+
+
   // Socket test
   socket.once("echo", function (msg, callback) {
     socket.emit("echo", msg);
   });
+
+	socket.on('broadcastCommit', function(arg){
+		console.log(arg);
+		io.emit('incomingCommit', arg)
+	});
 });
+
 
 
 

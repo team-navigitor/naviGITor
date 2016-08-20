@@ -4,7 +4,7 @@ const child = require('child_process');
 const {ipcMain} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-
+const simpleGit = require('simple-git')('./.git/')
 
 // Module to control application life.
 const app = electron.app
@@ -49,11 +49,15 @@ app.on('activate', function () {
   }
 })
 
-
 // File watching process for local git changes
+// when triggered, calls simpleGit to parse most recent log event
+// then sends that event and data to the render process (app.js)
 chokidar.watch(path.join(__dirname, './.git/'), {ignoreInitial: true}).on('all', (event, path) => {
   console.log(event, path);
-  console.log(readGit.getNewCommit);
-  mainWindow.webContents.send('commitMade', readGit.getNewCommit);
+  simpleGit.log(function(err, log) {
+    console.log(log.latest);
+    mainWindow.webContents.send('commitMade', log.latest);
+   });
+  //mainWindow.webContents.send('commitMade', readGit.getLatestLogMessage());
   //function broadcastLastCommit()
 });
