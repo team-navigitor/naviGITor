@@ -79,6 +79,10 @@ chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('a
    });
 });
 
+simpleGit.status(function(err, status){
+  console.log('has error on imm invoke: ' + err):
+  console.log('imm invoke: ' + status.current);
+})
 
 /******************************************************************************
         *** Terminal Emulation ***
