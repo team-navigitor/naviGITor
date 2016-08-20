@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 const {ipcRenderer} = require('electron');
+import ajax from 'superagent';
 
 // listens for an git change event from main.js webContent.send
 // then sends commit string to the server via socket
@@ -27,37 +28,42 @@ class App extends Component {
 			message: []
 		}
 
-		this.connect = this.connect.bind(this);
+		// this.connect = this.connect.bind(this);
 		this.handleData = this.handleData.bind(this);
 	}
 
 	componentWillMount() {
-    this.socket = io('http://localhost:3000');
-    this.socket.on('connect', this.connect);
-
+    this.socket = io('https://fa663fef.ngrok.io');
+    // this.socket.on('connect', this.connect);
+		//
+		console.log("component will mount fired")
+		ajax.get('https://api.github.com/repos/team-navigitor/naviGITor/commits')
+			.end((error, response) => {
+				if (!error && response) {
+					let apiData = response.body.map(function(item){
+						return { name: item.commit.author.name, date: item.commit.author.date, message: item.commit.message }
+					});
+					this.setState({ message: apiData });
+					console.log(apiData);
+				} else {
+					console.log('error fetching Github data', error);
+				}
+			}
+		);
     // this.socket.on('disconnect', this.disconnect.bind(this));
 	}
 
-	connect() {
+	// connect() {
 		// alert("connected!");
-    this.setState({ status: 'connected' });
-	}
+    // this.setState({ status: 'connected' });
+	// }
 	// disconnect() {
   //   this.setState({ status: 'disconnected' });
 	// }
 	componentDidMount() {
-	  // socket.on('news', this.handleData)
-		// socket.on('news', function(data){
-		// 	console.log(data);
-		// });
 		this.socket.on('test', this.handleData);
 		this.socket.on('incomingCommit', this.handleData);
-
-
-
-
   }
-
 	handleData(dataObj) {
 		let data = JSON.parse(dataObj);
 		console.log("handledata", data);
