@@ -7,14 +7,14 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import ajax from 'superagent';
-import Term from './terminal.js'
+import Term from './terminal/terminal.js'
 import Visualization from './visualization';
 const {ipcRenderer} = require('electron');
 
 // listens for an git change event from main.js webContent.send
 // then sends commit string to the server via socket
 ipcRenderer.on('commitMade', function(event, arg){
-	let socket = io('http://localhost:3000');
+	let socket = io('http://6aab338c.ngrok.io');
 	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
 })
 
@@ -29,7 +29,9 @@ class App extends Component {
 	}
 
 	componentWillMount() {
-    this.socket = io('https://fa663fef.ngrok.io');
+
+    this.socket = io('http://6aab338c.ngrok.io');
+
 		ajax.get('https://api.github.com/repos/team-navigitor/naviGITor/commits')
 			.end((error, response) => {
 				if (!error && response) {
@@ -59,7 +61,7 @@ class App extends Component {
 	render() {
     return (
 			<div className="containing-div-all">
-				<h1>GIT TOGETHER</h1>
+				<h1>naviGITor</h1>
       		<div className="containing-div">
 						<Visualization message={ this.state.message } />
 						<Term />
