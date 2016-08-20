@@ -14,9 +14,14 @@ const {ipcRenderer} = require('electron');
 // listens for an git change event from main.js webContent.send
 // then sends commit string to the server via socket
 ipcRenderer.on('commitMade', function(event, arg){
-	let socket = io('http://6aab338c.ngrok.io');
+	let socket = io('http://localhost:3000');
 	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
 })
+ipcRenderer.on('changedBranches', function(event, arg){
+	let socket = io('http://localhost:3000');
+	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
+})
+
 
 
 class App extends Component {
@@ -30,7 +35,7 @@ class App extends Component {
 
 	componentWillMount() {
 
-    this.socket = io('http://6aab338c.ngrok.io');
+    this.socket = io('http://localhost:3000');
 
 		ajax.get('https://api.github.com/repos/team-navigitor/naviGITor/commits')
 			.end((error, response) => {

@@ -54,9 +54,9 @@ app.on('activate', function () {
 
 /******************************************************************************
         *** File Watching and Emitting Events to Rendering Process ***
+        Following methods, when triggered, calls simpleGit to parse log event
+        then send that event and data to the render process in app.js
 *******************************************************************************/
-// Following methods, when triggered, calls simpleGit to parse log event
-// then sends that event and data to the render process (app.js)
 
 // File watching process for local git COMMITS
 chokidar.watch(path.join(__dirname, './.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
@@ -74,7 +74,7 @@ chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('a
   simpleGit.status(function(err, status) {
     if(err){console.log('error on branch event: ' + err)
     } else {
-    mainWindow.webContents.send('commitMade', status.current);
+    mainWindow.webContents.send('changedBranches', status.current);
     }
    });
 });
