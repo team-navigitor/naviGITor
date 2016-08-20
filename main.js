@@ -63,11 +63,11 @@ chokidar.watch(path.join(__dirname, './.git/'), {ignoreInitial: true}).on('all',
   //function broadcastLastCommit()
 });
 
-// Terminal
+// receive input from terminal
 ipcMain.on('term-input', function(event, input) {
-  console.log('input rec')
+  //call child-process exec, using input
   exec(input, function (error, stdout, stderr) {
-    console.log(stdout)
+    //send response from child-process back to renderer
     event.sender.send('reply', stdout)
   })
 })
