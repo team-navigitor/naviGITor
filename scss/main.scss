@@ -27,6 +27,12 @@ body {
 
 .terminal-container {
 	height: 33%;
+	outline: none;
+	text-align: left;
+
+	&:focus {
+		outline: 0;
+	}
 }
 .commits-container {
 	height: 45%;
