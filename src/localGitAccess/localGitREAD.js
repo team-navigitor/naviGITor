@@ -1,4 +1,6 @@
-const simpleGit = require('simple-git')('./.git/')
+
+//after requiring simplegit, second () needs to contain root to project folder root
+const simpleGit = require('simple-git')('./');
 
 module.exports = {
 
@@ -18,7 +20,7 @@ module.exports = {
 
    getCurrentBranch: function(){
     simpleGit.status(function(err, status){
-      return status.current;
+      console.log('from gitreadinteral: ' + status.current);
     })
   },
 

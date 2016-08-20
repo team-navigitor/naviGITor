@@ -4,7 +4,7 @@ const child = require('child_process');
 const {ipcMain} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-const simpleGit = require('simple-git')('./.git');
+const simpleGit = require('simple-git')('./');
 const exec = child.exec;
 
 // Module to control application life.
@@ -73,16 +73,13 @@ chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('a
   simpleGit.status(function(err, status) {
     if(err){console.log('error on branch event: ' + err)}
     else {
-    console.log('User has changed branches to: ' + status);
+    console.log('User has changed branches to: ' + status.current);
     //mainWindow.webContents.send('commitMade', status.current);
     }
    });
 });
 
-simpleGit.status(function(err, status){
-  console.log('has error on imm invoke: ' + err):
-  console.log('imm invoke: ' + status.current);
-})
+readGit.getCurrentBranch();
 
 /******************************************************************************
         *** Terminal Emulation ***
