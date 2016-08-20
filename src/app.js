@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import ajax from 'superagent';
-import Term from './terminal.js'
+import Term from './terminal/terminal.js'
 import Visualization from './visualization';
 const {ipcRenderer} = require('electron');
 
