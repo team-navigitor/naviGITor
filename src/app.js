@@ -63,7 +63,7 @@ class App extends Component {
 	render() {
     return (
 			<div className="containing-div-all">
-				<h1>GIT TOGETHER</h1>
+				<h1>naviGITor</h1>
       		<div className="containing-div">
 						<Visualization message={ this.state.message } />
 						<Term />
