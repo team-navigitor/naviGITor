@@ -4,7 +4,7 @@ const child = require('child_process');
 const {ipcMain} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-const simpleGit = require('simple-git')('./.git/');
+const simpleGit = require('simple-git')();
 const exec = child.exec;
 const Shell = require ('shelljs');
 
@@ -57,18 +57,38 @@ app.on('activate', function () {
   }
 })
 
-// File watching process for local git changes
-// when triggered, calls simpleGit to parse most recent log event
-// then sends that event and data to the render process (app.js)
-chokidar.watch(path.join(__dirname, './.git/'), {ignoreInitial: true}).on('all', (event, path) => {
-  console.log(event, path);
+
+
+/******************************************************************************
+        *** File Watching and Emitting Events to Rendering Process ***
+        Following methods, when triggered, calls simpleGit to parse log event
+        then send that event and data to the render process in app.js
+*******************************************************************************/
+
+// File watching process for local git COMMITS
+chokidar.watch(path.join(__dirname, './.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
   simpleGit.log(function(err, log) {
-    console.log(log.latest);
-    mainWindow.webContents.send('commitMade', log.latest);
+    if(err){
+      console.log('error on commit event: ' + err);
+    } else {
+      mainWindow.webContents.send('commitMade', log.latest);
+    }
    });
-  //mainWindow.webContents.send('commitMade', readGit.getLatestLogMessage());
-  //function broadcastLastCommit()
 });
+
+// File watching process for local git BRANCH CHECKOUTS
+chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
+  simpleGit.status(function(err, status) {
+    if(err){console.log('error on branch event: ' + err)
+    } else {
+    mainWindow.webContents.send('changedBranches', status.current);
+    }
+   });
+});
+
+/******************************************************************************
+        *** Terminal Emulation ***
+*******************************************************************************/
 
 // receive input from terminal
 ipcMain.on('term-input', function(event, input) {
