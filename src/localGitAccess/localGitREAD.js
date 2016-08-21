@@ -1,15 +1,16 @@
 
 //after requiring simplegit, second () needs to contain root to project folder root
 const simpleGit = require('simple-git')('./');
-
+const fs = require('fs')
 module.exports = {
 
 // Git methods to Access Read only Properties of local repository
 
    getFullLog: function(){
-    simpleGit.log(function(err, log) {
-        return log;
-    })
+    // simpleGit.log(function(err, log) {
+    //     return log;
+    // })
+    console.log('file')
   },
 
    getLatestLogMessage: function(){

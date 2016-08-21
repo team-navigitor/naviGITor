@@ -7,7 +7,7 @@ const path = require('path');
 const simpleGit = require('simple-git')();
 const exec = child.exec;
 const Shell = require ('shelljs');
-
+const fs = require('fs');
 
 // Module to control application life.
 const app = electron.app
@@ -84,6 +84,11 @@ chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('a
     mainWindow.webContents.send('changedBranches', status.current);
     }
    });
+});
+
+fs.readFile(path.join(__dirname, './.git/logs/refs/heads/testing'), 'utf8', (err, data) => {
+  if (err) throw err;
+  console.log(data);
 });
 
 /******************************************************************************
