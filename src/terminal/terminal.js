@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 
-class Term extends Component {
+export default class Term extends Component {
 	//on mount, load terminal onto DOM
 	componentDidMount() {
 		this.loadTerminal(ReactDOM.findDOMNode(this))
@@ -17,8 +17,7 @@ class Term extends Component {
 		const termWidth =  DOMelem.offsetWidth;
 
 		//initialize instance of terminal
-		const term = new Terminal({
-		});
+		const term = new Terminal();
 
 		//set terminal properties, height and width equal to DOM node's
 		term.cursorBlink = true;
@@ -86,12 +85,12 @@ class Term extends Component {
 				str += key;
 				term.write(key);
 			}
-		})
+		});
 		//define action on paste: write data to terminal and 
 		//concatenate onto string
 		term.on('paste', function (data, ev) {
     	term.write(data);
-		str += data
+			str += data
  		});
 	}
 
@@ -99,7 +98,6 @@ class Term extends Component {
 		return (
 			<div id="terminal" className="terminal-container" style={{backgroundColor: "#000", color: '#fff'}} >
 			</div>
-		)
+		);
 	}
 }
-export default Term

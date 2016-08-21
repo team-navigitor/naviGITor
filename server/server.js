@@ -6,25 +6,26 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 
+// process.env.PORT lets the port be set by Heroku
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT);
 const io = require('socket.io').listen(server);
 
-// hands this compiler off to the middleware for hot reloading
-const compiler = webpack(config);
 var data = JSON.stringify([{name: 'steve', message: 'commit message by steve'}, {name: 'sarah', message: 'commit message'}]);
 var data2 = JSON.stringify([{name: 'colin', message: 'colin commit message'}, {name: 'binh', message: 'binh commit message'}]);
 
 app.post('/postman', function(req, res) {
-	res.send("data");
-	io.emit('test', data);
+  res.send("data");
+  io.emit('test', data);
 });
 
 app.post('/postman2', function(req, res) {
-	res.send("hello2");
-	io.emit('test', data2);
+  res.send("hello2");
+  io.emit('test', data2);
 });
 
+// hands this compiler off to the middleware for hot reloading
+const compiler = webpack(config);
 app.use(webpackDevMiddleware(compiler, {
 	noInfo: true,
 	// public path simulates publicPath of config file

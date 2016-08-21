@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
 
-const Visualization = React.createClass({
+export default class Visualization extends Component {
 
 	render() {
 		let commits;
-			if (this.props.message !== []) {
+		if (this.props.message !== []) {
 			let obj = this.props.message;
 			commits = obj.map(function(info, i){
 				return (
@@ -15,8 +15,9 @@ const Visualization = React.createClass({
 					</li>
 				)
 			});
+		} else {
+			commits = null;
 		}
-		else commits = null;
 
 		return (
 			<div className="commits-container">
@@ -39,6 +40,4 @@ const Visualization = React.createClass({
 			</div>
 		)
 	}
-});
-
-module.exports = Visualization;
+}

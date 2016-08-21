@@ -9,7 +9,7 @@ import io from 'socket.io-client';
 import ajax from 'superagent';
 import Term from './terminal/terminal.js'
 import Visualization from './visualization';
-const {ipcRenderer} = require('electron');
+import { ipcRenderer } from 'electron';
 
 /* listens for an git commit event from main.js webContent.send
  then sends commit string to the server via socket */
@@ -26,14 +26,13 @@ ipcRenderer.on('changedBranches', function(event, arg){
 });
 
 
-
 class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			message: []
 		}
-		this.handleData = this.handleData.bind(this);
+		this._handleData = this._handleData.bind(this);
 	}
 
 	componentWillMount() {
@@ -41,11 +40,11 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		this.socket.on('test', this.handleData);
-		this.socket.on('incomingCommit', this.handleData);
+		this.socket.on('test', this._handleData);
+		this.socket.on('incomingCommit', this._handleData);
   }
 
-	handleData(dataObj) {
+	_handleData(dataObj) {
 		let data = JSON.parse(dataObj);
 		console.log("handledata", data);
 		this.setState({ message: this.state.message.concat(data) });
