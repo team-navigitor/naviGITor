@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import ajax from 'superagent';
 import Term from './terminal/terminal.js'
-import Visualization from './visualization';
+import GitTree from './gitTree';
 import { ipcRenderer } from 'electron';
 
 /* listens for an git commit event from main.js webContent.send
@@ -93,7 +93,7 @@ class App extends Component {
 						<button className="login-submit" type="submit">Submit</button>
 					</form>
       		<div className="container_visualizationAndTerminal">
-						<Visualization message={ this.state.message } />
+						<GitTree message={ this.state.message } />
 						<Term />
       		</div>
 			</div>

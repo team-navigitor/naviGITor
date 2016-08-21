@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 
-// process.env.PORT lets the port be set by Heroku
+// process.env.PORT sets to hosting service port (Heroku) or 3000
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT);
 const io = require('socket.io').listen(server);
@@ -33,9 +33,13 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 app.use(webpackHotMiddleware(compiler));
 
-app.use(express.static('./dist'));
+if (PORT === process.env.PORT) {
+  app.use(express.static('./'))
+} else {
+  app.use(express.static('./dist'));
+}
 
-console.log("Polling server is running at 'http://localhost:3000'");
+console.log('Polling server is running on http://localhost:' + PORT);
 
 // Express test
 app.get('/', function(req, res) {
