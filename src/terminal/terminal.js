@@ -95,8 +95,12 @@ export default class Term extends Component {
 	}
 
 	render() {
+		let style = {backgroundColor: "#000",
+		color: '#ccc',
+		fontFamily: "Courier",
+		overflow: "auto"}
 		return (
-			<div id="terminal" className="terminal-container" style={{backgroundColor: "#000", color: '#fff'}} >
+			<div id="terminal" className="terminal-container" style={style} >
 			</div>
 		);
 	}
