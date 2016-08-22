@@ -45,8 +45,13 @@ class Term extends Component {
 			console.log(replyArr)
 			replyArr.forEach(function(el) {
 				term.write('\r\n' + el);
-			})
+			});
 			term.prompt();
+			const node = document.getElementById("terminal");
+			let isAtBottom = node.scrollHeight - node.clientHeight <= node.scrollTop;
+			console.log(isAtBottom)
+			if (!isAtBottom) node.scrollTop = node.scrollHeight - node.clientHeight;
+			
 		})
 		//initialize variable for string to be sent to main
 		let str = '';
@@ -59,15 +64,19 @@ class Term extends Component {
 			!ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey && ev.keyCode !== 40 && ev.keyCode !==38
 			);
 
+			// if (ev.keyCode === 45) {
+			// 	key = "&#8209;"
+			// }
+
 			//if enter key is hit, send string to main process,
 			//then reset string to empty and call prompt function
 			if (ev.keyCode === 13) {
-				// if (str === '') term.prompt();
-				// else {
+				if (str === '') term.prompt();
+				else {
 				term.write('\r\n')
 				ipcRenderer.send('term-input', str)
 				str = '';	
-				
+				}
 				//term.prompt();	
 			}
 			//if backspace key is hit, delete string by one
@@ -96,10 +105,12 @@ class Term extends Component {
 	}
 
 	render() {
-		let style = {backgroundColor: "#000",
+		let style = {
+		backgroundColor: "#000",
 		color: '#ccc',
-		fontFamily: "Courier",
-		overflow: "auto"}
+		//fontFamily: "Courier",
+		overflow: "auto"
+		}
 		return (
 			<div id="terminal" className="terminal-container" style={style} >
 			</div>
