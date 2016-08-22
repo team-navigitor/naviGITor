@@ -71,6 +71,7 @@ class App extends Component {
 				} else {
 					console.log('error fetching Github data', error);
 				}
+				if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
 				socket.emit("subscribe", { room: `${orgName}/${repoName}live` });
 				socketRoom = `${orgName}/${repoName}live`;
 			}
