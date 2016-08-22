@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './terminal.scss'
 
 export default class Term extends Component {
 	//on mount, load terminal onto DOM
@@ -29,7 +28,7 @@ export default class Term extends Component {
 
 		//open terminal
 		term.open(node);
-		
+
 		//define initial term prompt
 		term.prompt = () => {
     		term.write('\r\n' + '$ ');
@@ -37,7 +36,7 @@ export default class Term extends Component {
 		//call prompt
 		term.prompt();
 
-		//when renderer gets reply back from main, 
+		//when renderer gets reply back from main,
 		//write reply to terminal
 		ipcRenderer.on('reply', (event, stdout) => {
 			let node = document.getElementById("terminal");
@@ -73,8 +72,8 @@ export default class Term extends Component {
 				else {
 				term.write('\r\n')
 				ipcRenderer.send('term-input', str)
-				str = '';	
-				//term.prompt();	
+				str = '';
+				//term.prompt();
 				}
 			}
 			//if backspace key is hit, delete string by one
@@ -94,7 +93,7 @@ export default class Term extends Component {
 				term.write(key);
 			}
 		});
-		//define action on paste: write data to terminal and 
+		//define action on paste: write data to terminal and
 		//concatenate onto string
 		term.on('paste', function (data, ev) {
     	term.write(data);
