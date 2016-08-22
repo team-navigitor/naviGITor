@@ -61,13 +61,13 @@ export default class Term extends Component {
 			//if enter key is hit, send string to main process,
 			//then reset string to empty and call prompt function
 			if (ev.keyCode === 13) {
-				// if (str === '') term.prompt();
-				// else {
+				if (str === '') term.prompt();
+				else {
 				term.write('\r\n')
 				ipcRenderer.send('term-input', str)
 				str = '';	
-				
-				//term.prompt();	
+				term.prompt();	
+				}
 			}
 			//if backspace key is hit, delete string by one
 			//and if 
