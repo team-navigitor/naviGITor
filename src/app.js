@@ -11,8 +11,10 @@ import Term from './terminal/terminal.js'
 import GitTree from './gitTree';
 import { ipcRenderer } from 'electron';
 
+// Socket handling for app. Must be global to current page for ipcRenderer + React
 let socket = io('http://localhost:3000');
 let socketRoom = null;
+
 /* listens for an git commit event from main.js webContent.send
  then sends commit string to the server via socket */
 ipcRenderer.on('commitMade', function(event, arg){
