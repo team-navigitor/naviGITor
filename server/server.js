@@ -74,7 +74,7 @@ io.sockets.on('connection', function (socket) {
 	});
   socket.on('disconnect', function(){
     connectedClients--;
-    `Disconnection: now ${connectedClients} are Connected on socket server`
+    console.log(`Disconnection: now ${connectedClients} are Connected on socket server`);
   })
 });
 
