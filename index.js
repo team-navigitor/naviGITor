@@ -7,7 +7,7 @@ const path = require('path');
 const simpleGit = require('simple-git')();
 const exec = child.exec;
 const Shell = require ('shelljs');
-
+const {dialog} = require('electron');
 
 // Module to control application life.
 const app = electron.app
@@ -16,6 +16,13 @@ const BrowserWindow = electron.BrowserWindow
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let projectPath
+
+function opendDirChoice() {
+  console.log(projectPath);
+  projectPath = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
+  console.log('project path: ' + projectPath);
+}
 
 function createWindow () {
   // Create the browser window.
@@ -100,4 +107,10 @@ ipcMain.on('term-input', function(event, input) {
     stderr ? str = stderr : str = stdout
     event.sender.send('reply', str)
   })
+})
+
+
+ipcMain.on('dirChoice', function(event, input){
+    opendDirChoice();
+    console.log('dir choice hit');
 })

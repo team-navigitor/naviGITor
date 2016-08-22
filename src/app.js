@@ -27,6 +27,11 @@ ipcRenderer.on('changedBranches', function(event, arg){
 	if(socketRoom) socket.emit('broadcastBranch', JSON.stringify(arg, null, 4));
 });
 
+function dirChoice() {
+	console.log('dirchpic ')
+	ipcRenderer.send('dirChoice');
+}
+
 
 class App extends Component {
 	constructor(props) {
@@ -97,6 +102,7 @@ class App extends Component {
 						<input id="login-repo" placeholder="Repo Name" type="text" />
 						<button className="login-submit" type="submit">Submit</button>
 					</form>
+					<button onClick = {dirChoice}> Select Project Folder </button>
       		<div className="container_visualizationAndTerminal">
 						<GitTree message={ this.state.message } />
 						<Term />
