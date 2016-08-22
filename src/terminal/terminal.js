@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import './terminal.scss'
 
 export default class Term extends Component {
 	//on mount, load terminal onto DOM
@@ -21,11 +21,11 @@ export default class Term extends Component {
 
 		//set terminal properties, height and width equal to DOM node's
 		term.cursorBlink = true;
-		console.log('height: ' + termHeight + 'width: ' + termWidth)
+		//console.log('height: ' + termHeight + 'width: ' + termWidth)
 		term.width = termWidth;
 		term.height = termHeight;
-		//term.rows = termHeight / 20;
-		// term.cols = 60;
+		//term.rows = 11;
+		//	term.cols = 90;
 
 		//open terminal
 		term.open(node);
@@ -40,12 +40,20 @@ export default class Term extends Component {
 		//when renderer gets reply back from main, 
 		//write reply to terminal
 		ipcRenderer.on('reply', (event, stdout) => {
+			let node = document.getElementById("terminal");
+			let counter = 0;
 			let replyArr = stdout.split('\n');
-			console.log(replyArr)
 			replyArr.forEach(function(el) {
 				term.write('\r\n' + el);
+				counter++;
 			})
 			term.prompt();
+			function isOverflowed(element){
+    			return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+				}
+			if (isOverflowed(node) && counter >= 11) {
+				node.scrollTop = node.scrollHeight;
+			}
 		})
 		//initialize variable for string to be sent to main
 		let str = '';
@@ -61,16 +69,16 @@ export default class Term extends Component {
 			//if enter key is hit, send string to main process,
 			//then reset string to empty and call prompt function
 			if (ev.keyCode === 13) {
-				// if (str === '') term.prompt();
-				// else {
+				if (str === '') term.prompt();
+				else {
 				term.write('\r\n')
 				ipcRenderer.send('term-input', str)
 				str = '';	
-				
 				//term.prompt();	
+				}
 			}
 			//if backspace key is hit, delete string by one
-			//and if 
+
       		else if (ev.keyCode === 8) {
 		  		if (str.length) {
 			  	str = str.substring(0, str.length - 1);
@@ -95,8 +103,11 @@ export default class Term extends Component {
 	}
 
 	render() {
+		let style = {backgroundColor: "#000",
+		color: '#ccc',
+		overflow: "auto"}
 		return (
-			<div id="terminal" className="terminal-container" style={{backgroundColor: "#000", color: '#fff'}} >
+			<div id="terminal" className="terminal-container" style={style} >
 			</div>
 		);
 	}
