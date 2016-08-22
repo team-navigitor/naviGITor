@@ -28,7 +28,6 @@ ipcRenderer.on('changedBranches', function(event, arg){
 });
 
 function dirChoice() {
-	console.log('dirchpic ')
 	ipcRenderer.send('dirChoice');
 }
 
