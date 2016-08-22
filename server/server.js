@@ -49,9 +49,10 @@ app.get('/', function(req, res) {
 /*************
 *** Socket Handling ***
 **************/
-
+var connectedClients = 0;
 io.sockets.on('connection', function (socket) {
-  console.log("Connected on socket server");
+  connectedClients++;
+  console.log(`${connectedClients} are Connected on socket server`);
   // room handling
   socket.on('subscribe', function(data) { socket.join(data.room); console.log(`joined room:${data.room}`)})
   socket.on('unsubscribe', function(data) { socket.leave(data.room); })
@@ -69,6 +70,10 @@ io.sockets.on('connection', function (socket) {
 		console.log('Branch server event: ' + arg);
 		io.emit('incomingCommit', arg)
 	});
+  socket.on('disconnect', function(){
+    connectedClients--;
+    `Disconnection: now ${connectedClients} are Connected on socket server`
+  })
 });
 
 
