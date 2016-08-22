@@ -46,20 +46,24 @@ app.get('/', function(req, res) {
   res.send('hello');
 });
 
+/*************
+*** Socket Handling ***
+**************/
+
 io.sockets.on('connection', function (socket) {
   console.log("Connected on socket server");
-
+  // room handling
+  socket.on('subscribe', function(data) { socket.join(data.room); console.log(`joined room:${data.room}`)})
+  socket.on('unsubscribe', function(data) { socket.leave(data.room); })
   // Socket test
   socket.once("echo", function (msg, callback) {
     socket.emit("echo", msg);
   });
-
   //listening for commit from local client, then broadcasts to all connected clients
 	socket.on('broadcastCommit', function(arg){
 		console.log('broadcastCommit: ' + arg);
 		io.emit('incomingCommit', arg)
 	});
-
   // listening for branch change from local client, then broadcasts to all connected clients
 	socket.on('broadcastBranch', function(arg){
 		console.log('Branch server event: ' + arg);
