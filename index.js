@@ -7,7 +7,6 @@ const path = require('path');
 const exec = child.exec;
 const Shell = require ('shelljs');
 
-var simpleGit = '';
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -70,7 +69,8 @@ app.on('activate', function () {
 function openDirChoice() {
   projectPath = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
   console.log('project path: ' + projectPath);
-  simpleGit = require('simple-git')(projectPath);
+  // to resolve to home path and append path given from renderer process
+  var simpleGit = require('simple-git')(path.resolve('~', projectPath.toString()));
 
   chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
     simpleGit.log(function(err, log) {
