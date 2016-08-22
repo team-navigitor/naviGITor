@@ -11,18 +11,20 @@ import Term from './terminal/terminal.js'
 import GitTree from './gitTree';
 import { ipcRenderer } from 'electron';
 
+// Socket handling for app. Must be global to current page for ipcRenderer + React
+let socket = io('http://localhost:3000');
+let socketRoom = null;
+
 /* listens for an git commit event from main.js webContent.send
  then sends commit string to the server via socket */
 ipcRenderer.on('commitMade', function(event, arg){
-	let socket = io('http://localhost:3000');
-	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
+	if(socketRoom) socket.emit('broadcastCommit', JSON.stringify(arg, null, 4));
 });
 
 /* listens for an git branch checkout event from main.js webContent.send
  then sends commit string to the server via socket */
 ipcRenderer.on('changedBranches', function(event, arg){
-	let socket = io('http://localhost:3000');
-	socket.emit('broadcastBranch', JSON.stringify(arg, null, 4))
+	if(socketRoom) socket.emit('broadcastBranch', JSON.stringify(arg, null, 4));
 });
 
 
@@ -35,13 +37,13 @@ class App extends Component {
 		this._handleData = this._handleData.bind(this);
 	}
 
-	componentWillMount() {
-    this.socket = io('http://localhost:3000');
-	}
+	// componentWillMount() {
+  //   this.socket = io('http://localhost:3000');
+	// }
 
 	componentDidMount() {
-		this.socket.on('test', this._handleData);
-		this.socket.on('incomingCommit', this._handleData);
+		socket.on('test', this._handleData);
+		socket.on('incomingCommit', this._handleData);
   }
 
 	_handleData(dataObj) {
@@ -71,6 +73,9 @@ class App extends Component {
 				} else {
 					console.log('error fetching Github data', error);
 				}
+				if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
+				socket.emit("subscribe", { room: `${orgName}/${repoName}live` });
+				socketRoom = `${orgName}/${repoName}live`;
 			}
 		);
 
