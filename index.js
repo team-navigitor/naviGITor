@@ -1,14 +1,13 @@
 const electron = require('electron')
 const readGit = require('./src/localGitAccess/localGitREAD');
 const child = require('child_process');
-const {ipcMain} = require('electron');
+const {ipcMain, dialog} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-const simpleGit = require('simple-git')();
 const exec = child.exec;
 const Shell = require ('shelljs');
 
-
+var simpleGit = '';
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -16,6 +15,9 @@ const BrowserWindow = electron.BrowserWindow
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let projectPath
+
+
 
 function createWindow () {
   // Create the browser window.
@@ -65,27 +67,31 @@ app.on('activate', function () {
         then send that event and data to the render process in app.js
 *******************************************************************************/
 
-// File watching process for local git COMMITS
-chokidar.watch(path.join(__dirname, './.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
-  simpleGit.log(function(err, log) {
-    if(err){
-      console.log('error on commit event: ' + err);
-    } else {
-      mainWindow.webContents.send('commitMade', log.latest);
-    }
-   });
-});
+function openDirChoice() {
+  projectPath = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
+  console.log('project path: ' + projectPath);
+  simpleGit = require('simple-git')(projectPath);
 
-// File watching process for local git BRANCH CHECKOUTS
-chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
-  simpleGit.status(function(err, status) {
-    if(err){console.log('error on branch event: ' + err)
-    } else {
-    mainWindow.webContents.send('changedBranches', status.current);
-    }
-   });
-});
+  chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
+    simpleGit.log(function(err, log) {
+      if(err){
+        console.log('error on commit event: ' + err);
+      } else {
+        mainWindow.webContents.send('commitMade', log.latest);
+      }
+     });
+  });
 
+  // File watching process for local git BRANCH CHECKOUTS
+  chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
+    simpleGit.status(function(err, status) {
+      if(err){console.log('error on branch event: ' + err)
+      } else {
+      mainWindow.webContents.send('changedBranches', status.current);
+      }
+     });
+  });
+}
 /******************************************************************************
         *** Terminal Emulation ***
 *******************************************************************************/
@@ -100,4 +106,9 @@ ipcMain.on('term-input', function(event, input) {
     stderr ? str = stderr : str = stdout
     event.sender.send('reply', str)
   })
+})
+
+
+ipcMain.on('dirChoice', function(event, input){
+    openDirChoice();
 })
