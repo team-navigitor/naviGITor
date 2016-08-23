@@ -24,7 +24,7 @@ ipcRenderer.on('commitMade', function(event, arg){
 /* listens for an git branch checkout event from main.js webContent.send
  then sends commit string to the server via socket */
 ipcRenderer.on('changedBranches', function(event, arg){
-	if(socketRoom) socket.emit('broadcastBranch', JSON.stringify(arg, null, 4));
+	if(socketRoom) socket.emit('broadcastBranch', {'room': socketRoom, 'data': JSON.stringify(arg, null, 4)});
 });
 
 function dirChoice() {
