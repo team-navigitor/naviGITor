@@ -6,25 +6,26 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 
+// process.env.PORT sets to hosting service port (Heroku) or 3000
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT);
 const io = require('socket.io').listen(server);
 
-// hands this compiler off to the middleware for hot reloading
-const compiler = webpack(config);
 var data = JSON.stringify([{name: 'steve', message: 'commit message by steve'}, {name: 'sarah', message: 'commit message'}]);
 var data2 = JSON.stringify([{name: 'colin', message: 'colin commit message'}, {name: 'binh', message: 'binh commit message'}]);
 
 app.post('/postman', function(req, res) {
-	res.send("data");
-	io.emit('test', data);
+  res.send("data");
+  io.emit('test', data);
 });
 
 app.post('/postman2', function(req, res) {
-	res.send("hello2");
-	io.emit('test', data2);
+  res.send("hello2");
+  io.emit('test', data2);
 });
 
+// hands this compiler off to the middleware for hot reloading
+const compiler = webpack(config);
 app.use(webpackDevMiddleware(compiler, {
 	noInfo: true,
 	// public path simulates publicPath of config file
@@ -32,9 +33,13 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 app.use(webpackHotMiddleware(compiler));
 
-app.use(express.static('./dist'));
+if (PORT === process.env.PORT) {
+  app.use(express.static('./'))
+} else {
+  app.use(express.static('./dist'));
+}
 
-console.log("Polling server is running at 'http://localhost:3000'");
+console.log('Polling server is running on http://localhost:' + PORT);
 
 // Express test
 app.get('/', function(req, res) {
@@ -42,18 +47,22 @@ app.get('/', function(req, res) {
 });
 
 io.sockets.on('connection', function (socket) {
-  console.log("connected on backend");
-
-
+  console.log("Connected on socket server");
 
   // Socket test
   socket.once("echo", function (msg, callback) {
     socket.emit("echo", msg);
   });
 
-//listening for commit from local client, then transmits to all connected clients
+  //listening for commit from local client, then broadcasts to all connected clients
 	socket.on('broadcastCommit', function(arg){
-		console.log(arg);
+		console.log('broadcastCommit: ' + arg);
+		io.emit('incomingCommit', arg)
+	});
+
+  // listening for branch change from local client, then broadcasts to all connected clients
+	socket.on('broadcastBranch', function(arg){
+		console.log('Branch server event: ' + arg);
 		io.emit('incomingCommit', arg)
 	});
 });

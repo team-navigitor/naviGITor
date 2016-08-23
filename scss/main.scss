@@ -10,28 +10,70 @@ body {
 	text-align: center;
 }
 
-.containing-div-all {
+#login-org,
+#login-repo {
+	color: #000;
+	display: block;
+  margin: 0 auto;
+  width: 200px;
+}
+
+.login-submit {
+  background: #fff;
+  border: 1px solid #fff;
+  color: #000;
+  border-radius: 4px;
+  transition: 0.3s all ease-in-out;
+
+  &:hover {
+  	border: 1px solid #ccc;
+  	background: #ccc;
+  }
+
+  &:active {
+  	outline: none;
+  }
+}
+
+.container_wholePage {
 	h1 {
 		letter-spacing: 2px;
 	}
+
 	text-align: center;
 	width: 85%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 30px;
 }
-.containing-div {
+.container_visualizationAndTerminal {
 	height: 100vh;
 	width: 100%;
 }
-
 .terminal-container {
 	height: 33%;
 	text-align: left;
 }
 .commits-container {
-	height: 45%;
+	height: 40%;
 }
+
+//**** visualization.js - flexbox stuff *****
+.flexbox-parent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+}
+.flexbox-item-grow {
+	flex: 1;
+	overflow: hidden;
+}
+// **** end visualization.js flexbox ****
+
 .panel-default {
 	background: rgba(255, 255, 255, 0.2);
 	border: 0;

@@ -8,15 +8,22 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import ajax from 'superagent';
 import Term from './terminal/terminal.js'
-import Visualization from './visualization';
-const {ipcRenderer} = require('electron');
+import GitTree from './gitTree';
+import { ipcRenderer } from 'electron';
 
-// listens for an git change event from main.js webContent.send
-// then sends commit string to the server via socket
+/* listens for an git commit event from main.js webContent.send
+ then sends commit string to the server via socket */
 ipcRenderer.on('commitMade', function(event, arg){
-	let socket = io('http://6aab338c.ngrok.io');
+	let socket = io('http://localhost:3000');
 	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
-})
+});
+
+/* listens for an git branch checkout event from main.js webContent.send
+ then sends commit string to the server via socket */
+ipcRenderer.on('changedBranches', function(event, arg){
+	let socket = io('http://localhost:3000');
+	socket.emit('broadcastBranch', JSON.stringify(arg, null, 4))
+});
 
 
 class App extends Component {
@@ -25,19 +32,40 @@ class App extends Component {
 		this.state = {
 			message: []
 		}
-		this.handleData = this.handleData.bind(this);
+		this._handleData = this._handleData.bind(this);
 	}
 
 	componentWillMount() {
+    this.socket = io('http://localhost:3000');
+	}
 
-    this.socket = io('http://6aab338c.ngrok.io');
+	componentDidMount() {
+		this.socket.on('test', this._handleData);
+		this.socket.on('incomingCommit', this._handleData);
+  }
 
-		ajax.get('https://api.github.com/repos/team-navigitor/naviGITor/commits')
+	_handleData(dataObj) {
+		let data = JSON.parse(dataObj);
+		console.log("handledata", data);
+		this.setState({ message: this.state.message.concat(data) });
+	}
+
+	_handleSubmit(e) {
+		e.preventDefault();
+
+		let orgName = document.getElementById('login-org').value;
+		let repoName = document.getElementById('login-repo').value;
+
+		ajax.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`)
 			.end((error, response) => {
 				if (!error && response) {
 					let apiData = response.body.map(function(item){
-						return { name: item.commit.author.name, date: item.commit.author.date, message: item.commit.message }
-					});
+						return {
+							name: item.commit.author.name,
+							date: item.commit.author.date,
+							message: item.commit.message
+						}
+					}).reverse();
 					this.setState({ message: apiData });
 					console.log(apiData);
 				} else {
@@ -45,25 +73,27 @@ class App extends Component {
 				}
 			}
 		);
-	}
 
-	componentDidMount() {
-		this.socket.on('test', this.handleData);
-		this.socket.on('incomingCommit', this.handleData);
-  }
+		// Save for now to transfer to main process later
+		// let githubLogin = {
+		// 	orgName: orgName,
+		// 	repoName: repoName
+		// }
 
-	handleData(dataObj) {
-		let data = JSON.parse(dataObj);
-		console.log("handledata", data);
-		this.setState({ message: this.state.message.concat(data) });
+		// ipcRenderer.send('githubLogin', githubLogin);
 	}
 
 	render() {
     return (
-			<div className="containing-div-all">
+			<div className="container_wholePage">
 				<h1>naviGITor</h1>
-      		<div className="containing-div">
-						<Visualization message={ this.state.message } />
+					<form onSubmit={this._handleSubmit.bind(this)} className="login">
+						<input id="login-org" placeholder="Github Organization" type="text" />
+						<input id="login-repo" placeholder="Repo Name" type="text" />
+						<button className="login-submit" type="submit">Submit</button>
+					</form>
+      		<div className="container_visualizationAndTerminal">
+						<GitTree message={ this.state.message } />
 						<Term />
       		</div>
 			</div>

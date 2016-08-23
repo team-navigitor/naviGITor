@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import './terminal.scss'
 
-
-class Term extends Component {
+export default class Term extends Component {
 	//on mount, load terminal onto DOM
 	componentDidMount() {
 		this.loadTerminal(ReactDOM.findDOMNode(this))
@@ -17,16 +17,15 @@ class Term extends Component {
 		const termWidth =  DOMelem.offsetWidth;
 
 		//initialize instance of terminal
-		const term = new Terminal({
-		});
+		const term = new Terminal();
 
 		//set terminal properties, height and width equal to DOM node's
 		term.cursorBlink = true;
-		console.log('height: ' + termHeight + 'width: ' + termWidth)
+		//console.log('height: ' + termHeight + 'width: ' + termWidth)
 		term.width = termWidth;
 		term.height = termHeight;
-		//term.rows = termHeight / 20;
-		// term.cols = 60;
+		//term.rows = 11;
+		//	term.cols = 90;
 
 		//open terminal
 		term.open(node);
@@ -41,18 +40,25 @@ class Term extends Component {
 		//when renderer gets reply back from main, 
 		//write reply to terminal
 		ipcRenderer.on('reply', (event, stdout) => {
+			let node = document.getElementById("terminal");
+			let counter = 0;
 			let replyArr = stdout.split('\n');
-			console.log(replyArr)
 			replyArr.forEach(function(el) {
 				term.write('\r\n' + el);
 			});
 			term.prompt();
-			const node = document.getElementById("terminal");
 			let isAtBottom = node.scrollHeight - node.clientHeight <= node.scrollTop;
 			console.log(isAtBottom)
 			if (!isAtBottom) node.scrollTop = node.scrollHeight - node.clientHeight;
-			
-		})
+				counter++;
+			})
+			term.prompt();
+			function isOverflowed(element){
+    			return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+				}
+			if (isOverflowed(node) && counter >= 11) {
+				node.scrollTop = node.scrollHeight;
+			}
 		//initialize variable for string to be sent to main
 		let str = '';
 
@@ -78,9 +84,10 @@ class Term extends Component {
 				str = '';	
 				}
 				//term.prompt();	
-			}
+				}
+			
 			//if backspace key is hit, delete string by one
-			//and if 
+
       		else if (ev.keyCode === 8) {
 		  		if (str.length) {
 			  	str = str.substring(0, str.length - 1);
@@ -95,12 +102,12 @@ class Term extends Component {
 				str += key;
 				term.write(key);
 			}
-		})
+		});
 		//define action on paste: write data to terminal and 
 		//concatenate onto string
 		term.on('paste', function (data, ev) {
     	term.write(data);
-		str += data
+			str += data
  		});
 	}
 
@@ -114,7 +121,6 @@ class Term extends Component {
 		return (
 			<div id="terminal" className="terminal-container" style={style} >
 			</div>
-		)
+		);
 	}
 }
-export default Term
