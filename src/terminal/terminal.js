@@ -78,6 +78,11 @@ export default class Term extends Component {
 			//then reset string to empty and call prompt function
 			if (ev.keyCode === 13) {
 				if (str === '') term.prompt();
+				else if (str = 'clear') {
+					term.write('\r\n')
+					ipcRenderer.send('term-input', str)
+					str = '';
+				}
 				else {
 				term.write('\r\n')
 				ipcRenderer.send('term-input', str)

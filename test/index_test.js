@@ -58,7 +58,7 @@ describe('ipcMain', function () {
     //console.log(this.app.client)
       return this.app.client.waitUntilWindowLoaded()
       .then(function() { return this.electron.ipcRenderer.send('term-input', 'ls')
-      }).then(function () {console.log (this.electron.remote.ipcMain.on === ('term-input', function(event, input) {
+      }).then(function () {return this.electron.remote.ipcMain.on === ('term-input', function(event, input) {
   //call child-process exec, using input
   Shell.exec(input, function (error, stdout, stderr) {
     if(stderr) console.log('error!!! ' + error)
@@ -67,15 +67,10 @@ describe('ipcMain', function () {
     stderr ? str = stderr : str = stdout
     event.sender.send('reply', str)
   })
-}))
+})
 
-        
-      
-        //return this.ipcMain.on('term-input', function(){console.log('yes')})
-        //console.log("yes" + this.app.client)
-        //return this.app.client.ipcMain.on('term-input', 'git branch -v')
      
       })
   })
-})
+}
 
