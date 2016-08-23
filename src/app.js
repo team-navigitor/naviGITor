@@ -12,7 +12,7 @@ import GitTree from './gitTree';
 import { ipcRenderer } from 'electron';
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
-let socket = io('http://localhost:3000');
+let socket = io('http://navigitorsite.herokuapp.com/');
 let socketRoom = null;
 
 /* listens for an git commit event from main.js webContent.send
