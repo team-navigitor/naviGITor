@@ -65,12 +65,12 @@ io.sockets.on('connection', function (socket) {
   //listening for commit from local client, then broadcasts to all connected clients
 	socket.on('broadcastCommit', function(arg){
 		console.log('broadcastCommit: ' + arg);
-		io.emit.to(arg.room).emit('incomingCommit', arg.data);
+		io.in(arg.room).emit('incomingCommit', arg.data);
 	});
   // listening for branch change from local client, then broadcasts to all connected clients
 	socket.on('broadcastBranch', function(arg){
 		console.log('Branch server event: ' + arg);
-		io.emit.to(arg.room).emit('incomingCommit', arg.data)
+		io.in(arg.room).emit('incomingCommit', arg.data)
   });
 
   socket.on('disconnect', function(){
