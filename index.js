@@ -104,17 +104,19 @@ ipcMain.on('term-input', function(event, input) {
 })
 
 
-
-
-
-fs.readFile('./.git/logs/HEAD', 'utf8', function(err, data){
-  let dataArr = data.split('\n');
-  for(var i = 0 ; i < dataArr.length -1; i++){
-    console.log(parseGit(dataArr[i]));
-    console.log(i);
-  }
-});
-
+/******************************************************************************
+        *** GIT Parsing ***
+*******************************************************************************/
+// TODO: MODULARIZE GIT PARSER, add get last commit/event functionality
+//
+// fs.readFile('./.git/logs/HEAD', 'utf8', function(err, data){
+//   let dataArr = data.split('\n');
+//   for(var i = 0 ; i < dataArr.length -1; i++){
+//     console.log(parseGit(dataArr[i]));
+//     console.log(i);
+//   }
+// });
+//
 
 
 function parseGit(commitStr){
