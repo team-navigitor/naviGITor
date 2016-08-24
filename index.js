@@ -5,7 +5,8 @@ const {ipcMain} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
 const simpleGit = require('simple-git')();
-const exec = child.exec;
+const exec = child.exec();
+const fork = child.fork;
 const Shell = require ('shelljs');
 
 
@@ -91,16 +92,13 @@ chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('a
 *******************************************************************************/
 
 // receive input from terminal
-ipcMain.on('term-input', callShell)
-
-function callShell(event, input) {
-
-  //call child-process exec, using input
-  Shell.exec(input, function (error, stdout, stderr) {
-    if(stderr) console.log('error!!! ' + error)
-    //send response from child-process back to renderer
-    let str;
-    stderr ? str = stderr : str = stdout
-    event.sender.send('reply', str)
+ipcMain.on('term-input', (event, input) => {
+  console.log('ipcmain firing')
+  child.exec(input, function (err, stdout, stderr) {
+    console.log('child exec firing', stdout)
+    event.sender.send('reply', stdout)
   })
-}
+  // const forkProc = fork(child)
+  // console.log('fork proc: ', forkProc)
+})
+

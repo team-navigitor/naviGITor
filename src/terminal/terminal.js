@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './terminal.scss'
+
 
 export default class Term extends Component {
 	//on mount, load terminal onto DOM
 	componentDidMount() {
-		this.loadTerminal(ReactDOM.findDOMNode(this))
+		this.loadTerminal(ReactDOM.findDOMNode(this));
 	}
+
+
 
 	loadTerminal(node) {
 		//get DOM node for testing
@@ -21,11 +23,6 @@ export default class Term extends Component {
 
 		//set terminal properties, height and width equal to DOM node's
 		term.cursorBlink = true;
-		//console.log('height: ' + termHeight + 'width: ' + termWidth)
-		term.width = termWidth;
-		term.height = termHeight;
-		//term.rows = 11;
-		//	term.cols = 90;
 
 		//open terminal
 		term.open(node);
@@ -34,40 +31,34 @@ export default class Term extends Component {
 		term.prompt = () => {
     		term.write('\r\n' + '$ ');
   		};
-		//call prompt
+		//call prompt to initialize terminal.
 		term.prompt();
 
 		//when renderer gets reply back from main, 
 		//write reply to terminal
 		ipcRenderer.on('reply', (event, stdout) => {
+			console.log('reply rec')
 			let node = document.getElementById("terminal");
 			let counter = 0;
 			let replyArr = stdout.split('\n');
 			replyArr.forEach(function(el) {
 				term.write('\r\n' + el);
-			});
-			term.prompt();
-			let isAtBottom = node.scrollHeight - node.clientHeight <= node.scrollTop;
-			console.log(isAtBottom)
-			if (!isAtBottom) node.scrollTop = node.scrollHeight - node.clientHeight;
 				counter++;
-			})
+			});
+
+			if (counter >= 10) node.scrollTop = node.scrollHeight;
 			term.prompt();
-			function isOverflowed(element){
-    			return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
-				}
-			if (isOverflowed(node) && counter >= 11) {
-				node.scrollTop = node.scrollHeight;
-			}
+			})
+
 		//initialize variable for string to be sent to main
 		let str = '';
-
+	
 		//function to be run on every key stroke
-		term.on('key', function(key, ev) {
+		term.on('key', (key, ev) => {
 			//initialize printable variable to check if
 			//key is valid
 			var printable = (
-			!ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey && ev.keyCode !== 40 && ev.keyCode !==38
+			!ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey && ev.keyCode !== 9 &&ev.keyCode !== 40 && ev.keyCode !==38
 			);
 
 			// if (ev.keyCode === 45) {
@@ -78,10 +69,12 @@ export default class Term extends Component {
 			//then reset string to empty and call prompt function
 			if (ev.keyCode === 13) {
 				if (str === '') term.prompt();
-				else if (str = 'clear') {
-					term.write('\r\n')
-					ipcRenderer.send('term-input', str)
+				else if (str === 'clear') {
+					for (let i = 0; i < 11; i ++) {
+						term.write('\r\n')
+					}
 					str = '';
+					term.prompt();
 				}
 				else {
 				term.write('\r\n')
@@ -110,12 +103,11 @@ export default class Term extends Component {
 		});
 		//define action on paste: write data to terminal and 
 		//concatenate onto string
-		term.on('paste', function (data, ev) {
+		term.on('paste', (data, ev) => {
     	term.write(data);
 			str += data
  		});
 	}
-
 	render() {
 		let style = {
 		backgroundColor: "#000",
