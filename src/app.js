@@ -8,23 +8,28 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import ajax from 'superagent';
 import Term from './terminal/terminal.js'
-import Visualization from './visualization';
-const {ipcRenderer} = require('electron');
+import GitTree from './gitTree';
+import { ipcRenderer } from 'electron';
+
+// Socket handling for app. Must be global to current page for ipcRenderer + React
+let socket = io('http://navigitorsite.herokuapp.com/');
+let socketRoom = null;
 
 /* listens for an git commit event from main.js webContent.send
  then sends commit string to the server via socket */
 ipcRenderer.on('commitMade', function(event, arg){
-	let socket = io('http://localhost:3000');
-	socket.emit('broadcastCommit', JSON.stringify(arg, null, 4))
+	if(socketRoom) socket.emit('broadcastCommit', JSON.stringify(arg, null, 4));
 });
 
 /* listens for an git branch checkout event from main.js webContent.send
  then sends commit string to the server via socket */
 ipcRenderer.on('changedBranches', function(event, arg){
-	let socket = io('http://localhost:3000');
-	socket.emit('broadcastBranch', JSON.stringify(arg, null, 4))
+	if(socketRoom) socket.emit('broadcastBranch', {'room': socketRoom, 'data': JSON.stringify(arg, null, 4)});
 });
 
+function dirChoice() {
+	ipcRenderer.send('dirChoice');
+}
 
 
 class App extends Component {
@@ -33,19 +38,19 @@ class App extends Component {
 		this.state = {
 			message: []
 		}
-		this.handleData = this.handleData.bind(this);
+		this._handleData = this._handleData.bind(this);
 	}
 
-	componentWillMount() {
-    this.socket = io('http://localhost:3000');
-	}
+	// componentWillMount() {
+  //   this.socket = io('http://localhost:3000');
+	// }
 
 	componentDidMount() {
-		this.socket.on('test', this.handleData);
-		this.socket.on('incomingCommit', this.handleData);
+		socket.on('test', this._handleData);
+		socket.on('incomingCommit', this._handleData);
   }
 
-	handleData(dataObj) {
+	_handleData(dataObj) {
 		let data = JSON.parse(dataObj);
 		console.log("handledata", data);
 		this.setState({ message: this.state.message.concat(data) });
@@ -72,6 +77,9 @@ class App extends Component {
 				} else {
 					console.log('error fetching Github data', error);
 				}
+				if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
+				socket.emit("subscribe", { room: `${orgName}/${repoName}live` });
+				socketRoom = `${orgName}/${repoName}live`;
 			}
 		);
 
@@ -93,8 +101,9 @@ class App extends Component {
 						<input id="login-repo" placeholder="Repo Name" type="text" />
 						<button className="login-submit" type="submit">Submit</button>
 					</form>
+					<button onClick = {dirChoice}> Select Project Folder </button>
       		<div className="container_visualizationAndTerminal">
-						<Visualization message={ this.state.message } />
+						<GitTree message={ this.state.message } />
 						<Term />
       		</div>
 			</div>
