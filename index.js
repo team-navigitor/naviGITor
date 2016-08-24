@@ -86,10 +86,6 @@ chokidar.watch(path.join(__dirname, './.git/HEAD'), {ignoreInitial: true}).on('a
    });
 });
 
-fs.readFile(path.join(__dirname, './.git/logs/refs/heads/testing'), 'utf8', (err, data) => {
-  if (err) throw err;
-  console.log(data);
-});
 
 /******************************************************************************
         *** Terminal Emulation ***
@@ -108,6 +104,9 @@ ipcMain.on('term-input', function(event, input) {
 })
 
 
+
+
+
 fs.readFile('./.git/logs/HEAD', 'utf8', function(err, data){
   let dataArr = data.split('\n');
   for(var i = 0 ; i < dataArr.length -1; i++){
@@ -116,14 +115,20 @@ fs.readFile('./.git/logs/HEAD', 'utf8', function(err, data){
   }
 });
 
+
+
 function parseGit(commitStr){
   var commitObj = {};
-  commitObj.parent = commitStr.substring(0, 41)
-  commitObj.secondSHA = commitStr.substring(41, 81);
+  commitObj.parent = [commitStr.substring(0, 40)];
+  commitObj.SHA = commitStr.substring(41, 81);
   commitObj.author = '';
   commitObj.time = '';
   var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
   commitObj.event = commitStr.match(eventTest)[0].substring(6);
+  if(commitObj.event.substring(0, 6).trim() === 'merge'){
+    commitObj.parent.push(commitObj.SHA);
+    commitObj.SHA = null;
+  }
   commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + commitObj.event.length));
 
   var i = 81;
