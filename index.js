@@ -4,8 +4,12 @@ const child = require('child_process');
 const {ipcMain, dialog} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-const exec = child.exec;
+const Parse = require('./src/GitParser/gitparser.js')
+const exec = child.exec();
+const fork = child.fork;
+
 const Shell = require ('shelljs');
+const fs = require('fs');
 
 // Module to control application life.
 const app = electron.app
@@ -66,6 +70,7 @@ app.on('activate', function () {
         then send that event and data to the render process in app.js
 *******************************************************************************/
 
+
 function openDirChoice() {
   projectPath = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
   console.log('project path: ' + projectPath);
@@ -97,17 +102,65 @@ function openDirChoice() {
 *******************************************************************************/
 
 // receive input from terminal
-ipcMain.on('term-input', function(event, input) {
-  //call child-process exec, using input
-  Shell.exec(input, function (error, stdout, stderr) {
-    if(stderr) console.log('error!!! ' + error)
-    //send response from child-process back to renderer
-    let str;
-    stderr ? str = stderr : str = stdout
-    event.sender.send('reply', str)
+ipcMain.on('term-input', (event, input) => {
+  console.log('ipcmain firing')
+  child.exec(input, function (err, stdout, stderr) {
+    console.log('child exec firing', stdout)
+    event.sender.send('reply', stdout)
   })
+  // const forkProc = fork(child)
+  // console.log('fork proc: ', forkProc)
 })
 
+
+
+/******************************************************************************
+        *** GIT Parsing ***
+*******************************************************************************/
+// TODO: MODULARIZE GIT PARSER, add get last commit/event functionality
+//
+// fs.readFile('./.git/logs/HEAD', 'utf8', function(err, data){
+//   let dataArr = data.split('\n');
+//   for(var i = 0 ; i < dataArr.length -1; i++){
+//     console.log(parseGit(dataArr[i]));
+//     console.log(i);
+//   }
+// });
+//
+
+
+function parseGit(commitStr){
+  var commitObj = {};
+  commitObj.parent = [commitStr.substring(0, 40)];
+  commitObj.SHA = commitStr.substring(41, 81);
+  commitObj.author = '';
+  commitObj.time = '';
+  var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
+  commitObj.event = commitStr.match(eventTest)[0].substring(6);
+  if(commitObj.event.substring(0, 6).trim() === 'merge'){
+    commitObj.parent.push(commitObj.SHA);
+    commitObj.SHA = null;
+  }
+  commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + commitObj.event.length));
+
+  var i = 81;
+  while(commitStr.charAt(i) !== '>'){
+    commitObj.author += commitStr.charAt(i);
+    i++;
+  }
+  commitObj.author += '>';
+  i++;
+
+  while(commitStr.charAt(i) !== '-'){
+    commitObj.time += commitStr.charAt(i);
+    i++;
+  }
+  commitObj.time.trim();
+return commitObj;
+};
+
+
+Parse.allEvents(function(data) { console.log("data from parser: ", data)})
 
 ipcMain.on('dirChoice', function(event, input){
     openDirChoice();
