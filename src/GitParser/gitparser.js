@@ -30,6 +30,7 @@ parse.allEvents = (callback) => {
     }
     callback(res)
   })
+  callback('res', res);
 }
 
 parse.allEvents(function(data) {console.log(data)})
