@@ -7,9 +7,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import ajax from 'superagent';
-import Term from './terminal/terminal.js'
-import GitTree from './gitTree';
+// import Term from './terminal/terminal.js'
+// import GitTree from './gitTree';
 import { ipcRenderer } from 'electron';
+import DagTree from './dagTree';
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
 let socket = io('http://navigitorsite.herokuapp.com/');
@@ -102,10 +103,7 @@ class App extends Component {
 						<button className="login-submit" type="submit">Submit</button>
 					</form>
 					<button onClick = {dirChoice}> Select Project Folder </button>
-      		<div className="container_visualizationAndTerminal">
-						<GitTree message={ this.state.message } />
-						<Term />
-      		</div>
+					<DagTree />
 			</div>
     );
 	}
