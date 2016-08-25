@@ -4,7 +4,7 @@ const child = require('child_process');
 const {ipcMain, dialog} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-
+const Parse = require('./src/GitParser/gitparser.js')
 const exec = child.exec();
 const fork = child.fork;
 
@@ -160,7 +160,7 @@ return commitObj;
 };
 
 
-
+Parse.allEvents(function(data) { console.log("data from parser: ", data)})
 
 ipcMain.on('dirChoice', function(event, input){
     openDirChoice();
