@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
+import $ from 'jquery';
+import qtip from 'qtip2';
 import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
-import $ from 'jquery';
+import cyqtip from 'cytoscape-qtip';
+import { ipcRenderer } from 'electron';
 
 // register extension
+cyqtip( cytoscape, $ );
 cydagre( cytoscape, dagre );
+
+ipcRenderer.on('parsedCommit', function(event, arg){
+	console.log('hello');
+	alert('hello');
+});
 
 export default class DagTree extends Component {
 	constructor() {
@@ -13,7 +22,7 @@ export default class DagTree extends Component {
 	}
 
 	componentDidMount() {
-		$(function(){
+		$(function dagTree() {
 			var cy = window.cy = cytoscape({
 				container: document.getElementById('cy'),
 				boxSelectionEnabled: false,
@@ -55,18 +64,7 @@ export default class DagTree extends Component {
 						{ data: { id: 'n2' } },
 						{ data: { id: 'n3' } },
 						{ data: { id: 'n4' } },
-						{ data: { id: 'n5' } },
-						{ data: { id: 'n6' } },
-						{ data: { id: 'n7' } },
-						{ data: { id: 'n8' } },
-						{ data: { id: 'n9' } },
-						{ data: { id: 'n10' } },
-						{ data: { id: 'n11' } },
-						{ data: { id: 'n12' } },
-						{ data: { id: 'n13' } },
-						{ data: { id: 'n14' } },
-						{ data: { id: 'n15' } },
-						{ data: { id: 'n16' } }
+						{ data: { id: 'n5' } }
 					],
 					edges: [
 						/** There is where ongoing commits or chains will be.
@@ -76,20 +74,38 @@ export default class DagTree extends Component {
 						{ data: { source: 'n0', target: 'n1' } },
 						{ data: { source: 'n1', target: 'n2' } },
 						{ data: { source: 'n1', target: 'n3' } },
-						{ data: { source: 'n1', target: 'n5' } },
-						{ data: { source: 'n4', target: 'n6' } },
-						{ data: { source: 'n6', target: 'n7' } },
-						{ data: { source: 'n6', target: 'n8' } },
-						{ data: { source: 'n8', target: 'n9' } },
-						{ data: { source: 'n7', target: 'n9' } },
-						{ data: { source: 'n8', target: 'n10' } },
-						{ data: { source: 'n11', target: 'n12' } },
-						{ data: { source: 'n12', target: 'n13' } },
-						{ data: { source: 'n13', target: 'n14' } },
-						{ data: { source: 'n13', target: 'n15' } },
+						{ data: { source: 'n1', target: 'n5' } }
 					]
 				},
 			});
+
+			// Hides and shows tooltop appropriately.
+			cy.qtip({
+				content: 'hello',
+				show: {
+				  event: 'mouseover'
+				},
+				hide: {
+					when: {
+					  event: 'mouseleave unfocus'
+					}
+				}
+	    });
+
+	  	// cy.on('mouseover', 'node', function(event) {
+  	 //    var node = event.cyTarget;
+  	 //    node.qtip({
+				// 	content: 'hello',
+				// 	show: {
+				// 	  event: event.type,
+				// 	},
+				// 	hide: {
+				// 		when: {
+				// 			event: 'mouseleave unfocus'
+				// 		}
+				// 	}
+  	 //    }, event);
+	  	// });
 		});
 	}
 

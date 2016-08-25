@@ -12,13 +12,13 @@ const Shell = require ('shelljs');
 const fs = require('fs');
 
 // Module to control application life.
-const app = electron.app
+const app = electron.app;
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const BrowserWindow = electron.BrowserWindow;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
-let projectPath
+let mainWindow;
+let projectPath;
 
 
 
@@ -94,7 +94,7 @@ function openDirChoice() {
       } else {
       mainWindow.webContents.send('changedBranches', status.current);
       }
-     });
+    });
   });
 }
 /******************************************************************************
@@ -130,24 +130,29 @@ ipcMain.on('term-input', (event, input) => {
 
 
 function parseGit(commitStr){
-  var commitObj = {};
+  let commitObj = {};
+  let eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
+
   commitObj.parent = [commitStr.substring(0, 40)];
   commitObj.SHA = commitStr.substring(41, 81);
   commitObj.author = '';
   commitObj.time = '';
-  var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
   commitObj.event = commitStr.match(eventTest)[0].substring(6);
+
   if(commitObj.event.substring(0, 6).trim() === 'merge'){
     commitObj.parent.push(commitObj.SHA);
     commitObj.SHA = null;
   }
+
   commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + commitObj.event.length));
 
-  var i = 81;
+  let i = 81;
+  
   while(commitStr.charAt(i) !== '>'){
     commitObj.author += commitStr.charAt(i);
     i++;
   }
+
   commitObj.author += '>';
   i++;
 
@@ -155,13 +160,19 @@ function parseGit(commitStr){
     commitObj.time += commitStr.charAt(i);
     i++;
   }
+
   commitObj.time.trim();
-return commitObj;
+
+  return commitObj;
 };
 
 
-Parse.allEvents(function(data) { console.log("data from parser: ", data)})
+Parse.allEvents(function(data) {
+  console.log("data from parser: ", data);
+  // Send Git commit data to client side
+  mainWindow.webContents.send('parsedCommit', data);
+});
 
 ipcMain.on('dirChoice', function(event, input){
-    openDirChoice();
-})
+  openDirChoice();
+});

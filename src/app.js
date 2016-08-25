@@ -19,6 +19,7 @@ let socketRoom = null;
 /* listens for an git commit event from main.js webContent.send
  then sends commit string to the server via socket */
 ipcRenderer.on('commitMade', function(event, arg){
+	console.log(event, arg);
 	if(socketRoom) socket.emit('broadcastCommit', JSON.stringify(arg, null, 4));
 });
 
@@ -32,15 +33,17 @@ function dirChoice() {
 	ipcRenderer.send('dirChoice');
 }
 
-
 class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			message: []
+			message: [],
+			commitArray: []
 		}
+
 		this._handleData = this._handleData.bind(this);
 	}
+
 
 	// componentWillMount() {
   //   this.socket = io('http://localhost:3000');
@@ -49,6 +52,13 @@ class App extends Component {
 	componentDidMount() {
 		socket.on('test', this._handleData);
 		socket.on('incomingCommit', this._handleData);
+
+
+		// ipcRenderer.on('parsedCommit', function(event, arg){
+		// 	console.log('hi');
+			
+		// 	this.setState({ commitArray: data })
+		// });
   }
 
 	_handleData(dataObj) {
@@ -103,7 +113,7 @@ class App extends Component {
 						<button className="login-submit" type="submit">Submit</button>
 					</form>
 					<button onClick = {dirChoice}> Select Project Folder </button>
-					<DagTree />
+					<DagTree data={this.state.commitArray} />
 			</div>
     );
 	}
