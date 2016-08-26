@@ -23,12 +23,13 @@ gitParser.mostRecentEvent = (gitPath, callback) => {
 }
 
 // parses the entire .git log file and returns an array of commit objects
-gitParser.allEvents = (callback) => {
+gitParser.allEvents = (gitPath, callback) => {
   const res = [];
-  fs.readFile(path.join(__dirname, '../../.git/logs/HEAD'), 'utf8', (err, data) => {
+  fs.readFile(gitPath +'/.git/logs/HEAD', 'utf8', (err, data) => {
+    if (err) return callback(err);
     let dataArr = data.split('\n');
     for (let i = 0; i < dataArr.length - 2; i++) {
-      res.push(gitParserGit(dataArr[i]));
+      res.push(parseGit(dataArr[i]));
     }
     callback(res)
   })
@@ -61,5 +62,37 @@ function parseSingleGit(commitStr){
   commitObj.time = commitObj.time.trim();
 return commitObj;
 };
+
+
+function parseGit(commitStr){
+  var commitObj = {};
+  commitObj.parent = [commitStr.substring(0, 40)];
+  commitObj.SHA = commitStr.substring(41, 81);
+  commitObj.author = '';
+  commitObj.time = '';
+  var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
+  commitObj.event = commitStr.match(eventTest)[0].substring(6);
+  if(commitObj.event.substring(0, 6).trim() === 'merge'){
+    commitObj.parent.push(commitObj.SHA);
+    commitObj.SHA = null;
+  }
+  commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + commitObj.event.length));
+
+  var i = 81;
+  while(commitStr.charAt(i) !== '>'){
+    commitObj.author += commitStr.charAt(i);
+    i++;
+  }
+  commitObj.author += '>';
+  i++;
+
+  while(commitStr.charAt(i) !== '-'){
+    commitObj.time += commitStr.charAt(i);
+    i++;
+  }
+  commitObj.time.trim();
+return commitObj;
+};
+
 
 module.exports = gitParser;
