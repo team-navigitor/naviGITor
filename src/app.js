@@ -14,25 +14,26 @@ import Main from './Main';
 import Login from './login';
 import GitTree from './gitTree';
 import Terminal from './terminal/terminal.js'
-// // Socket handling for app. Must be global to current page for ipcRenderer + React
-// let socket = io('http://navigitorsite.herokuapp.com/');
-// let socketRoom = null;
-//
-// /* listens for an git commit event from main.js webContent.send
-//  then sends commit string to the server via socket */
-// ipcRenderer.on('commitMade', function(event, arg){
-// 	if(socketRoom) socket.emit('broadcastCommit', JSON.stringify(arg, null, 4));
-// });
-//
-// /* listens for an git branch checkout event from main.js webContent.send
-//  then sends commit string to the server via socket */
-// ipcRenderer.on('changedBranches', function(event, arg){
-// 	if(socketRoom) socket.emit('broadcastBranch', {'room': socketRoom, 'data': JSON.stringify(arg, null, 4)});
-// });
-//
-// function dirChoice() {
-// 	ipcRenderer.send('dirChoice');
-// }
+
+// Socket handling for app. Must be global to current page for ipcRenderer + React
+let socket = io('http://navigitorsite.herokuapp.com');
+let socketRoom = null;
+
+/* listens for an git commit event from main.js webContent.send
+ then sends commit string to the server via socket */
+ipcRenderer.on('commitMade', function(event, arg){
+	if(socketRoom) socket.emit('broadcastCommit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 4)});
+});
+
+/* listens for an git branch checkout event from main.js webContent.send
+ then sends commit string to the server via socket */
+ipcRenderer.on('changedBranches', function(event, arg){
+	if(socketRoom) socket.emit('broadcastBranch', {'room': socketRoom, 'data': JSON.stringify(arg, null, 4)});
+});
+
+function dirChoice() {
+	ipcRenderer.send('dirChoice');
+}
 
 
 class App extends Component {
@@ -43,10 +44,6 @@ class App extends Component {
 		}
 		this._handleData = this._handleData.bind(this);
 	}
-
-	// componentWillMount() {
-  //   this.socket = io('http://localhost:3000');
-	// }
 
 	componentDidMount() {
 		socket.on('test', this._handleData);

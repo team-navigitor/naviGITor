@@ -1,10 +1,9 @@
-const electron = require('electron')
-const readGit = require('./src/localGitAccess/localGitREAD');
+const electron = require('electron');
 const child = require('child_process');
 const {ipcMain, dialog} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-const Parse = require('./src/GitParser/gitparser.js')
+const gitParser = require('./src/GitParser/gitparser.js');
 const exec = child.exec();
 const fork = child.fork;
 
@@ -18,7 +17,6 @@ const BrowserWindow = electron.BrowserWindow
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-let projectPath
 
 
 
@@ -69,34 +67,19 @@ app.on('activate', function () {
         Following methods, when triggered, calls simpleGit to parse log event
         then send that event and data to the render process in app.js
 *******************************************************************************/
-
-
+// to receive the path of file to be watched from renderer process,
+ipcMain.on('dirChoice', function(event, input){
+    openDirChoice();
+});
+// sets file watching and triggers event chain when git log is modified
 function openDirChoice() {
-  projectPath = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
-  console.log('project path: ' + projectPath);
+  let projectPath = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
   // to resolve to home path and append path given from renderer process
-  var simpleGit = require('simple-git')(path.resolve('~', projectPath.toString()));
-
-  chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
-    simpleGit.log(function(err, log) {
-      if(err){
-        console.log('error on commit event: ' + err);
-      } else {
-        mainWindow.webContents.send('commitMade', log.latest);
-      }
-     });
-  });
-
-  // File watching process for local git BRANCH CHECKOUTS
-  chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) => {
-    simpleGit.status(function(err, status) {
-      if(err){console.log('error on branch event: ' + err)
-      } else {
-      mainWindow.webContents.send('changedBranches', status.current);
-      }
-     });
-  });
-}
+  var gitPath = (path.resolve('~', projectPath.toString()));
+  chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) =>
+        gitParser.mostRecentEvent(gitPath, function(data) { mainWindow.webContents.send('commitMade', data)})
+  );
+};
 /******************************************************************************
         *** Terminal Emulation ***
 *******************************************************************************/
@@ -108,60 +91,4 @@ ipcMain.on('term-input', (event, input) => {
     console.log('child exec firing', stdout)
     event.sender.send('reply', stdout)
   })
-  // const forkProc = fork(child)
-  // console.log('fork proc: ', forkProc)
-})
-
-
-
-/******************************************************************************
-        *** GIT Parsing ***
-*******************************************************************************/
-// TODO: MODULARIZE GIT PARSER, add get last commit/event functionality
-//
-// fs.readFile('./.git/logs/HEAD', 'utf8', function(err, data){
-//   let dataArr = data.split('\n');
-//   for(var i = 0 ; i < dataArr.length -1; i++){
-//     console.log(parseGit(dataArr[i]));
-//     console.log(i);
-//   }
-// });
-//
-
-
-function parseGit(commitStr){
-  var commitObj = {};
-  commitObj.parent = [commitStr.substring(0, 40)];
-  commitObj.SHA = commitStr.substring(41, 81);
-  commitObj.author = '';
-  commitObj.time = '';
-  var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
-  commitObj.event = commitStr.match(eventTest)[0].substring(6);
-  if(commitObj.event.substring(0, 6).trim() === 'merge'){
-    commitObj.parent.push(commitObj.SHA);
-    commitObj.SHA = null;
-  }
-  commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + commitObj.event.length));
-
-  var i = 81;
-  while(commitStr.charAt(i) !== '>'){
-    commitObj.author += commitStr.charAt(i);
-    i++;
-  }
-  commitObj.author += '>';
-  i++;
-
-  while(commitStr.charAt(i) !== '-'){
-    commitObj.time += commitStr.charAt(i);
-    i++;
-  }
-  commitObj.time.trim();
-return commitObj;
-};
-
-
-Parse.allEvents(function(data) { console.log("data from parser: ", data)})
-
-ipcMain.on('dirChoice', function(event, input){
-    openDirChoice();
-})
+});
