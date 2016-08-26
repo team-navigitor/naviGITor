@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 export default class GitTree extends Component {
 	render() {
+		//CODE FOR GIT MESSAGES FROM LAST DRAFT:
 		// let commits;
 		// if (this.props.message !== []) {
 		// 	let obj = this.props.message;

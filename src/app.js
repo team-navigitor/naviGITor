@@ -10,7 +10,6 @@ import ajax from 'superagent';
 import { ipcRenderer } from 'electron';
 
 const { Router, Route, Link, hashHistory, IndexRoute } = require('react-router');
-
 import Main from './Main';
 import Login from './login';
 import GitTree from './gitTree';
@@ -92,7 +91,6 @@ class App extends Component {
 		// 	orgName: orgName,
 		// 	repoName: repoName
 		// }
-
 		// ipcRenderer.send('githubLogin', githubLogin);
 	}
 
@@ -105,7 +103,6 @@ class App extends Component {
 	}
 }
 export default App;
-// ReactDOM.render(<App />, document.getElementById('app'));
 
 
 ReactDOM.render((
