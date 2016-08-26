@@ -37,128 +37,85 @@ import Terminal from './terminal/terminal.js'
 
 
 class App extends Component {
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = {
-	// 		message: []
-	// 	}
-	// 	this._handleData = this._handleData.bind(this);
+	constructor(props) {
+		super(props);
+		this.state = {
+			message: []
+		}
+		this._handleData = this._handleData.bind(this);
+	}
+
+	// componentWillMount() {
+  //   this.socket = io('http://localhost:3000');
 	// }
-	//
-	// // componentWillMount() {
-  // //   this.socket = io('http://localhost:3000');
-	// // }
-	//
-	// componentDidMount() {
-	// 	socket.on('test', this._handleData);
-	// 	socket.on('incomingCommit', this._handleData);
-  // }
-	//
-	// _handleData(dataObj) {
-	// 	let data = JSON.parse(dataObj);
-	// 	console.log("handledata", data);
-	// 	this.setState({ message: this.state.message.concat(data) });
-	// }
-	//
-	// _handleSubmit(e) {
-	// 	e.preventDefault();
-	//
-	// 	let orgName = document.getElementById('login-org').value;
-	// 	let repoName = document.getElementById('login-repo').value;
-	//
-	// 	ajax.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`)
-	// 		.end((error, response) => {
-	// 			if (!error && response) {
-	// 				let apiData = response.body.map(function(item){
-	// 					return {
-	// 						name: item.commit.author.name,
-	// 						date: item.commit.author.date,
-	// 						message: item.commit.message
-	// 					}
-	// 				}).reverse();
-	// 				this.setState({ message: apiData });
-	// 				console.log(apiData);
-	// 			} else {
-	// 				console.log('error fetching Github data', error);
-	// 			}
-	// 			if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
-	// 			socket.emit("subscribe", { room: `${orgName}/${repoName}live` });
-	// 			socketRoom = `${orgName}/${repoName}live`;
-	// 		}
-	// 	);
-	//
-	// 	// Save for now to transfer to main process later
-	// 	// let githubLogin = {
-	// 	// 	orgName: orgName,
-	// 	// 	repoName: repoName
-	// 	// }
-	//
-	// 	// ipcRenderer.send('githubLogin', githubLogin);
-	// }
+
+	componentDidMount() {
+		socket.on('test', this._handleData);
+		socket.on('incomingCommit', this._handleData);
+  }
+
+	_handleData(dataObj) {
+		let data = JSON.parse(dataObj);
+		console.log("handledata", data);
+		this.setState({ message: this.state.message.concat(data) });
+	}
+
+	_handleSubmit(e) {
+		e.preventDefault();
+
+		let orgName = document.getElementById('login-org').value;
+		let repoName = document.getElementById('login-repo').value;
+
+		ajax.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`)
+			.end((error, response) => {
+				if (!error && response) {
+					let apiData = response.body.map(function(item){
+						return {
+							name: item.commit.author.name,
+							date: item.commit.author.date,
+							message: item.commit.message
+						}
+					}).reverse();
+					this.setState({ message: apiData });
+					console.log(apiData);
+				} else {
+					console.log('error fetching Github data', error);
+				}
+				if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
+				socket.emit("subscribe", { room: `${orgName}/${repoName}live` });
+				socketRoom = `${orgName}/${repoName}live`;
+			}
+		);
+
+		// Save for now to transfer to main process later
+		// let githubLogin = {
+		// 	orgName: orgName,
+		// 	repoName: repoName
+		// }
+
+		// ipcRenderer.send('githubLogin', githubLogin);
+	}
 
 	render() {
     return (
 				<div>
 					{this.props.children}
-					<Link to="/Main">SIGN IN</Link>
 				</div>
-					/* <form onSubmit={this._handleSubmit.bind(this)} className="login">
-						<input id="login-org" placeholder="Github Organization" type="text" />
-						<input id="login-repo" placeholder="Repo Name" type="text" />
-						<button className="login-submit" type="submit">Submit</button>
-					</form>
-					<button onClick = {dirChoice}> Select Project Folder </button>
-      		<div className="container_visualizationAndTerminal">
-						<GitTree message={ this.state.message } />
-						<Term />
-      		</div> */
-
-    );
+    )
 	}
 }
 export default App;
 // ReactDOM.render(<App />, document.getElementById('app'));
-
-class Home extends React.Component {
-   render() {
-      return (
-         <div>
-            <h1>Home...</h1>
-         </div>
-      )
-   }
-}
-// export default Home;
-
-class PageOne extends React.Component {
-   render() {
-      return (
-         <div>
-            <h1>Page One...</h1>
-         </div>
-      )
-   }
-}
-// export default PageOne;
-
-class PageTwo extends React.Component {
-   render() {
-      return (
-         <div>
-            <h1>Page Two...</h1>
-         </div>
-      )
-   }
-}
 
 
 ReactDOM.render((
    <Router history = {hashHistory}>
       <Route path = "/" component = {App}>
          <IndexRoute component = {Login} />
-         <Route path = "GitTree" component = {GitTree} />
-         <Route path = "Main" component = {Main} />
-			   <Route path = "Terminal" component = {Terminal} />
+				 <Route path = "Main" component = {Main}>
+				 	 <Route path = "GitTree" component = {GitTree} />
+			     <Route path = "Terminal" component = {Terminal} />
+				</Route>
       </Route>
   </Router>
 ), document.getElementById('app'))

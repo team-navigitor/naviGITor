@@ -27,7 +27,7 @@ export default class Login extends Component {
   render() {
     return (
       <div className='login-container'>
-      <h1>LOG IN PAGE</h1>
+      <h2>NAVIGITOR LOG IN PAGE</h2>
       <form className="enter-form" onSubmit={loginClicked}>
       <input id='userNameInput' className="form-control"
             placeholder="Please enter name"
@@ -36,7 +36,7 @@ export default class Login extends Component {
             placeholder="Please enter Password"
             required />
           <button id='LoginButton' type="submit" className="btn btn-primary" onClick={this.loginClicked}>Enter</button>
-      <button  id='signUpButton' className="btn btn-primary">Sign Up</button>
+      <button id='signUpButton' className="btn btn-primary">Sign Up</button>
     </form>
     </div>
     )

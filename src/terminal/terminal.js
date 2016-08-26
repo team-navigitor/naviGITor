@@ -115,6 +115,7 @@ export default class Terminal extends Component {
 		}
 		return (
 			<div id="terminal" className="terminal-container" style={style} >
+			<h1>TERMINAL</h1>
 			</div>
 		);
 	}

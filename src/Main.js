@@ -1,16 +1,36 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router';
-// import { Nav, NavItem } from 'react-bootstrap';
-// import NavBar from './navBar';
 
-export default class NavBar extends Component {
+
+export default class Main extends Component {
   render() {
     return (
       <div id='main-container'>
+
       <div className='side-nav-bar-container'>
+      <h2>NAVIGITOR</h2>
+      <form className="login">
+        <input id="login-org" placeholder="Github Org" type="text" />
+        <input id="login-repo" placeholder="Repo Name" type="text" />
+        <button className="login-submit" type="submit">Submit</button>
+      </form>
+
+      {/* <button onClick = {dirChoice}> Select Project Folder </button>
+      <form onSubmit={this._handleSubmit.bind(this)} className="login">
+        <input id="login-org" placeholder="Github Organization" type="text" />
+        <input id="login-repo" placeholder="Repo Name" type="text" />
+        <button className="login-submit" type="submit">Submit</button>
+      </form>
+      <button onClick = {dirChoice}> Select Project Folder </button> */}
+
+      {/* <div className="container_visualizationAndTerminal">
+        <GitTree message={ this.state.message } />
+        <Term />
+      </div> */}
+
         <ul>
-          <li><Link to='/GitTree'>GIT TREE</Link></li>
-          <li><Link to='/Terminal'>TERMINAL</Link></li>
+          <li><Link to='/Main/GitTree'>GIT TREE</Link></li>
+          <li><Link to='/Main/Terminal'>TERMINAL</Link></li>
           <li><Link to='/'>LOG OUT</Link></li>
         </ul>
       </div>
@@ -18,39 +38,6 @@ export default class NavBar extends Component {
          {this.props.children}
       </div>
       </div>
-        /* <Nav bsStyle="tabs" justified activeKey={1}>
-          <NavItem eventKey={1} title="Item">LOG OUT</NavItem>
-          <NavItem eventKey={2} title="Item">WORKFLOW</NavItem>
-          <NavItem eventKey={3} title="Item">TERMINAL</NavItem>
-          <NavItem eventKey={4} title="Item">CHAT</NavItem>
-        </Nav> */
     )
   }
 }
-
-
-
-
-// export default class Main extends Component {
-//   render() {
-//     return (
-//       <div id='Main-Page'>
-//         <NavBar />
-//         <div className='focal-area-container'></div>
-//         <div>
-//
-//         </div>
-//     )
-//   }
-// }
-//
-// //
-// // <div className="container_wholePage">
-// //   <h1>naviGITor</h1>
-// // //
-// // //     <div>
-// // //       <Link to="/PageOne">Click here to go page one</Link>
-// // //       {this.props.children}
-// // //     </div>
-// // //
-// // // </div>
