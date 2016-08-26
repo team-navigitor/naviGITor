@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { ipcRenderer } from 'electron';
 
-export default class Term extends Component {
+
+export default class TerminalView extends Component {
 	//on mount, load terminal onto DOM
 	componentDidMount() {
 		this.loadTerminal(ReactDOM.findDOMNode(this));
@@ -115,6 +117,7 @@ export default class Term extends Component {
 		}
 		return (
 			<div id="terminal" className="terminal-container" style={style} >
+			<h1>TERMINAL</h1>
 			</div>
 		);
 	}
