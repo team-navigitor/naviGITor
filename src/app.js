@@ -7,14 +7,14 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import ajax from 'superagent';
-import Term from './terminal/terminal.js'
-import GitTree from './gitTree';
 import { ipcRenderer } from 'electron';
 
 const { Router, Route, Link, hashHistory, IndexRoute } = require('react-router');
 
-
-//
+import Main from './Main';
+import Login from './login';
+import GitTree from './gitTree';
+import Terminal from './terminal/terminal.js'
 // // Socket handling for app. Must be global to current page for ipcRenderer + React
 // let socket = io('http://navigitorsite.herokuapp.com/');
 // let socketRoom = null;
@@ -98,13 +98,11 @@ class App extends Component {
 
 	render() {
     return (
-			<div className="container_wholePage">
-				<h1>naviGITor</h1>
 				<div>
-					<Link to="/PageOne">Click here to go page one</Link>
 					{this.props.children}
+					<Link to="/Main">SIGN IN</Link>
 				</div>
-					{/* <form onSubmit={this._handleSubmit.bind(this)} className="login">
+					/* <form onSubmit={this._handleSubmit.bind(this)} className="login">
 						<input id="login-org" placeholder="Github Organization" type="text" />
 						<input id="login-repo" placeholder="Repo Name" type="text" />
 						<button className="login-submit" type="submit">Submit</button>
@@ -113,8 +111,8 @@ class App extends Component {
       		<div className="container_visualizationAndTerminal">
 						<GitTree message={ this.state.message } />
 						<Term />
-      		</div> */}
-			</div>
+      		</div> */
+
     );
 	}
 }
@@ -152,18 +150,15 @@ class PageTwo extends React.Component {
       )
    }
 }
-// export default PageTwo;
-
-
 
 
 ReactDOM.render((
    <Router history = {hashHistory}>
       <Route path = "/" component = {App}>
-         <IndexRoute component = {Home} />
-         <Route path = "Home" component = {Home} />
-         <Route path = "PageOne" component = {PageOne} />
-         <Route path = "PageTwo" component = {PageTwo} />
+         <IndexRoute component = {Login} />
+         <Route path = "GitTree" component = {GitTree} />
+         <Route path = "Main" component = {Main} />
+			   <Route path = "Terminal" component = {Terminal} />
       </Route>
   </Router>
 ), document.getElementById('app'))

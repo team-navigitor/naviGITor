@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-export default class Term extends Component {
+export default class Terminal extends Component {
 	//on mount, load terminal onto DOM
 	componentDidMount() {
 		this.loadTerminal(ReactDOM.findDOMNode(this));
