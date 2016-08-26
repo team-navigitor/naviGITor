@@ -70,25 +70,21 @@ app.on('activate', function () {
 // to receive the path of file to be watched from renderer process,
 ipcMain.on('dirChoice', function(event, input){
     openDirChoice();
-    grabLocalOnLoad();
 });
 // sets file watching and triggers event chain when git log is modified
 function openDirChoice() {
   let projectPath = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
   // to resolve to home path and append path given from renderer process
   var gitPath = (path.resolve('~', projectPath.toString()));
+
+  // Watches for all local git activity
   chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) =>
         gitParser.mostRecentEvent(gitPath, function(data) { 
           mainWindow.webContents.send('parsedCommit', data)})
   );
-};
 
-function grabLocalOnLoad() {
-  let projectPath = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
-  // to resolve to home path and append path given from renderer process
-  var gitPath = (path.resolve('~', projectPath.toString()));
+  // Just loads git log history
   gitParser.allEvents(gitPath, function(data) { 
-    console.log(data);
     mainWindow.webContents.send('parsedCommitAll', data);
   });
 };

@@ -11,10 +11,6 @@ import { ipcRenderer } from 'electron';
 cyqtip( cytoscape, $ );
 cydagre( cytoscape, dagre );
 
-ipcRenderer.on('parsedCommitAll', function(event, data) {
-	console.log('ALL LOCAL STUFF', data);
-});
-
 export default class DagTree extends Component {
 	constructor() {
 		super();
@@ -25,28 +21,49 @@ export default class DagTree extends Component {
 		let localGitNodes = [];
 		let localGitEdges = [];
 
-		localGitAction = ipcRenderer.on('parsedCommit', function(event, data){
-			console.log(data);
+		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data){
 
+			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < data.length; i++) {
 				localGitNodes.push({
 					data: {
-						id: data[i]
+						id: data[i].SHA
 					}
 				});
 			}
 
 			for (var i = 0; i < data.length; i++) {
-				localGitEdges.push({
-					data: {
-						source: 'n0',
-						target: data[i]
-					}
-				});
+				// loop through git merge activity and connect current node with parent nodes
+				if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
+					localGitEdges.push({
+						data: {
+							source: data[i].parent[0],
+							target: data[i].SHA
+						}
+					},{
+						data: {
+							source: data[i].parent[1],
+							target: data[i].SHA
+						}
+					});
+				}
+
+				// loop through all other events and connect current node to parent node
+				if (data[i]['event'] !== 'checkout') {
+					localGitEdges.push({
+						data: {
+							source: data[i].parent[0],
+							target: data[i].SHA
+						}
+					});
+				}
 			}
+
+			dagTree();
 		});
 
-		$(function dagTree() {
+
+		function dagTree() {
 			var cy = window.cy = cytoscape({
 				container: document.getElementById('cy'),
 				boxSelectionEnabled: false,
@@ -76,34 +93,8 @@ export default class DagTree extends Component {
 					}
 				],
 				elements: {
-					// nodes: localGitNodes,
-					nodes: [
-						//	Todo: think about how to display a new edge/node when a user joins the repository
-
-						/** ALL SHAs (committed) will be newly created here
-								If the SHA does not have a parent ID, it should be known
-								that it is a new branch or commit.
-						**/
-						{ data: { id: 'n0' } },
-						localGitNodes
-						// ,
-						// { data: { id: 'n1' } },
-						// { data: { id: 'n2' } },
-						// { data: { id: 'n3' } },
-						// { data: { id: 'n4' } },
-						// { data: { id: 'n5' } }
-					],
+					nodes: localGitNodes,
 					edges: localGitEdges
-					// edges: [
-					// 	/** There is where ongoing commits or chains will be.
-					// 			When the current SHA (target) has a parent (source), 
-					// 			they should link;
-					// 	**/
-					// 	{ data: { source: 'n0', target: 'n1' } },
-					// 	{ data: { source: 'n1', target: 'n2' } },
-					// 	{ data: { source: 'n1', target: 'n3' } },
-					// 	{ data: { source: 'n1', target: 'n5' } }
-					// ]
 				},
 			});
 
@@ -134,7 +125,7 @@ export default class DagTree extends Component {
 				// 	}
   	 //    }, event);
 	  	// });
-		});
+		};
 	}
 
 	render() {
