@@ -2,8 +2,9 @@ body {
 	position: relative;
   color: white;
   height: 100vh;
-  background-color: #232C39;
-  background-image: linear-gradient(45deg, rgba(11, 23, 172, .5) 10%, rgba(253, 89, 146, .7));
+  background: #fff;
+  // background-color: #232C39;
+  // background-image: linear-gradient(45deg, rgba(11, 23, 172, .5) 10%, rgba(253, 89, 146, .7));
 	font-family: 'Titillium Web', sans-serif;
   overflow-y: hidden;
 	margin: 30px;
@@ -103,4 +104,9 @@ body {
 	left: 0;
 	top: 0;
 	z-index: 999;
+}
+
+.cytocontainer {
+	position: relative;
+	height: 450px;
 }
