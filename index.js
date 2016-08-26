@@ -3,7 +3,7 @@ const child = require('child_process');
 const {ipcMain, dialog} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-const Parse = require('./src/GitParser/gitparser.js');
+const gitParser = require('./src/GitParser/gitparser.js');
 const exec = child.exec();
 const fork = child.fork;
 
@@ -77,7 +77,7 @@ function openDirChoice() {
   // to resolve to home path and append path given from renderer process
   var gitPath = (path.resolve('~', projectPath.toString()));
   chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) =>
-        Parse.mostRecentEvent(gitPath, function(data) { mainWindow.webContents.send('commitMade', data)})
+        gitParser.mostRecentEvent(gitPath, function(data) { mainWindow.webContents.send('commitMade', data)})
   );
 };
 /******************************************************************************
