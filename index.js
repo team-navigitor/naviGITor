@@ -147,7 +147,7 @@ function parseGit(commitStr){
   commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + commitObj.event.length));
 
   let i = 81;
-  
+
   while(commitStr.charAt(i) !== '>'){
     commitObj.author += commitStr.charAt(i);
     i++;
@@ -166,9 +166,9 @@ function parseGit(commitStr){
   return commitObj;
 };
 
-
 Parse.allEvents(function(data) {
-  console.log("data from parser: ", data);
+  // console.log("data from parser: ", data);
+
   // Send Git commit data to client side
   mainWindow.webContents.send('parsedCommit', data);
 });
