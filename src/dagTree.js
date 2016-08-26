@@ -60,6 +60,42 @@ export default class DagTree extends Component {
 			}
 
 			dagTree();
+
+			// // Hides and shows tooltop appropriately, not dynamic
+			// cy.qtip({
+			// 	content: 'hello',
+			// 	show: {
+			// 	  event: 'mouseover'
+			// 	},
+			// 	hide: {
+			// 		when: {
+			// 		  event: 'mouseleave unfocus'
+			// 		}
+			// 	}
+	  //   });
+
+	  //Needs some polishing
+	  	cy.on('mouseover', 'node', function (event) {
+        var eid = event.cyTarget._private.data.id
+        console.log(event.cyTarget._private.data.id);
+        // console.log($(this));
+
+        $(this).qtip({
+          content: eid,
+          position: {
+            at: 'top',
+            target: $(this)
+          },
+          show: {
+            event: 'mouseover',
+            ready: true
+          },
+          hide: {
+            // fixed: true,
+            event: 'mouseleave unfocus'
+          }
+        }, event); 
+	    });
 		});
 
 
@@ -97,34 +133,6 @@ export default class DagTree extends Component {
 					edges: localGitEdges
 				},
 			});
-
-			// Hides and shows tooltop appropriately.
-			cy.qtip({
-				content: 'hello',
-				show: {
-				  event: 'mouseover'
-				},
-				hide: {
-					when: {
-					  event: 'mouseleave unfocus'
-					}
-				}
-	    });
-
-	  	// cy.on('mouseover', 'node', function(event) {
-  	 //    var node = event.cyTarget;
-  	 //    node.qtip({
-				// 	content: 'hello',
-				// 	show: {
-				// 	  event: event.type,
-				// 	},
-				// 	hide: {
-				// 		when: {
-				// 			event: 'mouseleave unfocus'
-				// 		}
-				// 	}
-  	 //    }, event);
-	  	// });
 		};
 	}
 
