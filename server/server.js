@@ -11,8 +11,7 @@ const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT);
 const io = require('socket.io').listen(server);
 
-
-// for debugging, REMOVE FOR PRODUCTION including postman endpoints
+// TODO for debugging, REMOVE FOR PRODUCTION including postman endpoints
 var data = JSON.stringify([{name: 'steve', message: 'commit message by steve'}, {name: 'sarah', message: 'commit message'}]);
 var data2 = JSON.stringify([{name: 'colin', message: 'colin commit message'}, {name: 'binh', message: 'binh commit message'}]);
 
