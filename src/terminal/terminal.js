@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { ipcRenderer } from 'electron';
 
-export default class Terminal extends Component {
+
+export default class TerminalView extends Component {
 	//on mount, load terminal onto DOM
 	componentDidMount() {
 		this.loadTerminal(ReactDOM.findDOMNode(this));

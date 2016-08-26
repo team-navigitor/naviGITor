@@ -74,8 +74,8 @@ export default class Main extends Component {
               <input id="login-org" placeholder="Github Org" type="text" />
               <input id="login-repo" placeholder="Repo Name" type="text" />
               <button className="login-submit" type="submit">Submit</button>
-              <button className="folder-button" onClick = {this._dirChoice}> Select Project Folder </button>
             </form>
+            <button className="folder-button" onClick = {this._dirChoice}> Select Project Folder </button>
 
             {/* <div className="container_visualizationAndTerminal">
               <GitTree message={ this.state.message } />

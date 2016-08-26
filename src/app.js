@@ -12,11 +12,11 @@ const { Router, Route, Link, hashHistory, IndexRoute } = require('react-router')
 import Main from './Main';
 import Login from './login';
 import GitTree from './gitTree';
-import Terminal from './terminal/terminal.js'
+import TerminalView from './terminal/terminal.js'
 
-// // Socket handling for app. Must be global to current page for ipcRenderer + React
-// let socket = io('http://navigitorsite.herokuapp.com');
-// let socketRoom = null;
+// Socket handling for app. Must be global to current page for ipcRenderer + React
+let socket = io('http://navigitorsite.herokuapp.com');
+let socketRoom = null;
 //
 // /* listens for an git commit event from main.js webContent.send
 //  then sends commit string to the server via socket */
@@ -48,7 +48,7 @@ class App extends Component {
 	_handleData(dataObj) {
 		let data = JSON.parse(dataObj);
 		console.log("handledata", data);
-		this.setState({ message: this.state.message.concat(data) });
+		// this.setState({ message: this.state.message.concat(data) });
 	}
 
 	// function dirChoice() {
@@ -73,7 +73,7 @@ ReactDOM.render((
          <IndexRoute component = {Login} />
 				 <Route path = "Main" component = {Main}>
 				 	 <Route path = "GitTree" component = {GitTree} />
-			     <Route path = "Terminal" component = {Terminal} />
+			     <Route path = "Terminal" component = {TerminalView} />
 				</Route>
       </Route>
   </Router>
