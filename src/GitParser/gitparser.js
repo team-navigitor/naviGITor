@@ -1,12 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-const parse = {};
+const gitParser = {};
 
-parse.singleEvent = (callback) => {
+
+// parses the most recent git event and passes value to callback function
+gitParser.mostRecentEvent = (gitPath, callback) => {
     let res = '';
-    fs.readFile(path.join(__dirname, '../../.git/logs/HEAD'), 'utf8', (err, data) => {
-      if (err) return callback(err);  
+    fs.readFile(gitPath +'/.git/logs/HEAD', 'utf8', (err, data) => {
+      if (err) return callback(err);
       //console.log('fs running')
       let i = data.length - 2;
       while (data[i] !== "\n") {
@@ -14,28 +16,26 @@ parse.singleEvent = (callback) => {
         let temp = data[i] += res;
         res = temp;
         i--;
-    } 
+    }
        callback(res)
   })
 
 }
-parse.singleEvent(function(data) {console.log(data)})
 
-parse.allEvents = (callback) => { 
+// parses the entire .git log file and returns an array of commit objects
+gitParser.allEvents = (callback) => {
   const res = [];
   fs.readFile(path.join(__dirname, '../../.git/logs/HEAD'), 'utf8', (err, data) => {
     let dataArr = data.split('\n');
     for (let i = 0; i < dataArr.length - 2; i++) {
-      res.push(parseGit(dataArr[i]));
+      res.push(gitParserGit(dataArr[i]));
     }
     callback(res)
   })
 }
 
-parse.allEvents(function(data) {console.log(data)})
-//console.log(fs.readFile(path.join(__dirname, '../../.git/logs/HEAD'), 'utf8', parseGit));
-
-function parseGit(commitStr){
+//used as a helper function to gitParser an individual git event from the .git log
+function parseSingleGit(commitStr){
   var commitObj = {};
   commitObj.parent = commitStr.substring(0, 41)
   commitObj.secondSHA = commitStr.substring(41, 81);
@@ -62,4 +62,4 @@ function parseGit(commitStr){
 return commitObj;
 };
 
-module.exports = parse;
+module.exports = gitParser;
