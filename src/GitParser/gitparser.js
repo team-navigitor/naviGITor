@@ -22,8 +22,6 @@ gitParser.mostRecentEvent = (gitPath, callback) => {
 
 }
 
-console.log(gitParser.mostRecentEvent('/Users/colin/Desktop/fixing-nav/', function(data){
-  console.log(data)}))
 // parses the entire .git log file and returns an array of commit objects
 gitParser.allEvents = (gitPath, callback) => {
   const res = [];
