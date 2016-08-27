@@ -4,12 +4,12 @@
 body {
 	position: relative;
   color: black;
-  height: 100vh;
-  // background-color: #232C39;
-  // background-image: linear-gradient(45deg, rgba(11, 23, 172, .5) 10%, rgba(253, 89, 146, .7));
 	font-family: 'Titillium Web', sans-serif;
-  overflow-y: hidden;
-	text-align: center;
+  // overflow-y: hidden;
+}
+
+#app {
+  height: 100vh;
 }
 
 // ***** gitTree.js *******
@@ -21,12 +21,23 @@ body {
 
 // ***** login.js *****
 .login-container {
-	position: relative;
-	top: 150px;
-	width: 40%;
+	// Center div horizontally and vertically
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	max-width: 300px;
 	margin-left: auto;
 	margin-right: auto;
 
+	h2 {
+		text-align: center;
+	}
+}
+.login-logo {
+	margin: 0 auto;
+	width: 100%;
 }
 .enter-form {
 	margin-top: 30px;
@@ -48,20 +59,25 @@ body {
 .side-nav-bar-container {
 	padding: 10px;
 	color: white;
-	width: 30%;
+	max-width: 200px;
+	width: 100%;
 	height: 100vh;
 	float: left;
-	background-color: #5DADE2;
+	background-color: #eee;
+
 	h5 {
+		color: #666;
 		text-align: left;
 		font-weight: bold;
 		text-transform: capitalize;
 	}
 }
+.side-nav-logo {
+	width: 100%;
+}
 .view-container {
-	width: 70%;
+	margin-left: 200px;
 	height: 100%;
-	float: right;
 }
 .login {
 	margin-top: 30px;
@@ -119,4 +135,28 @@ li {
 // ***** terminal *******
 .terminal-container {
 	height: 100vh;
+}
+
+textarea {
+	background: transparent;
+	border: 0;
+	outline: 0;
+}
+
+#cy {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 999;
+}
+
+.cytocontainer {
+	position: relative;
+	height: 800px;
+}
+
+.qtip {
+	color: #000;
 }

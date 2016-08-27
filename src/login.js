@@ -27,8 +27,8 @@ export default class Login extends Component {
   render() {
     return (
       <div className='login-container'>
-        <h2>(navigitor logo)</h2>
-        <h2>LOG IN PAGE</h2>
+        <img className="login-logo" src="../images/darknaviGitorLogo_1.png" />
+        <h2>LOG IN</h2>
         <form className="enter-form" onSubmit={loginClicked}>
             <input id='userNameInput' className="form-control"
                   placeholder="Please enter name" required />

@@ -11,9 +11,9 @@ const Shell = require ('shelljs');
 const fs = require('fs');
 
 // Module to control application life.
-const app = electron.app
+const app = electron.app;
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const BrowserWindow = electron.BrowserWindow;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -76,9 +76,17 @@ function openDirChoice() {
   let projectPath = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
   // to resolve to home path and append path given from renderer process
   var gitPath = (path.resolve('~', projectPath.toString()));
+
+  // Watches for all local git activity
   chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) =>
-        gitParser.mostRecentEvent(gitPath, function(data) { mainWindow.webContents.send('commitMade', data)})
+        gitParser.mostRecentEvent(gitPath, function(data) { 
+          mainWindow.webContents.send('parsedCommit', data)})
   );
+
+  // Just loads git log history
+  gitParser.allEvents(gitPath, function(data) { 
+    mainWindow.webContents.send('parsedCommitAll', data);
+  });
 };
 /******************************************************************************
         *** Terminal Emulation ***
