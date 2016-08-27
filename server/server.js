@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const Rx = require('rxjs/Rx')
+//const Rx = require('rxjs/Rx')
 // may need to change config to config.prod later on
 const config = require('../webpack.config');
 const webpack = require('webpack');
@@ -40,7 +40,10 @@ console.log('Polling server is running on http://localhost:' + PORT);
 
 io.sockets.on('connection', function (socket) {
   // room handling
-  socket.on('subscribe', function(data) { socket.join(data.room)});
+  socket.on('subscribe', function(data) { 
+  EventController.post(testObj)
+  socket.join(data.room)}
+  );
   socket.on('unsubscribe', function(data) { socket.leave(data.room)});
   // Socket test
   socket.once("echo", function (msg, callback) {
@@ -99,6 +102,9 @@ io.sockets.on('connection', function (socket) {
 //   });
 //   res.redirect('/');
 // });
-
+var testObj = {};
+testObj.data = "19cbd65fba1ba345fc927395d572830162f7b1cf 5e860081d9f7ccc7cbc0a64922beed6d6ac09de9 Colin Brownlie <colin@Colins-MacBook-Pro.local> 1472261176 -0700     	commit (merge): fixing merge conflict"
+testObj.repo = "testrepooooo";
+testObj.author = "god"
 
 module.exports = server;

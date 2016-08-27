@@ -1,19 +1,23 @@
 const mongoose = require('mongoose');
 //const Event = require('./event-model.js')
 const Schema = mongoose.Schema;
-const db = mongoose.connection;
-mongoose.connect('mongodb://localhost/test');
+mongoose.connection.once('open', function() {console.log('open on: mongodb://localhost/test')});
+//mongoose.connect(('mongodb://localhost/test'))
+//db.connect('mongodb://localhost/test');
 
 const eventSchema = new Schema({
     user: {type: String, required: true},
     data: {type: String, required: true}, 
 });
 
-EventController.post = arg => {
-    db.once('open', () => {
-    let Event = mongoose.model(req.repo, eventSchema);
+EventController = {}
+EventController.post = (arg) => {
+    mongoose.connect('mongodb://localhost/test', function(err) {
+        if (err) return console.error(err)
+    let Event = mongoose.model(arg.repo, eventSchema);
+    console.log('event: ', Event)
     let NewEvent = new Event();
-    //console.log(Event)
+    
     if (Array.isArray(arg.data)) {
         arg.data.forEach(function(elem) {
             NewEvent.user = elem.author;
@@ -21,19 +25,27 @@ EventController.post = arg => {
             Event.create(NewEvent)
         })
     } else {
-        NewEvent.user = arg.data.author,
+        console.log('into else')
+        NewEvent.user = arg.author,
         NewEvent.data = JSON.stringify(arg.data);
+        console.log(NewEvent)
         Event.create(NewEvent)
+        console.log('collections:', mongoose.connection.db.collections(function(err, data) {
+            console.log(data)
+        }))
         };
     })
+    
 }
 
-EventController.getRepo = arg => {
-    db.once('open', () => {
-        var repo = arg.reqo.toLowerCase() + 's'
-        res.send(db[req.repo].find())
-    })
-}
+    EventController.getRepo = arg => {
+        mongoose.connect('mongodb://localhost/test', function(err) {
+        var repo = arg.room.toLowerCase() + 's';
+        var coll = mongoose.connection.db.listCollections();
+        //console.log('coll:', coll)
+        //console.log(coll);
+        })
+    }
 
 EventController.getUser = arg => {
     db.once('open', () => {
@@ -50,5 +62,6 @@ EventController.getAllRepos = arg => {
         res.send(allEvents);
     })
 }
+
 
 module.exports = EventController;
