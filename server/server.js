@@ -5,6 +5,7 @@ const config = require('../webpack.config');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
+const EventController = require('../src/database/event-controller.js')
 
 // process.env.PORT sets to hosting service port (Heroku) or 3000
 const PORT = process.env.PORT || 3000;
@@ -64,12 +65,14 @@ io.sockets.on('connection', function (socket) {
   //listening for commit from local client, then broadcasts to all connected clients
 	socket.on('broadcastCommit', function(arg){
 		console.log('broadcastCommit: ' + arg);
+
 		io.in(arg.room).emit('incomingCommit', arg.data);
 	});
   // listening for branch change from local client, then broadcasts to all connected clients
 	socket.on('broadcastBranch', function(arg){
 		console.log('Branch server event: ' + arg);
 		io.in(arg.room).emit('incomingCommit', arg.data)
+    
   });
 
   socket.on('disconnect', function(){
