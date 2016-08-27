@@ -91,6 +91,8 @@ export default class GitTree extends Component {
 				    }
 					}
 				]);
+
+				cy.load();
 			});
 
 			dagTree();
