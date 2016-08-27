@@ -28,7 +28,7 @@ gitParser.allEvents = (gitPath, callback) => {
   fs.readFile(gitPath +'/.git/logs/HEAD', 'utf8', (err, data) => {
     if (err) return callback(err);
     let dataArr = data.split('\n');
-    for (let i = 0; i < dataArr.length - 2; i++) {
+    for (let i = 0; i < dataArr.length - 1; i++) {
       res.push(parseGit(dataArr[i]));
     }
     callback(res)
