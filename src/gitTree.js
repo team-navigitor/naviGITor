@@ -71,7 +71,6 @@ export default class GitTree extends Component {
 			 then sends commit string to the server via socket */
 			ipcRenderer.on('parsedCommit', function(event, localGit){
 
-				console.log(localGit);
 				console.log(localGit.SHA);
 				console.log(localGit.parent[0]);
 
@@ -84,7 +83,7 @@ export default class GitTree extends Component {
 					},
 					{
 				    data: {
-				    	source: localGit.parent[0],
+				    	source: localGit.parent[0].parent[0],
 				    	target: localGit.SHA
 				    }
 					}
