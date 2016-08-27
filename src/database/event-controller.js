@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 //const Event = require('./event-model.js')
 const Schema = mongoose.Schema;
-mongoose.connection.once('open', function() {console.log('open on: mongodb://localhost/test')});
+mongoose.connection.once('open', () => {console.log('open on: mongodb://localhost/test')});
 //mongoose.connect(('mongodb://localhost/test'))
 //db.connect('mongodb://localhost/test');
 
@@ -11,57 +11,61 @@ const eventSchema = new Schema({
 });
 
 EventController = {}
-EventController.post = (arg) => {
-    mongoose.connect('mongodb://localhost/test', function(err) {
+
+EventController.post = arg => {
+    mongoose.connect('mongodb://localhost/test', err => {
         if (err) return console.error(err)
-    let Event = mongoose.model(arg.repo, eventSchema);
-    console.log('event: ', Event)
-    let NewEvent = new Event();
-    
-    if (Array.isArray(arg.data)) {
-        arg.data.forEach(function(elem) {
-            NewEvent.user = elem.author;
-            NewEvent.data = JSON.stringify(elem);
+        let Event = mongoose.model(arg.repo, eventSchema);
+        let NewEvent = new Event();
+        
+        if (Array.isArray(arg.data)) {
+            arg.data.forEach(elem => {
+                NewEvent.user = elem.author;
+                NewEvent.data = JSON.stringify(elem);
+                Event.create(NewEvent)
+            })
+        } else {
+            NewEvent.user = arg.author,
+            NewEvent.data = JSON.stringify(arg.data);
             Event.create(NewEvent)
-        })
-    } else {
-        console.log('into else')
-        NewEvent.user = arg.author,
-        NewEvent.data = JSON.stringify(arg.data);
-        console.log(NewEvent)
-        Event.create(NewEvent)
-        console.log('collections:', mongoose.connection.db.collections(function(err, data) {
-            console.log(data)
-        }))
         };
-    })
-    
+    })    
 }
 
-    EventController.getRepo = arg => {
-        mongoose.connect('mongodb://localhost/test', function(err) {
-        var repo = arg.room.toLowerCase() + 's';
-        var coll = mongoose.connection.db.listCollections();
-        //console.log('coll:', coll)
-        //console.log(coll);
+    EventController.getRepo = (arg, callback) => {
+        mongoose.connect('mongodb://localhost/test', err => {
+            if (err) return console.error(err);
+            let repo = arg.repo + 's';
+            let coll = mongoose.model(arg.repo, eventSchema)
+            coll.find((err, repo) => {
+                if (err) return console.error(err)
+                callback(repo)
+            })
         })
     }
 
-EventController.getUser = arg => {
-    db.once('open', () => {
-        res.send((db[arg.repo].find({ user: req.user})))
+EventController.getUser = (arg, callback) => {
+    mongoose.connect('mongodb://localhost/test', err => {
+        if (err) return console.error(err);
+        let coll = mongoose.model(arg.repo, eventSchema)
+        coll.findOne({'user': arg.user}, 'user data', (err, user) => {
+            if (err) return console.error(err)
+            callback(user);
+        })
     })
 }
 
-EventController.getAllRepos = arg => {
-    db.once('open', () => {
-        const collArr = db.listCollections();
-        const allEvents = collArr.map(function(elem) {
-            return db[elem].find();
-        });
-        res.send(allEvents);
-    })
-}
+// EventController.getAllRepos = (arg, callback) => {
+//     mongoose.connect('mongodb://localhost/test', err => {
+//         if (err) return console.error(err);
+//         const collArr = mongoose.connections[0];
+//         // const allEvents = collArr.map(function(elem) {
+//         //     return db[elem].find();
+//         // });
+//         // res.send(allEvents);
+//         callback(collArr)
+//     })
+// }
 
 
 module.exports = EventController;

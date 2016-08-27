@@ -41,7 +41,6 @@ console.log('Polling server is running on http://localhost:' + PORT);
 io.sockets.on('connection', function (socket) {
   // room handling
   socket.on('subscribe', function(data) { 
-  EventController.post(testObj)
   socket.join(data.room)}
   );
   socket.on('unsubscribe', function(data) { socket.leave(data.room)});
@@ -51,11 +50,13 @@ io.sockets.on('connection', function (socket) {
   });
   //listening for commit from local client, then broadcasts to all connected clients
 	socket.on('broadcastCommit', function(arg){
+    EventController.post(arg);
 		console.log('broadcastCommit: ' + arg);
 		io.in(arg.room).emit('incomingCommit', arg.data);
 	});
   // listening for branch change from local client, then broadcasts to all connected clients
 	socket.on('broadcastBranch', function(arg){
+    EventController.post(arg);
 		console.log('Branch server event: ' + arg);
 		io.in(arg.room).emit('incomingCommit', arg.data)
     
@@ -102,9 +103,5 @@ io.sockets.on('connection', function (socket) {
 //   });
 //   res.redirect('/');
 // });
-var testObj = {};
-testObj.data = "19cbd65fba1ba345fc927395d572830162f7b1cf 5e860081d9f7ccc7cbc0a64922beed6d6ac09de9 Colin Brownlie <colin@Colins-MacBook-Pro.local> 1472261176 -0700     	commit (merge): fixing merge conflict"
-testObj.repo = "testrepooooo";
-testObj.author = "god"
 
 module.exports = server;
