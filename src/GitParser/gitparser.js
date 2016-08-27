@@ -17,7 +17,7 @@ gitParser.mostRecentEvent = (gitPath, callback) => {
         res = temp;
         i--;
     }
-       callback(res)
+       callback(parseGit(res))
   })
 
 }
