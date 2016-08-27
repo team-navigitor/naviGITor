@@ -40,33 +40,33 @@ export default class GitTree extends Component {
 			}
 
 			for (var i = 0; i < data.length; i++) {
-				// loop through git merge activity and connect current node with parent nodes
-				if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
-					localGitEdges.push({
-						data: {
-							source: data[i].parent[0],
-							target: data[i].SHA
-						}
-					},{
-						data: {
-							source: data[i].parent[1],
-							target: data[i].SHA
-						}
-					});
-				}
+				// // loop through git merge activity and connect current node with parent nodes
+				// if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
+				// 	localGitEdges.push({
+				// 		data: {
+				// 			source: data[i].parent[0],
+				// 			target: data[i].SHA
+				// 		}
+				// 	},{
+				// 		data: {
+				// 			source: data[i].parent[1],
+				// 			target: data[i].SHA
+				// 		}
+				// 	});
+				// }
 
 				// loop through all other events and connect current node to parent node
-				if (data[i]['event'] !== 'checkout') {
+				// if (data[i]['event'] !== 'checkout') {
 					// If the node has no parent, do not attempt to connect an edge
-					if (data[i].parent[0] !== "0000000000000000000000000000000000000000") {
+					// if (data[i].parent[0] !== "0000000000000000000000000000000000000000") {
 						localGitEdges.push({
 							data: {
 								source: data[i].parent[0],
 								target: data[i].SHA
 							}
 						});
-					}
-				}
+					// }
+				// }
 			}
 
 			/* listens for an git commit event from main.js webContent.send
@@ -94,7 +94,7 @@ export default class GitTree extends Component {
 					}
 				]);
 
-				cy.reset();
+				cy.layout();
 			});
 
 			dagTree();
