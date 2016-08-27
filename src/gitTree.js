@@ -21,6 +21,7 @@ export default class GitTree extends Component {
 		let localGitAction;
 		let localGitNodes = [];
 		let localGitEdges = [];
+		console.log('hi');
 
 		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data){
 			console.log('hi2', data);
