@@ -83,7 +83,7 @@ export default class GitTree extends Component {
 					},
 					{
 				    data: {
-				    	source: localGit.parent[0].parent[0],
+				    	source: localGit.parent[0].data.target,
 				    	target: localGit.SHA
 				    }
 					}
