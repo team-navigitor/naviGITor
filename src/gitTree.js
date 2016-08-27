@@ -94,7 +94,12 @@ export default class GitTree extends Component {
 					}
 				]);
 
-				cy.layout({name: 'dagre'});
+				// cy.animate()
+				cy.layout({
+					name: 'dagre',
+					animate: true,
+					animationDuration: 500
+				});
 			});
 
 			dagTree();
