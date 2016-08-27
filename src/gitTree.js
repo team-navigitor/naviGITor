@@ -74,9 +74,10 @@ export default class GitTree extends Component {
 				console.log(localGit.SHA);
 				console.log(localGit.parent[0]);
 
+				console.log(localGitNodes[localGitNodes.length - 1]);
 				console.log(localGitNodes[localGitNodes.length - 1][parent[0]]);
 				// console.log(localGitNodes[localGitNodes.length - 1].parent[0]);
-				
+
 
 				cy.add([
 					{
