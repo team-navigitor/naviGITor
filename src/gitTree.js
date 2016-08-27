@@ -94,7 +94,7 @@ export default class GitTree extends Component {
 					}
 				]);
 
-				dagTree();
+				cy.layout({name: 'dagre'})
 			});
 
 			dagTree();
