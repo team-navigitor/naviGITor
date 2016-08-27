@@ -85,6 +85,7 @@ export default class GitTree extends Component {
 					},
 					{
 				    data: {
+				    	id: 'edge' + localGit.SHA,
 				    	source: localGit.parent[0],
 				    	target: localGit.SHA
 				    }
