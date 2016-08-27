@@ -29,7 +29,6 @@ export default class GitTree extends Component {
 		// find a way to update local changes in the data
 
 		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data){
-			console.log('hi2', data);
 
 			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < data.length; i++) {
@@ -58,12 +57,15 @@ export default class GitTree extends Component {
 
 				// loop through all other events and connect current node to parent node
 				if (data[i]['event'] !== 'checkout') {
-					localGitEdges.push({
-						data: {
-							source: data[i].parent[0],
-							target: data[i].SHA
-						}
-					});
+					// If the node has no parent, do not attempt to connect an edge
+					if (data[i].parent[0] !== "0000000000000000000000000000000000000000") {
+						localGitEdges.push({
+							data: {
+								source: data[i].parent[0],
+								target: data[i].SHA
+							}
+						});
+					}
 				}
 			}
 
@@ -85,14 +87,14 @@ export default class GitTree extends Component {
 					},
 					{
 				    data: {
-				    	id: 'edge' + localGit.SHA,
+				    	id: 'edge ' + localGit.message,
 				    	source: localGit.parent[0],
 				    	target: localGit.SHA
 				    }
 					}
 				]);
 
-				cy.load();
+				cy.layout();
 			});
 
 			dagTree();
