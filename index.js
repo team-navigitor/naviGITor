@@ -80,7 +80,7 @@ function openDirChoice() {
   // Watches for all local git activity
   chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) =>
         gitParser.mostRecentEvent(gitPath, function(data) { 
-          mainWindow.webContents.send('parsedCommit', data)})
+          mainWindow.webContents.send('commitMade', data)})
   );
 
   // Just loads git log history

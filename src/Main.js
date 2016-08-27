@@ -11,13 +11,13 @@ let socketRoom = null;
 /* listens for an git commit event from main.js webContent.send
  then sends commit string to the server via socket */
 ipcRenderer.on('commitMade', function(event, arg){
-	if(socketRoom) socket.emit('broadcastCommit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 4)});
+	if(socketRoom) socket.emit('broadcastCommit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 });
 
 /* listens for an git branch checkout event from main.js webContent.send
  then sends commit string to the server via socket */
 ipcRenderer.on('changedBranches', function(event, arg){
-	if(socketRoom) socket.emit('broadcastBranch', {'room': socketRoom, 'data': JSON.stringify(arg, null, 4)});
+	if(socketRoom) socket.emit('broadcastBranch', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 });
 
 
@@ -50,8 +50,8 @@ export default class Main extends Component {
   					console.log('error fetching Github data', error);
   				}
   				if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
-  				socket.emit("subscribe", { room: `${orgName}/${repoName}live` });
-  				socketRoom = `${orgName}/${repoName}live`;
+  				socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
+  				socketRoom = `${orgName}.${repoName}live`;
   			}
   		);
   		// Save for now to transfer to main process later

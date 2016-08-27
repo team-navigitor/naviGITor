@@ -41,7 +41,10 @@ console.log('Polling server is running on http://localhost:' + PORT);
 io.sockets.on('connection', function (socket) {
   // room handling
   socket.on('subscribe', function(data) { 
-  socket.join(data.room)}
+    EventController.getRepo(data, function(x) {
+      console.log(x)
+    })
+    socket.join(data.room)}
   );
   socket.on('unsubscribe', function(data) { socket.leave(data.room)});
   // Socket test
@@ -50,13 +53,19 @@ io.sockets.on('connection', function (socket) {
   });
   //listening for commit from local client, then broadcasts to all connected clients
 	socket.on('broadcastCommit', function(arg){
-    EventController.post(arg);
-		console.log('broadcastCommit: ' + arg);
+    console.log('commit firing')
+    EventController.post(arg, function(data) {
+      console.log(data)
+    });
+		console.log('broadcastCommit: ' + arg.room);
 		io.in(arg.room).emit('incomingCommit', arg.data);
 	});
   // listening for branch change from local client, then broadcasts to all connected clients
 	socket.on('broadcastBranch', function(arg){
-    EventController.post(arg);
+    console.log('firing branch')
+    EventController.post(arg, function(data) {
+      console.log(data)
+    });
 		console.log('Branch server event: ' + arg);
 		io.in(arg.room).emit('incomingCommit', arg.data);
   });

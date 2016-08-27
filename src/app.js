@@ -15,7 +15,7 @@ import GitTree from './gitTree';
 import TerminalView from './terminal/terminal.js'
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
-let socket = io('http://navigitorsite.herokuapp.com');
+let socket = io('http://localhost:3000');
 let socketRoom = null;
 //
 // /* listens for an git commit event from main.js webContent.send
