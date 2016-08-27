@@ -75,14 +75,21 @@ export default class GitTree extends Component {
 				console.log(localGit.SHA);
 
 
-				cy.add({
-			    group: "nodes",
-			    data: {
-			    	id: localGit.SHA,
-			    	source: localGit.parent[0],
-			    	target: localGit.SHA
-			    }
-				});
+				cy.add([
+					{
+				    group: "nodes",
+				    data: {
+				    	id: localGit.SHA
+				    }
+					},
+					{
+				    group: "edges",
+				    data: {
+				    	source: localGit.parent[0],
+				    	target: localGit.SHA
+				    }
+					}
+				]);
 			});
 
 			dagTree();
