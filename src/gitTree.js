@@ -6,11 +6,13 @@ import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
 import cyqtip from 'cytoscape-qtip';
 import { ipcRenderer } from 'electron';
+import ajax from 'superagent';
 
 
 // register extension
 cyqtip( cytoscape, $ );
 cydagre( cytoscape, dagre );
+
 
 export default class GitTree extends Component {
 	constructor() {
@@ -21,6 +23,10 @@ export default class GitTree extends Component {
 		let localGitAction;
 		let localGitNodes = [];
 		let localGitEdges = [];
+		let globalData;
+
+		// NEED TO UPDATE LIVE ON ANY COMMIT, ONLY GRABS COMMIT WHEN OPEN DIRECTORY
+		// find a way to update local changes in the data
 
 		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data){
 			console.log('hi2', data);
@@ -61,7 +67,24 @@ export default class GitTree extends Component {
 				}
 			}
 
+			/* listens for an git commit event from main.js webContent.send
+			 then sends commit string to the server via socket */
+			ipcRenderer.on('parsedCommit', function(event, localGit){
+
+				console.log(localGit);
+				// cy.add({
+			 //    group: "nodes",
+			 //    data: {
+			 //    	id: localGit,
+			 //    	source: 'blah',
+			 //    	target: localGit
+			 //    }
+				// });
+			});
+
 			dagTree();
+
+
 
 			// // Hides and shows tooltop appropriately, not dynamic
 			// cy.qtip({
