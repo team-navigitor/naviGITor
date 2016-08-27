@@ -78,13 +78,11 @@ export default class GitTree extends Component {
 
 				cy.add([
 					{
-				    group: "nodes",
 				    data: {
 				    	id: localGit.SHA
 				    }
 					},
 					{
-				    group: "edges",
 				    data: {
 				    	source: localGit.parent[0],
 				    	target: localGit.SHA
