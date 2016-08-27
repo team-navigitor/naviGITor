@@ -58,8 +58,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('broadcastBranch', function(arg){
     EventController.post(arg);
 		console.log('Branch server event: ' + arg);
-		io.in(arg.room).emit('incomingCommit', arg.data)
-    
+		io.in(arg.room).emit('incomingCommit', arg.data);
   });
 });
 

@@ -30,6 +30,9 @@ let socketRoom = null;
 // 	if(socketRoom) socket.emit('broadcastBranch', {'room': socketRoom, 'data': JSON.stringify(arg, null, 4)});
 // });
 
+ipcRenderer.on('info', function(event, data) {
+	console.log(data.msg)
+});
 
 class App extends Component {
 	constructor(props) {
@@ -37,12 +40,21 @@ class App extends Component {
 		this.state = {
 			message: []
 		}
+
 		this._handleData = this._handleData.bind(this);
 	}
 
 	componentDidMount() {
 		socket.on('test', this._handleData);
 		socket.on('incomingCommit', this._handleData);
+
+
+		// Not entering through here
+		// ipcRenderer.on('parsedCommit', function(event, arg){
+		// 	console.log('hi');
+			
+		// 	this.setState({ commitArray: data })
+		// });
   }
 
 	_handleData(dataObj) {
@@ -58,9 +70,9 @@ class App extends Component {
 
 	render() {
     return (
-				<div>
-					{this.props.children}
-				</div>
+			<div>
+				{this.props.children}
+			</div>
     )
 	}
 }

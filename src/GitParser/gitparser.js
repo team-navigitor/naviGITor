@@ -34,8 +34,8 @@ gitParser.allEvents = (gitPath, callback) => {
       res.push(parseGit(dataArr[i]));
     }
     callback(res)
-  })
-  callback('res', res);
+
+  });
 }
 
 //used as a helper function to gitParser an individual git event from the .git log

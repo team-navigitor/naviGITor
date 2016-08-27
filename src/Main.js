@@ -68,7 +68,7 @@ export default class Main extends Component {
       <div id='main-container'>
 
         <div className='side-nav-bar-container'>
-            <h2>NAVIGITOR</h2>
+            <img className="side-nav-logo" src="../images/darknaviGitorLogo_1.png" />
             <form onSubmit={this._handleSubmit} className="login">
               <h5>Find Repository</h5>
               <input id="login-org" placeholder="Github Org" type="text" />
