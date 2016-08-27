@@ -71,11 +71,10 @@ export default class GitTree extends Component {
 			 then sends commit string to the server via socket */
 			ipcRenderer.on('parsedCommit', function(event, localGit){
 
-				console.log(localGit.SHA);
 				console.log(localGit.parent[0]);
+				console.log(localGit.SHA);
 
 				console.log(localGitNodes[localGitNodes.length - 1]);
-				console.log(localGitNodes[localGitNodes.length - 1][data]);
 
 
 				cy.add([
@@ -86,7 +85,7 @@ export default class GitTree extends Component {
 					},
 					{
 				    data: {
-				    	source: localGitNodes[localGitNodes.length - 1].parent[0],
+				    	source: localGit.parent[0],
 				    	target: localGit.SHA
 				    }
 					}
