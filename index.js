@@ -68,7 +68,7 @@ app.on('activate', function () {
         then send that event and data to the render process in app.js
 *******************************************************************************/
 // to receive the path of file to be watched from renderer process,
-ipcMain.on('dirChoice', function(event, input){
+ipcMain.on('dirChoice', function(event, input) {
   openDirChoice();
 });
 // sets file watching and triggers event chain when git log is modified
@@ -95,7 +95,7 @@ function openDirChoice() {
 // receive input from terminal
 ipcMain.on('term-input', (event, input) => {
   fork.send(input)
-  })
+})
 
 fork.on('message', m => {
   mainWindow.webContents.send('reply', m)
