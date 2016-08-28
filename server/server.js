@@ -1,7 +1,5 @@
 const express = require('express');
 const app = express();
-//const Rx = require('rxjs/Rx')
-// may need to change config to config.prod later on
 const config = require('../webpack.config');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -36,11 +34,12 @@ console.log('Polling server is running on http://localhost:' + PORT);
 
 /***************************
 *** Socket Handling + RxJS ***
+TODO: handle subscribe/getRepo functionality on client side
 ****************************/
 
 io.sockets.on('connection', function (socket) {
   // room handling
-  socket.on('subscribe', function(data) { 
+  socket.on('subscribe', function(data) {
     EventController.getRepo(data, function(x) {
       console.log(x)
     })
@@ -51,24 +50,14 @@ io.sockets.on('connection', function (socket) {
   socket.once("echo", function (msg, callback) {
     socket.emit("echo", msg);
   });
-  //listening for commit from local client, then broadcasts to all connected clients
-	socket.on('broadcastCommit', function(arg){
-    console.log('commit firing')
+  //listening for Git Action from local client, then broadcasts to all connected clients in team
+	// TODO: handle callback in post method
+	socket.on('broadcastGit', function(arg){
     EventController.post(arg, function(data) {
-      console.log(data)
+			console.log(data);
     });
-		console.log('broadcastCommit: ' + arg.room);
 		io.in(arg.room).emit('incomingCommit', arg.data);
 	});
-  // listening for branch change from local client, then broadcasts to all connected clients
-	socket.on('broadcastBranch', function(arg){
-    console.log('firing branch')
-    EventController.post(arg, function(data) {
-      console.log(data)
-    });
-		console.log('Branch server event: ' + arg);
-		io.in(arg.room).emit('incomingCommit', arg.data);
-  });
 });
 
 
