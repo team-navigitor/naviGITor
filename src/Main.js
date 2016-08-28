@@ -10,7 +10,7 @@ let socketRoom = null;
 
 /* listens for an git commit event from main.js webContent.send
  then sends commit string to the server via socket */
-ipcRenderer.on('parseGit', function(event, arg){
+ipcRenderer.on('parsedCommit', function(event, arg){
 	if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 });
 
