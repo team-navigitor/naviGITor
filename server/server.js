@@ -1,11 +1,10 @@
 const express = require('express');
 const app = express();
-const Rx = require('rxjs/Rx')
-// may need to change config to config.prod later on
 const config = require('../webpack.config');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
+const EventController = require('../src/database/event-controller.js')
 
 // process.env.PORT sets to hosting service port (Heroku) or 3000
 const PORT = process.env.PORT || 3000;
@@ -35,25 +34,30 @@ console.log('Polling server is running on http://localhost:' + PORT);
 
 /***************************
 *** Socket Handling + RxJS ***
+TODO: handle subscribe/getRepo functionality on client side
 ****************************/
 
 io.sockets.on('connection', function (socket) {
   // room handling
-  socket.on('subscribe', function(data) { socket.join(data.room)});
+  socket.on('subscribe', function(data) {
+    EventController.getRepo(data, function(x) {
+      console.log(x)
+    })
+    socket.join(data.room)}
+  );
   socket.on('unsubscribe', function(data) { socket.leave(data.room)});
   // Socket test
   socket.once("echo", function (msg, callback) {
     socket.emit("echo", msg);
   });
-  //listening for commit from local client, then broadcasts to all connected clients
-	socket.on('broadcastCommit', function(arg){
+  //listening for Git Action from local client, then broadcasts to all connected clients in team
+	// TODO: handle callback in post method
+	socket.on('broadcastGit', function(arg){
+    EventController.post(arg, function(data) {
+			console.log(data);
+    });
 		io.in(arg.room).emit('incomingCommit', arg.data);
 	});
-  // listening for branch change from local client, then broadcasts to all connected clients
-	socket.on('broadcastBranch', function(arg){
-		console.log('Branch server event: ' + arg);
-		io.in(arg.room).emit('incomingCommit', arg.data)
-  });
 });
 
 
@@ -96,6 +100,5 @@ io.sockets.on('connection', function (socket) {
 //   });
 //   res.redirect('/');
 // });
-
 
 module.exports = server;
