@@ -25,6 +25,8 @@ export default class GitTree extends Component {
 		let localGitAction;
 		let localGitNodes = [];
 		let localGitEdges = [];
+		let globalGitNodes = [];
+		let globalGitEdges = [];
 		let globalData;
 
 		// NEED TO UPDATE LIVE ON ANY COMMIT, ONLY GRABS COMMIT WHEN OPEN DIRECTORY
@@ -32,56 +34,57 @@ export default class GitTree extends Component {
 
 		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data) {
 
+			/************************
+			** GLOBAL GIT ACTIVITY **
+			************************/
 			ajax.get('https://api.github.com/repos/team-navigitor/naviGITor/commits')
 				.end((error, response) => {
 					if (!error && response) {
-						response.body.map(function(item){
-							console.log(item.sha);
-							// for (var i = 0; i < item.length; i++) {
-							// 	localGitNodes.push({
+						response.body.forEach(function(item){
+							globalGitNodes.push({
+								data: {
+									id: item.sha
+								}
+							});
+
+							// Github Merges
+							// if (item.parents.length > 1) {
+							// 	globalGitEdges.push({
 							// 		data: {
-							// 			id: item[i].sha
+							// 			source: item.parents[0].sha,
+							// 			target: item.sha
+							// 		}
+							// 	},{
+							// 		data: {
+							// 			source: item.parents[1].sha,
+							// 			target: item.sha
 							// 		}
 							// 	});
 							// }
 
-							// for (var i = 0; i < item.length; i++) {
-							// 	// loop through git merge activity and connect current node with parent nodes
-							// 	if (item[i]['event'] === 'merge' && item[i]['event'] !== 'checkout') {
+							// // Worry about checkout events later
+							// // loop through all other events and connect current node to parent node
+							// if (item[i]['event'] !== 'checkout') {
+							// 	// If the node has no parent, do not attempt to connect an edge
+							// 	if (item[i].parent[0] !== "0000000000000000000000000000000000000000") {
 							// 		localGitEdges.push({
 							// 			data: {
 							// 				source: item[i].parents[0].sha,
 							// 				target: item[i].sha
 							// 			}
-							// 		},{
-							// 			data: {
-							// 				source: item[i].parents[1].sha,
-							// 				target: item[i].sha
-							// 			}
 							// 		});
 							// 	}
-
-							// 	// loop through all other events and connect current node to parent node
-							// 	if (item[i]['event'] !== 'checkout') {
-							// 		// If the node has no parent, do not attempt to connect an edge
-							// 		if (item[i].parent[0] !== "0000000000000000000000000000000000000000") {
-							// 			localGitEdges.push({
-							// 				data: {
-							// 					source: item[i].parents[0].sha,
-							// 					target: item[i].sha
-							// 				}
-							// 			});
-							// 		}
-							// 	}
 							// }
-						}).reverse();
+						});
 					} else {
 						console.log('error fetching Github data', error);
 					}
 				}
 			);
 
-
+			/***********************
+			** LOCAL GIT ACTIVITY **
+			***********************/
 			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < data.length; i++) {
 				localGitNodes.push({
@@ -162,6 +165,7 @@ export default class GitTree extends Component {
 			});
 
 			dagTree();
+			// globalDagTree();
 
 
 
@@ -212,8 +216,6 @@ export default class GitTree extends Component {
 					name: 'dagre',
 					animate: true
 				},
-				minZoom: 1e-50,
-				maxZoom: 1e50,
 				style: [
 					{
 						selector: 'node',
@@ -240,6 +242,45 @@ export default class GitTree extends Component {
 				elements: {
 					nodes: localGitNodes,
 					edges: localGitEdges
+				},
+			});
+		};
+
+		function globalDagTree() {
+			var gcy = window.gcy = cytoscape({
+				container: document.getElementById('cy'),
+				boxSelectionEnabled: false,
+				autounselectify: true,
+				layout: {
+					name: 'dagre',
+					animate: true
+				},
+				style: [
+					{
+						selector: 'node',
+						style: {
+							'content': 'data(id)',
+							'text-opacity': 0.5,
+							'text-valign': 'center',
+							'text-halign': 'right',
+							'background-color': '#11479e'
+						}
+					},
+					{
+						selector: 'edge',
+						style: {
+							'width': 4,
+							'curve-style': 'bezier',
+							'target-arrow-shape': 'triangle',
+							'target-arrow-fill': 'filled',
+							'line-color': '#9dbaea',
+							'target-arrow-color': '#9dbaea'
+						}
+					}
+				],
+				elements: {
+					nodes: globalGitNodes,
+					edges: globalGitEdges
 				},
 			});
 		};

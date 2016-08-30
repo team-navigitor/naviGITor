@@ -50,8 +50,8 @@ export default class Main extends Component {
   					console.log('error fetching Github data', error);
   				}
   				if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
-  				socket.emit("subscribe", { room: `${orgName}/${repoName}live` });
-  				socketRoom = `${orgName}/${repoName}live`;
+  				socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
+  				socketRoom = `${orgName}.${repoName}live`;
   			}
   		);
   		// Save for now to transfer to main process later
