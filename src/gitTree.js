@@ -7,11 +7,13 @@ import dagre from 'dagre';
 import cyqtip from 'cytoscape-qtip';
 import { ipcRenderer } from 'electron';
 import ajax from 'superagent';
+import navigator from 'cytoscape-navigator';
 
 
 // register extension
 cyqtip( cytoscape, $ );
 cydagre( cytoscape, dagre );
+navigator( cytoscape );
 
 
 export default class GitTree extends Component {
@@ -28,7 +30,57 @@ export default class GitTree extends Component {
 		// NEED TO UPDATE LIVE ON ANY COMMIT, ONLY GRABS COMMIT WHEN OPEN DIRECTORY
 		// find a way to update local changes in the data
 
-		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data){
+		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data) {
+
+			ajax.get('https://api.github.com/repos/team-navigitor/naviGITor/commits')
+				.end((error, response) => {
+					if (!error && response) {
+						response.body.map(function(item){
+							console.log(item.sha);
+							// for (var i = 0; i < item.length; i++) {
+							// 	localGitNodes.push({
+							// 		data: {
+							// 			id: item[i].sha
+							// 		}
+							// 	});
+							// }
+
+							// for (var i = 0; i < item.length; i++) {
+							// 	// loop through git merge activity and connect current node with parent nodes
+							// 	if (item[i]['event'] === 'merge' && item[i]['event'] !== 'checkout') {
+							// 		localGitEdges.push({
+							// 			data: {
+							// 				source: item[i].parents[0].sha,
+							// 				target: item[i].sha
+							// 			}
+							// 		},{
+							// 			data: {
+							// 				source: item[i].parents[1].sha,
+							// 				target: item[i].sha
+							// 			}
+							// 		});
+							// 	}
+
+							// 	// loop through all other events and connect current node to parent node
+							// 	if (item[i]['event'] !== 'checkout') {
+							// 		// If the node has no parent, do not attempt to connect an edge
+							// 		if (item[i].parent[0] !== "0000000000000000000000000000000000000000") {
+							// 			localGitEdges.push({
+							// 				data: {
+							// 					source: item[i].parents[0].sha,
+							// 					target: item[i].sha
+							// 				}
+							// 			});
+							// 		}
+							// 	}
+							// }
+						}).reverse();
+					} else {
+						console.log('error fetching Github data', error);
+					}
+				}
+			);
+
 
 			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < data.length; i++) {
@@ -40,33 +92,33 @@ export default class GitTree extends Component {
 			}
 
 			for (var i = 0; i < data.length; i++) {
-				// // loop through git merge activity and connect current node with parent nodes
-				// if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
-				// 	localGitEdges.push({
-				// 		data: {
-				// 			source: data[i].parent[0],
-				// 			target: data[i].SHA
-				// 		}
-				// 	},{
-				// 		data: {
-				// 			source: data[i].parent[1],
-				// 			target: data[i].SHA
-				// 		}
-				// 	});
-				// }
+				// loop through git merge activity and connect current node with parent nodes
+				if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
+					localGitEdges.push({
+						data: {
+							source: data[i].parent[0],
+							target: data[i].SHA
+						}
+					},{
+						data: {
+							source: data[i].parent[1],
+							target: data[i].SHA
+						}
+					});
+				}
 
 				// loop through all other events and connect current node to parent node
-				// if (data[i]['event'] !== 'checkout') {
+				if (data[i]['event'] !== 'checkout') {
 					// If the node has no parent, do not attempt to connect an edge
-					// if (data[i].parent[0] !== "0000000000000000000000000000000000000000") {
+					if (data[i].parent[0] !== "0000000000000000000000000000000000000000") {
 						localGitEdges.push({
 							data: {
 								source: data[i].parent[0],
 								target: data[i].SHA
 							}
 						});
-					// }
-				// }
+					}
+				}
 			}
 
 			/* listens for an git commit event from main.js webContent.send
@@ -75,9 +127,6 @@ export default class GitTree extends Component {
 
 				console.log(localGit.parent[0]);
 				console.log(localGit.SHA);
-
-				console.log(localGitNodes[localGitNodes.length - 1]);
-
 
 				cy.add([
 					{
@@ -94,19 +143,29 @@ export default class GitTree extends Component {
 					}
 				]);
 
-				// cy.animate()
 				cy.layout({
 					name: 'dagre',
 					animate: true,
-					animationDuration: 500
+					fit: true,
+					animationDuration: 500,
 				});
+
+				// cy.style([
+				// 	{
+				// 		selector: 'data[id = "' + localGit.SHA + '"]',
+				// 		style: {
+				// 			'color': 'red',
+				// 			'background-color': 'red'
+				// 		}
+				// 	}
+				// ]);
 			});
 
 			dagTree();
 
 
 
-			// // Hides and shows tooltop appropriately, not dynamic
+			// // Hides and shows tooltop app	ropriately, not dynamic
 			// cy.qtip({
 			// 	content: 'hello',
 			// 	show: {
@@ -150,8 +209,11 @@ export default class GitTree extends Component {
 				boxSelectionEnabled: false,
 				autounselectify: true,
 				layout: {
-					name: 'dagre'
+					name: 'dagre',
+					animate: true
 				},
+				minZoom: 1e-50,
+				maxZoom: 1e50,
 				style: [
 					{
 						selector: 'node',
@@ -167,7 +229,9 @@ export default class GitTree extends Component {
 						selector: 'edge',
 						style: {
 							'width': 4,
+							'curve-style': 'bezier',
 							'target-arrow-shape': 'triangle',
+							'target-arrow-fill': 'filled',
 							'line-color': '#9dbaea',
 							'target-arrow-color': '#9dbaea'
 						}
