@@ -5,7 +5,7 @@ import '../scss/main.scss';
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import { ipcRenderer } from 'electron';
 
 const { Router, Route, Link, hashHistory, IndexRoute } = require('react-router');
@@ -15,8 +15,8 @@ import GitTree from './gitTree';
 import TerminalView from './terminal/terminal.js'
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
-let socket = io('http://localhost:3000');
-let socketRoom = null;
+// let socket = io('http://localhost:3000');
+// let socketRoom = null;
 
 class App extends Component {
 	constructor(props) {
@@ -28,10 +28,10 @@ class App extends Component {
 		this._handleData = this._handleData.bind(this);
 	}
 
-	componentDidMount() {
-		socket.on('test', this._handleData);
-		socket.on('incomingCommit', this._handleData);
-  }
+	// componentDidMount() {
+	// 	socket.on('test', this._handleData);
+	// 	socket.on('incomingCommit', this._handleData);
+ //  }
 
 	_handleData(dataObj) {
 		let data = JSON.parse(dataObj);
@@ -54,7 +54,7 @@ ReactDOM.render((
       <Route path = "/" component = {App}>
          <IndexRoute component = {Login} />
 				 <Route path = "Main" component = {Main}>
-				 	 <Route path = "GitTree" component = {GitTree} />
+				 	 <Route path = "GitTree" component = {GitTree} myprop="foo" />
 			     <Route path = "Terminal" component = {TerminalView} />
 				</Route>
       </Route>

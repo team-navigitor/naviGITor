@@ -14,12 +14,21 @@ ipcRenderer.on('parsedCommit', function(event, arg){
 	if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 });
 
-
-socket.on('incomingCommit', function(data){
-	console.log('broadcast loud and clear: ' + data);
-})
+/**
+* @data - broadcasted git event from other user
+**/
+// socket.on('incomingCommit', function(data){
+// 	console.log('broadcast loud and clear: ' + data);
+// });
 
 export default class Main extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			commits: []
+		}
+	}
+
   _dirChoice() {
 	  ipcRenderer.send('dirChoice');
   }
@@ -33,14 +42,17 @@ export default class Main extends Component {
 		ajax.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`)
 			.end((error, response) => {
 				if (!error && response) {
-					let apiData = response.body.map(function(item){
-						return {
-							name: item.commit.author.name,
-							date: item.commit.author.date,
-							message: item.commit.message
-						}
-					}).reverse();
-					console.log(apiData);
+					this.setState({
+						commits: response
+					});
+					// let apiData = response.body.map(function(item){
+					// 	return {
+					// 		name: item.commit.author.name,
+					// 		date: item.commit.author.date,
+					// 		message: item.commit.message
+					// 	}
+					// }).reverse();
+					console.log(commits);
 				} else {
 					console.log('error fetching Github data', error);
 				}
