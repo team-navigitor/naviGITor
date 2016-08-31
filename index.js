@@ -93,6 +93,7 @@ function openDirChoice() {
 *******************************************************************************/
 
 // receive input from terminal
+
 ipcMain.on('term-input', (event, input) => {
   console.log('ipcmain firing')
   fork.send(input)

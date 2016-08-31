@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { ipcRenderer } from 'electron';
 
 
+
 export default class TerminalView extends Component {
 	//on mount, load terminal onto DOM
 	componentDidMount() {
@@ -27,6 +28,9 @@ export default class TerminalView extends Component {
 
 		//open terminal
 		term.open(node);
+		term.on('open', ev => {
+			ipcRenderer.send('open-fork', 'open')
+		})
 
 		//define initial term prompt
 		term.prompt = () => {
