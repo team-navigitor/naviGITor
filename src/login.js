@@ -19,17 +19,19 @@ function verifyUser(){
     console.log(data)
   })
 }
-// function signUpClicked(){
-//   hashHistory.push('/signup');
-// }
+function signUpClicked(){
+  hashHistory.push('/signup');
+}
 function loginClicked(e){
   e.preventDefault();
   verifyUser()
-  // if(isAuthenticated){
-  //   console.log('isAuthenticated');
-  //   hashHistory.push('Main');
-  // }
-  // else {hashHistory.push('/signup');}
+
+  //TODO: provide authenitcation toggle, hardcoded to true for debugging on front end
+  if(true){
+    console.log('isAuthenticated');
+    hashHistory.push('Main');
+  }
+  else {hashHistory.push('/signup');}
 }
 
 export default class Login extends Component {
