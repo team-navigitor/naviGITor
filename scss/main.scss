@@ -98,7 +98,19 @@ body {
 	width: 100%;
 	text-align: left;
   &:hover {
-  	border: 1px solid #ccc;
+  	background: #ccc;
+  }
+  &:active {
+  	outline: none;
+  }
+}
+.login-submit2 {
+	background: #2874A6;
+	color: white!important;
+  border: none;
+  color: #000;
+  transition: 0.3s all ease-in-out;
+  &:hover {
   	background: #ccc;
   }
   &:active {
@@ -159,4 +171,10 @@ textarea {
 
 .qtip {
 	color: #000;
+}
+
+.git-tree-header {
+	form {
+		float: left;
+	}
 }

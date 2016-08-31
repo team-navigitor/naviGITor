@@ -9,7 +9,8 @@ let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
 
 /* listens for an git commit event from main.js webContent.send
- then sends commit string to the server via socket */
+ then sends commit string to the server via socket.
+ Also enters socketRoom after filling out form and making AJAX request */
 ipcRenderer.on('parsedCommit', function(event, arg){
 	if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 });
@@ -22,13 +23,6 @@ ipcRenderer.on('parsedCommit', function(event, arg){
 // });
 
 export default class Main extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			commits: []
-		}
-	}
-
   _dirChoice() {
 	  ipcRenderer.send('dirChoice');
   }
@@ -42,17 +36,14 @@ export default class Main extends Component {
 		ajax.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`)
 			.end((error, response) => {
 				if (!error && response) {
-					this.setState({
-						commits: response
-					});
-					// let apiData = response.body.map(function(item){
-					// 	return {
-					// 		name: item.commit.author.name,
-					// 		date: item.commit.author.date,
-					// 		message: item.commit.message
-					// 	}
-					// }).reverse();
-					console.log(commits);
+					let apiData = response.body.map(function(item){
+						return {
+							name: item.commit.author.name,
+							date: item.commit.author.date,
+							message: item.commit.message
+						}
+					}).reverse();
+					console.log(apiData);
 				} else {
 					console.log('error fetching Github data', error);
 				}
