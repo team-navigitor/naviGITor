@@ -6,7 +6,6 @@ import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
 import cyqtip from 'cytoscape-qtip';
 import { ipcRenderer } from 'electron';
-import ajax from 'superagent';
 import io from 'socket.io-client';
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
@@ -57,6 +56,7 @@ export default class GitTree extends Component {
 		let orgName = document.getElementById('login-org2').value;
 		let repoName = document.getElementById('login-repo2').value;
 
+		// Not really using this GET request, may need to switch it with database uri
 		$.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`, function(commits) {
 			this.setState({
 				commits: commits
@@ -75,82 +75,49 @@ export default class GitTree extends Component {
 		let localGitNodes = [];
 		let localGitEdges = [];
 
-		socket.on('incomingCommit', function(incomingData){
+		socket.on('incomingCommit', function(data){
+			var incomingData = JSON.parse(data);
 			console.log('broadcast loud and clear: ' + incomingData);
 
 			// loop through all local git activity, and store as nodes
-			// for (var i = 0; i < data.length; i++) {
-			// 	localGitNodes.push({
-			// 		data: {
-			// 			id: data[i].SHA
-			// 		}
-			// 	});
-			// }
+			for (var i = 0; i < incomingData.length; i++) {
+				localGitNodes.push({
+					data: {
+						id: incomingData[i].SHA
+					}
+				});
+			}
 
-			// for (var i = 0; i < data.length; i++) {
-			// 	// loop through git merge activity and connect current node with parent nodes
-			// 	if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
-			// 		localGitEdges.push({
-			// 			data: {
-			// 				source: data[i].parent[0],
-			// 				target: data[i].SHA
-			// 			}
-			// 		},{
-			// 			data: {
-			// 				source: data[i].parent[1],
-			// 				target: data[i].SHA
-			// 			}
-			// 		});
-			// 	}
+			for (var i = 0; i < incomingData.length; i++) {
+				// loop through git merge activity and connect current node with parent nodes
+				if (incomingData[i]['event'] === 'merge' && incomingData[i]['event'] !== 'checkout') {
+					console.log('entered merge');
+					localGitEdges.push({
+						data: {
+							source: incomingData[i].parent[0],
+							target: incomingData[i].SHA
+						}
+					},{
+						data: {
+							source: incomingData[i].parent[1],
+							target: incomingData[i].SHA
+						}
+					});
+				}
 
-			// 	// loop through all other events and connect current node to parent node
-			// 	if (data[i]['event'] !== 'checkout') {
-			// 		localGitEdges.push({
-			// 			data: {
-			// 				source: data[i].parent[0],
-			// 				target: data[i].SHA
-			// 			}
-			// 		});
-			// 	}
-			// }
+				// loop through all other events and connect current node to parent node
+				if (incomingData[i]['event'] !== 'checkout') {
+					localGitEdges.push({
+						data: {
+							source: incomingData[i].parent[0],
+							target: incomingData[i].SHA
+						}
+					});
+				}
+			}
 
 			dagTree();
 
-			// // Hides and shows tooltop appropriately, not dynamic
-			// cy.qtip({
-			// 	content: 'hello',
-			// 	show: {
-			// 	  event: 'mouseover'
-			// 	},
-			// 	hide: {
-			// 		when: {
-			// 		  event: 'mouseleave unfocus'
-			// 		}
-			// 	}
-	  //   });
-
-	  //Needs some polishing
-	  	// cy.on('mouseover', 'node', function (event) {
-    //     var eid = event.cyTarget._private.data.id
-    //     console.log(event.cyTarget._private.data.id);
-    //     // console.log($(this));
-
-    //     $(this).qtip({
-    //       content: eid,
-    //       position: {
-    //         at: 'top',
-    //         target: $(this)
-    //       },
-    //       show: {
-    //         event: 'mouseover',
-    //         ready: true
-    //       },
-    //       hide: {
-    //         // fixed: true,
-    //         event: 'mouseleave unfocus'
-    //       }
-    //     }, event); 
-	   //  });
 		});
 
 
@@ -210,3 +177,40 @@ export default class GitTree extends Component {
 		);
 	}
 }
+
+
+// // Hides and shows tooltop appropriately, not dynamic
+			// cy.qtip({
+			// 	content: 'hello',
+			// 	show: {
+			// 	  event: 'mouseover'
+			// 	},
+			// 	hide: {
+			// 		when: {
+			// 		  event: 'mouseleave unfocus'
+			// 		}
+			// 	}
+	  //   });
+
+	  //Needs some polishing
+	  	// cy.on('mouseover', 'node', function (event) {
+    //     var eid = event.cyTarget._private.data.id
+    //     console.log(event.cyTarget._private.data.id);
+    //     // console.log($(this));
+
+    //     $(this).qtip({
+    //       content: eid,
+    //       position: {
+    //         at: 'top',
+    //         target: $(this)
+    //       },
+    //       show: {
+    //         event: 'mouseover',
+    //         ready: true
+    //       },
+    //       hide: {
+    //         // fixed: true,
+    //         event: 'mouseleave unfocus'
+    //       }
+    //     }, event); 
+	   //  });
