@@ -13,6 +13,10 @@ import Main from './Main';
 import Login from './login';
 import GitTree from './gitTree';
 import TerminalView from './terminal/terminal.js'
+import Signup from './signup';
+import TeamLogin from './teamLogin';
+import Analytics from './analytics';
+import Logo from './logopage';
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
 let socket = io('http://localhost:3000');
@@ -22,11 +26,17 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			message: []
+			// loggedIn:
+			// team:
+			// data:
+			data: []
 		}
-
-		this._handleData = this._handleData.bind(this);
+	this._handleData = this._handleData.bind(this);
 	}
+
+	// printData: function print() {
+	// 	console.log('print '+)
+	// }
 
 	componentDidMount() {
 		socket.on('test', this._handleData);
@@ -39,9 +49,11 @@ class App extends Component {
 	}
 
 	render() {
+
     return (
 			<div>
-				{this.props.children}
+			{this.props.children}
+				{/* React.cloneElement(this.props.children, { this.props.children }); */}
 			</div>
     )
 	}
@@ -51,11 +63,18 @@ export default App;
 
 ReactDOM.render((
    <Router history = {hashHistory}>
+
       <Route path = "/" component = {App}>
+
          <IndexRoute component = {Login} />
-				 <Route path = "Main" component = {Main}>
-				 	 <Route path = "GitTree" component = {GitTree} />
-			     <Route path = "Terminal" component = {TerminalView} />
+				 <Route path = "Signup" component = {Signup} />
+				 <Route path = "TeamLogin" component = {TeamLogin} />
+
+					 <Route path = "Main" component = {Main}>
+					   <IndexRoute component = {Logo} />
+					 	 <Route path = "GitTree" component = {GitTree} />
+				     <Route path = "Terminal" component = {TerminalView} />
+				     <Route path = "Analytics" component = {Analytics} />
 				</Route>
       </Route>
   </Router>
