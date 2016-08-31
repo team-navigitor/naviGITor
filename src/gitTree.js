@@ -7,6 +7,10 @@ import dagre from 'dagre';
 import cyqtip from 'cytoscape-qtip';
 import { ipcRenderer } from 'electron';
 
+// if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
+// socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
+// socketRoom = `${orgName}.${repoName}live`;
+
 
 // register extension
 cyqtip( cytoscape, $ );
@@ -17,11 +21,11 @@ export default class GitTree extends Component {
 		super();
 	}
 
+
 	componentDidMount() {
 		let localGitAction;
 		let localGitNodes = [];
 		let localGitEdges = [];
-		console.log('hi');
 
 		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data){
 			console.log('hi2', data);
@@ -97,7 +101,7 @@ export default class GitTree extends Component {
     //         // fixed: true,
     //         event: 'mouseleave unfocus'
     //       }
-    //     }, event); 
+    //     }, event);
 	   //  });
 		});
 
@@ -140,8 +144,13 @@ export default class GitTree extends Component {
 	}
 
 	render() {
+		// console.log('in git tree '+this.props.orgName);
+		console.log('in git tree '+JSON.stringify(this.props.getAppState));
 		return (
+
 			<div className="cytocontainer">
+			<h1>{this.props.getAppState.orgName}</h1>
+
 				<div id="cy"></div>
 			</div>
 		);

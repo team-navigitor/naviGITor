@@ -7,37 +7,24 @@ import App from './app';
 import Signup from './signup';
 import TeamLogin from './teamLogin';
 
-let isAuthenticated = true;
 
-function verifyUser(){
-  console.log(document.getElementById('userNameInput').value);
-}
-function signUpClicked(){
-  hashHistory.push('Signup');
-}
-function loginClicked(e){
-  e.preventDefault();
-  verifyUser()
-  if(isAuthenticated){
-    console.log('isAuthenticated');
-    hashHistory.push('TeamLogin');
-  }
-  else hashHistory.push('Signup');
-}
+
 
 export default class Login extends Component {
+  constructor(props) {
+    super(props);
+
+
+    this._loginClicked = this._loginClicked.bind(this);
+  }
   render() {
     return (
       <div className='login-container'>
         <img className='login-logo' src='../images/darknaviGitorLogo_1.png' />
         <form className='login-form'>
-            <input id='userNameInput'
-                  placeholder='USERNAME' type='text' required />
-            <input type='password'
-                  placeholder='PASSWORD' type='text' required />
-
-            <button className='login-button' type="submit" onClick={loginClicked}>LOG IN</button>
-
+            <input id='userNameInput' placeholder='USERNAME' type='text' required />
+            <input type='password' placeholder='PASSWORD' type='text' required />
+            <button className='login-button' type="submit" onClick={this._loginClicked}>LOG IN</button>
         </form>
 
         <div id='signup-button'>
@@ -46,4 +33,22 @@ export default class Login extends Component {
     </div>
     )
   }
+
+  // let isAuthenticated = true;
+
+  verifyUser(){
+    console.log(document.getElementById('userNameInput').value);
+  }
+
+  _loginClicked(e){
+    e.preventDefault();
+    // this.verifyUser();
+    // if(isAuthenticated){
+    //   console.log('isAuthenticated');
+    //   hashHistory.push('TeamLogin');
+    // }
+    // else hashHistory.push('Signup');
+     hashHistory.push('TeamLogin');
+  }
+
 }
