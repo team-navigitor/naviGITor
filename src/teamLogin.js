@@ -29,55 +29,37 @@ export default class TeamLogin extends Component {
 
   _dirChoice() {
     ipcRenderer.send('dirChoice');
+
   }
 
 _handleSubmit(e) {
   e.preventDefault();
   let orgName = document.getElementById('login-org').value;
   let repoName = document.getElementById('login-repo').value;
-  // ajax.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`)
-  //   .end((error, response) => {
-  //     if (!error && response) {
-  //       let apiData = response.body.map(function(item){
-  //         return {
-  //           name: item.commit.author.name,
-  //           date: item.commit.author.date,
-  //           message: item.commit.message
-  //         }
-  //       }).reverse();
-  //       console.log(apiData);
-  //     } else {
-  //       console.log('error fetching Github data', error);
-  //     }
+
   if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
   socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
   socketRoom = `${orgName}.${repoName}live`;
-    // }
-  // );
+
   hashHistory.push('Main');
 
-  // TODO: Save for now to transfer to main process later
-  // let githubLogin = {
-  // 	orgName: orgName,
-  // 	repoName: repoName
-  // }
-  // ipcRenderer.send('githubLogin', githubLogin);
+
 }
   render() {
     return (
-        <div id='teamLogin-container'>
-          <h1>Enter Your Repository and Project Folder</h1>
 
-            <h5>Select Your Local Project Folder</h5>
-            <button className="folder-button" onClick = {this._dirChoice}> Select Project Folder </button>
+        <div className='login-container' id='teamLogin-container'>
+        <h3>PROJECT INFORMATION</h3>
 
-            <form onSubmit={this._handleSubmit} className="login">
-              <h5>Find Your Team's Repository</h5>
-              <input id="login-org" placeholder="Github Org" type="text" />
-              <input id="login-repo" placeholder="Repo Name" type="text" />
-              <button className="login-submit" type="submit">Submit</button>
+            <h5>Select the local file where your project is located:</h5>
+            <button className="login-button" onClick = {this._dirChoice}>FIND FOLDER</button>
+
+            <form onSubmit={this._handleSubmit} className="login-form">
+              <h5 className='team-h5'>Enter your team's Github repository:</h5>
+              <input id="login-org" placeholder="GITHUB ORGANIZATION" type="text" />
+              <input id="login-repo" placeholder="REPO NAME" type="text" />
+              <button className="login-button" type="submit">SUBMIT</button>
             </form>
-
 
           {/* <li><Link to='/Main'>Continue</Link></li> */}
         </div>

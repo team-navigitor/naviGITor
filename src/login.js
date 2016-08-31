@@ -29,19 +29,20 @@ export default class Login extends Component {
   render() {
     return (
       <div className='login-container'>
-        <img className="login-logo" src="../images/darknaviGitorLogo_1.png" />
-        <h2>LOG IN</h2>
-        <form className="enter-form">
-            <input id='userNameInput' className="form-control"
-                  placeholder="Please enter name" required />
-            <input type='password' className="form-control"
-                  placeholder="Please enter Password" required />
+        <img className='login-logo' src='../images/darknaviGitorLogo_1.png' />
+        <form className='login-form'>
+            <input id='userNameInput'
+                  placeholder='USERNAME' type='text' required />
+            <input type='password'
+                  placeholder='PASSWORD' type='text' required />
 
-            <button id='LoginButton' type="submit" className="btn btn-primary" onClick={loginClicked}>Enter</button>
-
-            <button id='signUpButton' className="btn btn-primary" onClick={signUpClicked}>Sign Up</button>
+            <button className='login-button' type="submit" onClick={loginClicked}>LOG IN</button>
 
         </form>
+
+        <div id='signup-button'>
+          <p>Don't have an account?  <Link to='Signup' className='signup-link'>Sign Up</Link></p>
+        </div>
     </div>
     )
   }
