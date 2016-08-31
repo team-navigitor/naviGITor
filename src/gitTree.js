@@ -77,46 +77,42 @@ export default class GitTree extends Component {
 
 		socket.on('incomingCommit', function(incomingData){
 			console.log('broadcast loud and clear: ' + incomingData);
-		});
-
-		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data){
-			console.log('hi2', data);
 
 			// loop through all local git activity, and store as nodes
-			for (var i = 0; i < data.length; i++) {
-				localGitNodes.push({
-					data: {
-						id: data[i].SHA
-					}
-				});
-			}
+			// for (var i = 0; i < data.length; i++) {
+			// 	localGitNodes.push({
+			// 		data: {
+			// 			id: data[i].SHA
+			// 		}
+			// 	});
+			// }
 
-			for (var i = 0; i < data.length; i++) {
-				// loop through git merge activity and connect current node with parent nodes
-				if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
-					localGitEdges.push({
-						data: {
-							source: data[i].parent[0],
-							target: data[i].SHA
-						}
-					},{
-						data: {
-							source: data[i].parent[1],
-							target: data[i].SHA
-						}
-					});
-				}
+			// for (var i = 0; i < data.length; i++) {
+			// 	// loop through git merge activity and connect current node with parent nodes
+			// 	if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
+			// 		localGitEdges.push({
+			// 			data: {
+			// 				source: data[i].parent[0],
+			// 				target: data[i].SHA
+			// 			}
+			// 		},{
+			// 			data: {
+			// 				source: data[i].parent[1],
+			// 				target: data[i].SHA
+			// 			}
+			// 		});
+			// 	}
 
-				// loop through all other events and connect current node to parent node
-				if (data[i]['event'] !== 'checkout') {
-					localGitEdges.push({
-						data: {
-							source: data[i].parent[0],
-							target: data[i].SHA
-						}
-					});
-				}
-			}
+			// 	// loop through all other events and connect current node to parent node
+			// 	if (data[i]['event'] !== 'checkout') {
+			// 		localGitEdges.push({
+			// 			data: {
+			// 				source: data[i].parent[0],
+			// 				target: data[i].SHA
+			// 			}
+			// 		});
+			// 	}
+			// }
 
 			dagTree();
 
