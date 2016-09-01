@@ -44,7 +44,7 @@ export default class Login extends Component {
     //   hashHistory.push('TeamLogin');
     // }
     // else hashHistory.push('Signup');
-     hashHistory.push('TeamLogin');
+     hashHistory.push('/TeamLogin');
   }
 
 }

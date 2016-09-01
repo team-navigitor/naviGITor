@@ -28,7 +28,7 @@ export default class TeamLogin extends Component {
   }
 
   render() {
-    console.log('teamlogin page');
+    console.log('teamlogin')
     return (
 
         <div className='login-container' id='teamLogin-container'>

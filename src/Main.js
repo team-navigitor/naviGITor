@@ -16,17 +16,20 @@ export default class Main extends Component {
 
         <div className='side-nav-bar-container'>
 
-        <h1>{this.props.getAppState.orgName}</h1>
-        {/* <h1>{this.props.repoName}</h1> */}
+        <div className='image-container'>
 
+        </div>
+
+<div className='nav-links-container'>
             <ul>
-              <h5>Navigate</h5>
               <li><Link to='/Main/GitTree'>GIT TREE</Link></li>
               <li><Link to='/Main/Analytics'>ANALYTICS</Link></li>
 							<li><Link to='/Main/Terminal'>TERMINAL</Link></li>
+							<li><Link to='/Main/Terminal'>CHAT</Link></li>
               <li><Link to='/'>LOG OUT</Link></li>
             </ul>
 
+</div>
       </div>
 
 	      <div className='view-container'>
