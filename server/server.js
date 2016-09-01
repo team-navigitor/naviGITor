@@ -40,6 +40,7 @@ TODO: handle subscribe/getRepo functionality on client side
 io.sockets.on('connection', function (socket) {
   // room handling
   socket.on('subscribe', function(data) {
+		console.log(data.room);
     EventController.getRepo(data, function(x) {
       console.log(x)
     })

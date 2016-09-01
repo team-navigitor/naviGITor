@@ -4,13 +4,12 @@ import { Link } from 'react-router';
 export default class Main extends Component {
   constructor(props) {
     super(props);
-
-
     // this._loginClicked = this._loginClicked.bind(this);
   }
 
   render() {
-      console.log('in Main '+JSON.stringify(this.props.getAppState));
+    console.log('main page');
+    // console.log('in Main '+JSON.stringify(this.props.getAppState));
     return (
 
       <div id='main-container'>

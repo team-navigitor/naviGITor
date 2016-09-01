@@ -21,7 +21,6 @@ export default class GitTree extends Component {
 		super();
 	}
 
-
 	componentDidMount() {
 		let localGitAction;
 		let localGitNodes = [];
@@ -144,13 +143,10 @@ export default class GitTree extends Component {
 	}
 
 	render() {
-		// console.log('in git tree '+this.props.orgName);
-		console.log('in git tree '+JSON.stringify(this.props.getAppState));
 		return (
-
 			<div className="cytocontainer">
-			<h1>{this.props.getAppState.orgName}</h1>
-
+			  <p>This is the Org Name: {this.props.getAppState.orgName}</p>
+				<p>This is the Repo Name: {this.props.getAppState.repoName}</p>
 				<div id="cy"></div>
 			</div>
 		);

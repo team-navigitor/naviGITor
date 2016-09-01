@@ -9,7 +9,7 @@ import io from 'socket.io-client';
 import { ipcRenderer } from 'electron';
 
 const { Router, Route, Link, hashHistory, IndexRoute } = require('react-router');
-import Main from './Main';
+import Main from './main';
 import Login from './login';
 import GitTree from './gitTree';
 import TerminalView from './terminal/terminal.js'
@@ -18,9 +18,9 @@ import TeamLogin from './teamLogin';
 import Analytics from './analytics';
 import Logo from './logopage';
 
-// Socket handling for app. Must be global to current page for ipcRenderer + React
-// let socket = io('http://localhost:3000');
-// let socketRoom = null;
+
+let socket = io('http://localhost:3000');
+let socketRoom = null;
 
 class App extends Component {
 	constructor(props) {
@@ -28,44 +28,44 @@ class App extends Component {
 		this.state = {
 			orgName: '',
 			repoName: '',
+			newestGitEvent: '',
 		}
-	// this._handleData = this._handleData.bind(this);
-	// this.onHandleData = this.onHandleData.bind(this);
-	this.setAppState = this.setAppState.bind(this);
-	// this.setState = this.setState.bind(this);
+		this.setAppState = this.setAppState.bind(this);
 	}
-	// handleRepoInfo: function(childName, childValue) {
-	// 	let newState = {};
-	// 	newState[childName] = childValue;
-	// 	this.setState(newState)
-	// }
 
-	// componentDidMount() {
-	// 	socket.on('test', this._handleData);
-	// 	socket.on('incomingCommit', this._handleData);
-  // }
+	componentDidMount() {
+		/* listens for a git commit event from main.js webContent.send then sends commit string to the server via socket */
+		ipcRenderer.on('parsedCommit', function(event, arg){
+			if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
+		});
 
-	// _handleData(dataObj) {
-	// 	let data = JSON.parse(dataObj);
-	// 	console.log("handledata", data);
-	// }
+		//NEED TO TEST
+		socket.on('incomingCommit', function(data){
+			console.log('broadcast loud and clear: ' + data);
+			this.setState.bind(this)(data);
+		});
+	}
 
+	// Socket handling for app. Must be global to current page for ipcRenderer + React
+	setSocketRoom(obj) {
+		if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
+		socket.emit("subscribe", { room: `${obj.orgName}.${obj.repoName}live` });
+		socketRoom = `${obj.orgName}.${obj.repoName}live`;
+	}
+
+	//need to test this func being called from other components
 	setAppState(obj){
 		console.log('this state '+JSON.stringify(this.state))
 		this.setState.bind(this)(obj);
 		console.log('data coming in ' +JSON.stringify(obj));
+		if (obj['orgName']) {
+			console.log('yes obj is orgName '+obj['orgName']);
+			this.setSocketRoom(obj);
+		}
 	}
 
-	// onHandleData(val) {
-	// 	// console.log('data coming in' +JSON.stringify(val));
-	// 	// console.log('state BEFORE adding data: '+JSON.stringify(this.state.data));
-	// 	this.setState.bind(this)({
-	// 		data: val
-	// 	})
-		// console.log('state after adding data: '+JSON.stringify(this.state.data));
-	// }
-
 	render() {
+		console.log('app page')
     return (
 			<div>
 			{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
@@ -78,10 +78,8 @@ export default App;
 
 ReactDOM.render((
    <Router history = {hashHistory}>
-
       <Route path = "/" component = {App}>
-
-         <IndexRoute component = {TeamLogin} />
+         <IndexRoute component = {Login} />
 				 <Route path = "Signup" component = {Signup} />
 				 <Route path = "TeamLogin" component = {TeamLogin} />
 

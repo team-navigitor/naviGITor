@@ -1,21 +1,17 @@
 import React, {Component} from 'react';
 import { Router, Route, Link } from 'react-router';
 import { hashHistory } from 'react-router';
-
-import Main from './Main';
+import Main from './main';
 import App from './app';
 import Signup from './signup';
 import TeamLogin from './teamLogin';
 
 
 
-
 export default class Login extends Component {
   constructor(props) {
     super(props);
-
-
-    this._loginClicked = this._loginClicked.bind(this);
+    this.loginClicked = this.loginClicked.bind(this);
   }
   render() {
     return (
@@ -24,7 +20,7 @@ export default class Login extends Component {
         <form className='login-form'>
             <input id='userNameInput' placeholder='USERNAME' type='text' required />
             <input type='password' placeholder='PASSWORD' type='text' required />
-            <button className='login-button' type="submit" onClick={this._loginClicked}>LOG IN</button>
+            <button className='login-button' type="submit" onClick={this.loginClicked}>LOG IN</button>
         </form>
 
         <div id='signup-button'>
@@ -40,7 +36,7 @@ export default class Login extends Component {
     console.log(document.getElementById('userNameInput').value);
   }
 
-  _loginClicked(e){
+  loginClicked(e){
     e.preventDefault();
     // this.verifyUser();
     // if(isAuthenticated){

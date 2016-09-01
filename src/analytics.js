@@ -4,7 +4,7 @@ export default class Analytics extends Component {
   render() {
     return (
         <div id='analytics-container'>
-            <h1>Analytics Page</h1>
+            <p>Analytics Page</p>
         </div>
     )
   }
