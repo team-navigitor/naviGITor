@@ -81,7 +81,8 @@ export default class Main extends Component {
             </div> */}
             <ul>
               <h5>Navigate</h5>
-              <li><Link to='/Main/GitTree'>GIT TREE</Link></li>
+              <li><Link to='/Main/GitTree'>GLOBAL GIT TREE</Link></li>
+              <li><Link to='/Main/LocalGitTree'>LOCAL GIT TREE</Link></li>
               <li><Link to='/Main/Terminal'>TERMINAL</Link></li>
               <li><Link to='/'>LOG OUT</Link></li>
             </ul>

@@ -71,9 +71,8 @@ export default class GitTree extends Component {
 	}
 
 	componentDidMount() {
-		let localGitAction;
-		let localGitNodes = [];
-		let localGitEdges = [];
+		let incomingGitNodes = [];
+		let incomingGitEdges = [];
 
 		socket.on('incomingCommit', function(data){
 			var incomingData = JSON.parse(data);
@@ -81,7 +80,7 @@ export default class GitTree extends Component {
 
 			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < incomingData.length; i++) {
-				localGitNodes.push({
+				incomingGitNodes.push({
 					data: {
 						id: incomingData[i].SHA
 					}
@@ -92,7 +91,7 @@ export default class GitTree extends Component {
 				// loop through git merge activity and connect current node with parent nodes
 				if (incomingData[i]['event'] === 'merge' && incomingData[i]['event'] !== 'checkout') {
 					console.log('entered merge');
-					localGitEdges.push({
+					incomingGitEdges.push({
 						data: {
 							source: incomingData[i].parent[0],
 							target: incomingData[i].SHA
@@ -107,7 +106,7 @@ export default class GitTree extends Component {
 
 				// loop through all other events and connect current node to parent node
 				if (incomingData[i]['event'] !== 'checkout') {
-					localGitEdges.push({
+					incomingGitEdges.push({
 						data: {
 							source: incomingData[i].parent[0],
 							target: incomingData[i].SHA
@@ -152,8 +151,8 @@ export default class GitTree extends Component {
 					}
 				],
 				elements: {
-					nodes: localGitNodes,
-					edges: localGitEdges
+					nodes: incomingGitNodes,
+					edges: incomingGitEdges
 				},
 			});
 		};
