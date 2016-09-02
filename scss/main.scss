@@ -82,84 +82,73 @@ input:focus {
 
 // ****** Main.js *****
 .side-nav-bar-container {
-	padding: 10px;
-	color: white;
-	max-width: 200px;
+	max-width: 13em;
 	width: 100%;
 	height: 100vh;
+	background-color: #424949;
+	color: white;
 	float: left;
-	background-color: #eee;
-
-	h5 {
-		color: #666;
-		text-align: left;
-		font-weight: bold;
-		text-transform: capitalize;
-	}
-}
-.side-nav-logo {
-	width: 100%;
+	position: relative;
 }
 .view-container {
-	margin-left: 200px;
+	margin-left: 13em;
 	height: 100%;
 }
-.side-image {
-	// background: url('../images/LSHero-003.jpg') cover no-repeat;
-	width: 100%;
+.nav-image {
+	background:linear-gradient(rgba(66, 73, 73, 0.7), rgba(66, 73, 73, 0.7)), url(https://t4.ftcdn.net/jpg/01/16/66/99/240_F_116669961_zNY1cxr3rupc1CeazvIK6hUyvS9joZrd.jpg);
+	background-size: 120% auto;
+	background-position: right-top;
+	height: 10.2em;
+	text-align: center;
 }
-.login {
-	margin-top: 30px;
+#profile-pic {
+	height: 60px;
+	border-radius: 50%;
+	margin-top: 20px;
 }
-// #login-org,
-// #login-repo {
-// 	color: #000;
-// 	display: block;
-//   margin: 0 auto;
-// 	width: 100%;
-// }
-// .login-submit {
-//   background: #2874A6;
-// 	color: white!important;
-//   border: none;
-//   color: #000;
-//   transition: 0.3s all ease-in-out;
-// 	width: 100%;
-// 	text-align: left;
-//   &:hover {
-//   	border: 1px solid #ccc;
-//   	background: #ccc;
-//   }
-//   &:active {
-//   	outline: none;
-//   }
-// }
-// .folder-button {
-// 	width: 100%;
-// 	color: #2874A6;
-// 	text-align: left;
-// }
 ul {
 	list-style-type: none;
-	padding: 0;
-	margin: 0;
-	margin-top: 30px;
+	padding: 1em;
+	margin-top: .9em;
 	text-align: left;
 }
 li {
-  transition: 0.3s all ease-in-out;
+	font-size: 1.1em;
 	width: 100%;
-	color: white!important;
+	color: darkGray;
+	margin:0 0 1em 1em;
+	padding-left: 1em;
 	font-weight: bold;
   &:hover {
-  	background: white;
+  	color: white;
   }
-  &:active {
-  	outline: none;
-  }
+}
+.list {
+	color: darkGray;
+	font-size: .8em;
+	&:hover {
+		color: white;
+		text-decoration: none;
+	}
+}
+.nav-logo {
+	height: 4em;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	position: absolute;
+	bottom: 1em;
 }
 // ***** end main.js *****
 
+.landing-logo {
+	width: 25em;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	opacity: .5;
+	padding-top: 5em;
+}
 
 // ***** terminal *******
 .terminal-container {

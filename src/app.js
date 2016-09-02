@@ -17,6 +17,8 @@ import Signup from './signup';
 import TeamLogin from './teamLogin';
 import Analytics from './analytics';
 import Logo from './logopage';
+import Profile from './profilePage';
+import Chat from './chat';
 
 
 let socket = io('http://localhost:3000');
@@ -27,13 +29,16 @@ class App extends Component {
 		super(props);
 		this.state = {
 			orgName: '',
-			repoName: '',
+			repoName: 'Navigitor',
 			newestGitEvent: '',
+			profilePic: 'https://avatars1.githubusercontent.com/u/8155387?v=3&s=400',
+			username: 'Binh Nguyen',
 		}
 		this.setAppState = this.setAppState.bind(this);
 	}
 
 	componentDidMount() {
+		console.log('app component did mount')
 		/* listens for a git commit event from main.js webContent.send then sends commit string to the server via socket */
 		ipcRenderer.on('parsedCommit', function(event, arg){
 			if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
@@ -53,7 +58,7 @@ class App extends Component {
 		socketRoom = `${obj.orgName}.${obj.repoName}live`;
 	}
 
-	//need to test this func being called from other components
+	// need to test this func being called from other components
 	setAppState(obj){
 		console.log('this state '+JSON.stringify(this.state))
 		this.setState.bind(this)(obj);
@@ -66,6 +71,7 @@ class App extends Component {
 
 	render() {
 		console.log('app page')
+		console.log(this.props.location);
     return (
 			<div>
 			{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
@@ -88,6 +94,8 @@ ReactDOM.render((
 					 	 <Route path = "GitTree" component = {GitTree} />
 				     <Route path = "Terminal" component = {TerminalView} />
 				     <Route path = "Analytics" component = {Analytics} />
+						 <Route path = "Profile" component = {Profile} />
+						 <Route path = "Chat" component = {Chat} />
 				</Route>
       </Route>
   </Router>
