@@ -60,18 +60,18 @@ export default class GitTree extends Component {
 		let orgName = document.getElementById('login-org2').value;
 		let repoName = document.getElementById('login-repo2').value;
 
+		if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
+		socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
+		socketRoom = `${orgName}.${repoName}live`;
 		// Not really using this GET request, may need to switch it with database uri
-		$.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`, function(commits) {
-			this.setState({
-				commits: commits
-			});
+		// $.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`, function(commits) {
+		// 	this.setState({
+		// 		commits: commits
+		// 	});
 
-			console.log('Made get request', commits);
+		// 	console.log('Made get request', commits);
 
-			if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
-			socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
-			socketRoom = `${orgName}.${repoName}live`;
-		}.bind(this));
+		// }.bind(this));
 	}
 
 	componentDidMount() {
