@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
+mongoose.connect('http://localhost:3000/test')
 
 //define user schema
 const userSchema = new Schema ({

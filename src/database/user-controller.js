@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
 
 //initialize UserController as empty object
-UserController = {};
+let UserController = {};
 
 //create method to add user to collection
 UserController.add = (req, res, next) => {
