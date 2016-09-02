@@ -23,7 +23,6 @@ ipcRenderer.on('parsedCommit', function(event, arg){
 	if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 });
 
-
 export default class LocalGitTree extends Component {
 	constructor(props) {
 		super(props);
@@ -67,18 +66,16 @@ export default class LocalGitTree extends Component {
 		let localGitEdges = [];
 
 		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data) {
+			console.log(data);
 			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < data.length; i++) {
 				localGitNodes.push({
 					data: {
-						id: data[i].SHA
+						id: data[i].SHA,
+						label: data[i].message
 					}
 				});
 			}
-
-			// $(document).ready(function() {
-			// 	$('data.SHA').last().css( "background-color", "red" );
-			// });
 
 			for (var i = 0; i < data.length; i++) {
 				// loop through git merge activity and connect current node with parent nodes
@@ -107,44 +104,97 @@ export default class LocalGitTree extends Component {
 				}
 			}
 
+			/* listens for an git commit event from main.js webContent.send
+			 then sends commit string to the server via socket */
+			ipcRenderer.on('parsedCommit', function(event, localGit){
+				cy.add([
+					{
+				    data: {
+				    	id: localGit.SHA,
+				    	label: localGit.message
+				    }
+					},
+					{
+				    data: {
+				    	id: 'edge ' + localGit.message,
+				    	source: localGit.parent[0],
+				    	target: localGit.SHA
+				    }
+					}
+				]).style({
+					'border-style': 'double',
+					'border-color': '#93dbff',
+					'border-width': 5,
+					'line-color': '#93dbff',
+				});
+
+				cy.layout({
+					name: 'dagre',
+					animate: true,
+					fit: true,
+					animationDuration: 500,
+				});
+			});
+
 			dagTree();
+
+			// cy.elements().qtip({
+			// 	content: 'Example qTip on ele',
+			// 	position: {
+			// 		my: 'top center',
+			// 		at: 'bottom center'
+			// 	},
+			// 	style: {
+			// 		tip: {
+			// 			width: 16,
+			// 			height: 8
+			// 		}
+			// 	}
+			// });
 		});
 
 
 		function dagTree() {
-			var cy = window.cy = cytoscape({
-				container: document.getElementById('cy'),
-				boxSelectionEnabled: false,
-				autounselectify: true,
-				layout: {
-					name: 'dagre'
-				},
-				style: [
-					{
-						selector: 'node',
-						style: {
-							'content': 'data(id)',
-							'text-opacity': 0.5,
-							'text-valign': 'center',
-							'text-halign': 'right',
-							'background-color': '#216e51'
-						}
+			$(function() {
+				var cy = window.cy = cytoscape({
+					container: document.getElementById('cy'),
+					boxSelectionEnabled: false,
+					autounselectify: true,
+					layout: {
+						name: 'dagre'
 					},
-					{
-						selector: 'edge',
-						style: {
-							'width': 4,
-							'curve-style': 'bezier',
-							'target-arrow-shape': 'triangle',
-							'line-color': '#42dca3',
-							'target-arrow-color': '#42dca3'
+					style: [
+						{
+							selector: 'node',
+							style: {
+								'content': 'data(label)',
+								'width': 80,
+								'height': 80,
+								'text-opacity': 0.5,
+								'text-valign': 'center',
+								'text-halign': 'right',
+								'background-image': 'https://github.com/binhxn.png',
+								'border-width': 3,
+								'background-fit': 'cover',
+								'border-color': '#42dca3'
+							}
+						},
+						{
+							selector: 'edge',
+							style: {
+								'width': 4,
+								'curve-style': 'bezier',
+								'target-arrow-shape': 'triangle',
+								'line-color': '#42dca3',
+								'target-arrow-color': '#42dca3'
+							}
 						}
+					],
+					elements: {
+						nodes: localGitNodes,
+						edges: localGitEdges
 					}
-				],
-				elements: {
-					nodes: localGitNodes,
-					edges: localGitEdges
-				},
+				});
 			});
 		};
 	}
