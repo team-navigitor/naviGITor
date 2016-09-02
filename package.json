@@ -50,6 +50,7 @@
     "mocha": "^3.0.2",
     "node-sass": "^3.8.0",
     "sass-loader": "^4.0.0",
+    "sinon": "^1.17.5",
     "spectron": "^3.3.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1",

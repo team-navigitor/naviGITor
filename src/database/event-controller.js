@@ -10,7 +10,7 @@ const eventSchema = new Schema({
 });
 
 //initialize EventController as empty object
-EventController = {}
+let EventController = {}
 
 //create post method for EventController
 EventController.post = arg => {
