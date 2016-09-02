@@ -29,10 +29,10 @@ class App extends Component {
 		super(props);
 		this.state = {
 			orgName: '',
-			repoName: 'Navigitor',
+			repoName: '',
 			newestGitEvent: '',
 			profilePic: 'https://avatars1.githubusercontent.com/u/8155387?v=3&s=400',
-			username: 'Binh Nguyen',
+			username: '',
 		}
 		this.setAppState = this.setAppState.bind(this);
 	}
