@@ -41,19 +41,22 @@ TODO: handle subscribe/getRepo functionality on client side
 ****************************/
 
 io.sockets.on('connection', function (socket) {
+  // Socket test
+  socket.once("echo", function (msg, callback) {
+    socket.emit("echo", msg);
+  });
+
   // room handling
   socket.on('subscribe', function(data) {
 		console.log(data.room);
     EventController.getRepo(data, function(x) {
       console.log(x)
     })
+
     socket.join(data.room)}
   );
+
   socket.on('unsubscribe', function(data) { socket.leave(data.room)});
-  // Socket test
-  socket.once("echo", function (msg, callback) {
-    socket.emit("echo", msg);
-  });
   //listening for Git Action from local client, then broadcasts to all connected clients in team
 	// TODO: handle callback in post method
 	socket.on('broadcastGit', function(arg){

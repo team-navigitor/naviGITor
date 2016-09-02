@@ -8,10 +8,13 @@ import cyqtip from 'cytoscape-qtip';
 import { ipcRenderer } from 'electron';
 import io from 'socket.io-client';
 
+// register extension
+cyqtip( cytoscape, $ );
+cydagre( cytoscape, dagre );
+
 // Socket handling for app. Must be global to current page for ipcRenderer + React
 let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
-
 
 /* listens for an git commit event from main.js webContent.send
  then sends commit string to the server via socket.
@@ -20,24 +23,7 @@ ipcRenderer.on('parsedCommit', function(event, arg){
 	if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 });
 
-/**
-* @data - broadcasted git event from other user
-**/
-// Try and move this to componentDidMount or handleSubmit tomorrow
-socket.on('incomingCommit', function(data){
-	console.log('broadcast loud and clear: ' + data);
-});
-
-// if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
-// socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
-// socketRoom = `${orgName}.${repoName}live`;
-
-
-// register extension
-cyqtip( cytoscape, $ );
-cydagre( cytoscape, dagre );
-
-export default class GitTree extends Component {
+export default class LocalGitTree extends Component {
 	constructor(props) {
 		super(props);
 
@@ -75,88 +61,140 @@ export default class GitTree extends Component {
 	}
 
 	componentDidMount() {
-		let incomingGitNodes = [];
-		let incomingGitEdges = [];
+		let localGitAction;
+		let localGitNodes = [];
+		let localGitEdges = [];
 
-		socket.on('incomingCommit', function(data){
-			var incomingData = JSON.parse(data);
-			console.log('broadcast loud and clear: ' + incomingData);
-
+		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data) {
+			console.log(data);
 			// loop through all local git activity, and store as nodes
-			for (var i = 0; i < incomingData.length; i++) {
-				incomingGitNodes.push({
+			for (var i = 0; i < data.length; i++) {
+				localGitNodes.push({
 					data: {
-						id: incomingData[i].SHA
+						id: data[i].SHA,
+						label: data[i].message
 					}
 				});
 			}
 
-			for (var i = 0; i < incomingData.length; i++) {
+			for (var i = 0; i < data.length; i++) {
 				// loop through git merge activity and connect current node with parent nodes
-				if (incomingData[i]['event'] === 'merge' && incomingData[i]['event'] !== 'checkout') {
-					console.log('entered merge');
-					incomingGitEdges.push({
+				if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
+					localGitEdges.push({
 						data: {
-							source: incomingData[i].parent[0],
-							target: incomingData[i].SHA
+							source: data[i].parent[0],
+							target: data[i].SHA
 						}
 					},{
 						data: {
-							source: incomingData[i].parent[1],
-							target: incomingData[i].SHA
+							source: data[i].parent[1],
+							target: data[i].SHA
 						}
 					});
 				}
 
 				// loop through all other events and connect current node to parent node
-				if (incomingData[i]['event'] !== 'checkout') {
-					incomingGitEdges.push({
+				if (data[i]['event'] !== 'checkout') {
+					localGitEdges.push({
 						data: {
-							source: incomingData[i].parent[0],
-							target: incomingData[i].SHA
+							source: data[i].parent[0],
+							target: data[i].SHA
 						}
 					});
 				}
 			}
 
+			/* listens for an git commit event from main.js webContent.send
+			 then sends commit string to the server via socket */
+			ipcRenderer.on('parsedCommit', function(event, localGit){
+				cy.add([
+					{
+				    data: {
+				    	id: localGit.SHA,
+				    	label: localGit.message
+				    }
+					},
+					{
+				    data: {
+				    	id: 'edge ' + localGit.message,
+				    	source: localGit.parent[0],
+				    	target: localGit.SHA
+				    }
+					}
+				]).style({
+					'border-style': 'double',
+					'border-color': '#93dbff',
+					'border-width': 5,
+					'line-color': '#93dbff',
+				});
+
+				cy.layout({
+					name: 'dagre',
+					animate: true,
+					fit: true,
+					animationDuration: 500,
+				});
+			});
+
 			dagTree();
+
+			// cy.elements().qtip({
+			// 	content: 'Example qTip on ele',
+			// 	position: {
+			// 		my: 'top center',
+			// 		at: 'bottom center'
+			// 	},
+			// 	style: {
+			// 		tip: {
+			// 			width: 16,
+			// 			height: 8
+			// 		}
+			// 	}
+			// });
 		});
 
 
 		function dagTree() {
-			var cy = window.cy = cytoscape({
-				container: document.getElementById('cy'),
-				boxSelectionEnabled: false,
-				autounselectify: true,
-				layout: {
-					name: 'dagre'
-				},
-				style: [
-					{
-						selector: 'node',
-						style: {
-							'content': 'data(id)',
-							'text-opacity': 0.5,
-							'text-valign': 'center',
-							'text-halign': 'right',
-							'background-color': '#11479e'
-						}
+			$(function() {
+				var cy = window.cy = cytoscape({
+					container: document.getElementById('cy'),
+					boxSelectionEnabled: false,
+					autounselectify: true,
+					layout: {
+						name: 'dagre'
 					},
-					{
-						selector: 'edge',
-						style: {
-							'width': 4,
-							'curve-style': 'bezier',
-							'target-arrow-shape': 'triangle',
-							'line-color': '#9dbaea',
-							'target-arrow-color': '#9dbaea'
+					style: [
+						{
+							selector: 'node',
+							style: {
+								'content': 'data(label)',
+								'width': 80,
+								'height': 80,
+								'text-opacity': 0.5,
+								'text-valign': 'center',
+								'text-halign': 'right',
+								'background-image': 'https://github.com/binhxn.png',
+								'border-width': 3,
+								'background-fit': 'cover',
+								'border-color': '#42dca3'
+							}
+						},
+						{
+							selector: 'edge',
+							style: {
+								'width': 4,
+								'curve-style': 'bezier',
+								'target-arrow-shape': 'triangle',
+								'line-color': '#42dca3',
+								'target-arrow-color': '#42dca3'
+							}
 						}
+					],
+					elements: {
+						nodes: localGitNodes,
+						edges: localGitEdges
 					}
-				],
-				elements: {
-					nodes: incomingGitNodes,
-					edges: incomingGitEdges
-				},
+				});
 			});
 		};
 	}
@@ -173,8 +211,6 @@ export default class GitTree extends Component {
 					<button className="folder-button2" onClick = {this._dirChoice2}> Select Project Folder </button>
 				</div>
 				<div className="cytocontainer">
-				  {/*<p>This is the Org Name: {this.props.getAppState.orgName}</p>
-					<p>This is the Repo Name: {this.props.getAppState.repoName}</p>*/}
 					<div id="cy"></div>
 				</div>
 			</div>
