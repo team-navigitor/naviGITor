@@ -5,8 +5,8 @@ const chokidar = require('chokidar');
 const path = require('path');
 const gitParser = require('./src/GitParser/gitparser.js');
 const exec = child.exec();
-const fork = child.fork(`${__dirname}/fork.js`);
-var ls = child.fork('fork.js');
+
+//var ls = child.fork('fork.js');
 const Shell = require ('shelljs');
 const fs = require('fs');
 
@@ -93,10 +93,26 @@ function openDirChoice() {
 *******************************************************************************/
 
 // receive input from terminal
+const fork = child.fork(`${__dirname}/fork.js`);
 ipcMain.on('term-input', (event, input) => {
   fork.send(input)
 })
 
+// ipcMain.on('send-dir', dir => {
+//   console.log('ipc main send-dir firing')
+//   mainWindow.webContents.send('send-dir', dir)
+// })
+
+ipcMain.on('get-dir', () => {
+  //const fork = child.fork(`${__dirname}/fork.js`);
+  console.log('ipc main get-dir firing')
+  fork.send('get-dir')
+})
 fork.on('message', m => {
-  mainWindow.webContents.send('reply', m)
+  if(m.dirOnly) {
+    console.log(m.dirOnly)
+    mainWindow.webContents.send('send-dir', m)
+  }
+  else mainWindow.webContents.send('reply', m)
+  //mainWindow.webContents.send('reply', m)
 })
