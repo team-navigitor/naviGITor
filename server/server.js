@@ -5,11 +5,14 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const EventController = require('../src/database/event-controller.js')
-
+const UserController = require ('../src/database/user-controller.js')
 // process.env.PORT sets to hosting service port (Heroku) or 3000
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT);
 const io = require('socket.io').listen(server);
+const bodyParser = require ('body-parser');
+
+app.use(bodyParser.urlencoded({extended: true}))
 
 /************************************************
 *** Development: Webpack Config/Middleware ***
@@ -63,6 +66,17 @@ io.sockets.on('connection', function (socket) {
 	});
 });
 
+/***********************
+ *** User Sign in/up ***
+ ***********************/
+
+app.post('/signup', UserController.add, (req, res) => {
+  //console.log('signed up')
+})
+
+app.post('/verify', UserController.verify, (req, res) => {
+  //console.log(req)
+})
 
 /*************
 *** O Auth ***

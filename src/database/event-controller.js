@@ -1,51 +1,53 @@
 const mongoose = require('mongoose');
-//const Event = require('./event-model.js')
 const Schema = mongoose.Schema;
 mongoose.connection.once('open', () => {console.log('open on: mongodb://localhost/test')});
-//mongoose.connect(('mongodb://localhost/test'))
-//db.connect('mongodb://localhost/test');
+//mongoose.connect('mongodb://localhost/test');
+
 
 const eventSchema = new Schema({
   user: {type: String, required: true},
   data: {type: String, required: true},
 });
 
+//initialize EventController as empty object
 EventController = {}
 
+//create post method for EventController
 EventController.post = arg => {
-  mongoose.connect('mongodb://localhost/test', err => {
-    arg.author = arg.data.substring(83, arg.data.indexOf('<') - 1)
-    if (err) return console.error(err)
+    //create Event model using room property passed from argument as the collection name
     let Event = mongoose.model(arg.room, eventSchema);
+    //create new instance of event
     let NewEvent = new Event();
-
+    //check if data is coming in as array, which will only happen if a new user
+    //with prior history in Git tree joins team
     if (Array.isArray(arg.data)) {
-      arg.data.forEach(elem => {
-        NewEvent.user = elem.author;
-        NewEvent.data = JSON.stringify(elem);
-        Event.create(NewEvent)
-        mongoose.connection.close()
-      })
+        //iterate through array, adding each
+        arg.data.forEach(elem => {
+            //parse user from each element in array
+            NewEvent.user = elem.data.substring(83, elem.data.indexOf('<') - 1);
+            NewEvent.data = JSON.stringify(elem);
+            //save event to collection or create new collection
+            Event.create(NewEvent)
+        })
+    //else if a single instance of Git event
     } else {
-        console.log('reached else. data: author: ' + arg.author + ' arg: ' + arg.data)
-        NewEvent.user = arg.author,
+        //parse user from data
+        NewEvent.user = arg.data.substring(83, arg.data.indexOf('<') - 1),
         NewEvent.data = JSON.stringify(arg.data);
+        //save event to collection or create new collection
         Event.create(NewEvent);
-        mongoose.connection.close()
     };
-  })
 }
 
+//fetch collection/repo
 EventController.getRepo = (arg, callback) => {
-  mongoose.connect('mongodb://localhost/test', err => {
-    if (err) return console.error(err);
+    //define which collection we're looking for
     let coll = mongoose.model(arg.room + 's', eventSchema)
+    //return all docs in collection
     coll.find((err, repo) => {
-      if (err) return console.error(err)
-      callback(repo)
-      mongoose.connection.close()
+        if (err) return console.error(err)
+        callback(repo);
     })
-  })
 }
 
 // EventController.getUser = (arg, callback) => {
