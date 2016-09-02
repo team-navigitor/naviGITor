@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { ipcRenderer } from 'electron';
 
 
+
 export default class TerminalView extends Component {
 	//on mount, load terminal onto DOM
 	componentDidMount() {
@@ -29,26 +30,29 @@ export default class TerminalView extends Component {
 		term.open(node);
 
 		//define initial term prompt
-		term.prompt = () => {
-    		term.write('\r\n' + '$ ');
-  		};
+		ipcRenderer.on('send-dir', (event, dir) => {
+			console.log(dir)
+			term.write(dir.dirOnly + '$ ')
+		})
 		//call prompt to initialize terminal.
-		term.prompt();
+		ipcRenderer.send('get-dir')
 
 		//when renderer gets reply back from main,
 		//write reply to terminal
 		ipcRenderer.on('reply', (event, stdout) => {
-			console.log('reply rec')
-			let node = document.getElementById("terminal");
-			let counter = 0;
-			let replyArr = stdout.split('\n');
-			replyArr.forEach(function(el) {
-				term.write('\r\n' + el);
-				counter++;
-			});
-
-			if (counter >= 10) node.scrollTop = node.scrollHeight;
-			term.prompt();
+			if (stdout.res !== '') {
+				console.log(JSON.stringify(stdout))
+				let node = document.getElementById("terminal");
+				let counter = 0;
+				let replyArr = stdout.res.split('\n');
+				replyArr.forEach(function(el) {
+					term.write('\r\n' + el);
+					counter++;
+				});
+			
+				if (counter >= 10) node.scrollTop = node.scrollHeight;
+			}
+			ipcRenderer.send('get-dir');
 			})
 
 		//initialize variable for string to be sent to main
@@ -69,19 +73,18 @@ export default class TerminalView extends Component {
 			//if enter key is hit, send string to main process,
 			//then reset string to empty and call prompt function
 			if (ev.keyCode === 13) {
-				if (str === '') term.prompt();
+				if (str === '') ipcMain.send('get-dir');
 				else if (str === 'clear') {
 					for (let i = 0; i < 11; i ++) {
 						term.write('\r\n')
 					}
 					str = '';
-					term.prompt();
+					ipcMain.send('get-dir');
 				}
 				else {
 				term.write('\r\n')
 				ipcRenderer.send('term-input', str)
 				str = '';
-				//term.prompt();
 				}
 			}
 			//if backspace key is hit, delete string by one

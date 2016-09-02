@@ -11,9 +11,9 @@ import { ipcRenderer } from 'electron';
 const { Router, Route, Link, hashHistory, IndexRoute } = require('react-router');
 import Main from './main';
 import Login from './login';
+import Signup from './signup.js'
 import GitTree from './gitTree';
 import TerminalView from './terminal/terminal.js'
-import Signup from './signup';
 import TeamLogin from './teamLogin';
 import Analytics from './analytics';
 import Logo from './logopage';
