@@ -1,93 +1,40 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router';
-import { ipcRenderer } from 'electron';
-import ajax from 'superagent';
-import io from 'socket.io-client';
 
-// Socket handling for app. Must be global to current page for ipcRenderer + React
-let socket = io('http://navigitorsite.herokuapp.com');
-let socketRoom = null;
-
-/* listens for an git commit event from main.js webContent.send
- then sends commit string to the server via socket */
-ipcRenderer.on('parsedCommit', function(event, arg){
-	if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
-});
-
-
-socket.on('incomingCommit', function(data){
-	console.log('broadcast loud and clear: ' + data);
-})
 
 export default class Main extends Component {
-  _dirChoice() {
-	  ipcRenderer.send('dirChoice');
+  constructor(props) {
+    super(props);
   }
 
-	_handleSubmit(e) {
-		e.preventDefault();
-
-		let orgName = document.getElementById('login-org').value;
-		let repoName = document.getElementById('login-repo').value;
-
-		ajax.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`)
-			.end((error, response) => {
-				if (!error && response) {
-					let apiData = response.body.map(function(item){
-						return {
-							name: item.commit.author.name,
-							date: item.commit.author.date,
-							message: item.commit.message
-						}
-					}).reverse();
-					console.log(apiData);
-				} else {
-					console.log('error fetching Github data', error);
-				}
-				if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
-				socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
-				socketRoom = `${orgName}.${repoName}live`;
-			}
-		);
-		// TODO: Save for now to transfer to main process later
-		// let githubLogin = {
-		// 	orgName: orgName,
-		// 	repoName: repoName
-		// }
-		// ipcRenderer.send('githubLogin', githubLogin);
-	}
-
   render() {
+    // console.log('main page');
+    // console.log('in Main '+JSON.stringify(this.props.getAppState));
     return (
 
       <div id='main-container'>
 
         <div className='side-nav-bar-container'>
-            <img className="side-nav-logo" src="../images/darknaviGitorLogo_1.png" />
-            <form onSubmit={this._handleSubmit} className="login">
-              <h5>Find Repository</h5>
-              <input id="login-org" placeholder="Github Org" type="text" />
-              <input id="login-repo" placeholder="Repo Name" type="text" />
-              <button className="login-submit" type="submit">Submit</button>
-            </form>
-            <button className="folder-button" onClick = {this._dirChoice}> Select Project Folder </button>
+            <div className='nav-image'>
+              <img id='profile-pic' src={this.props.getAppState.profilePic}></img>
+              <p>{this.props.getAppState.username}</p>
+              <p>{this.props.getAppState.repoName}</p>
+            </div>
+            <div className='nav-links-container'>
 
-            {/* <div className="container_visualizationAndTerminal">
-              <GitTree message={ this.state.message } />
-              <Term />
-            </div> */}
-            <ul>
-              <h5>Navigate</h5>
-              <li><Link to='/Main/GitTree'>GIT TREE</Link></li>
-              <li><Link to='/Main/Terminal'>TERMINAL</Link></li>
-              <li><Link to='/'>LOG OUT</Link></li>
-            </ul>
-      </div>
+              <ul className='fa-ul'>
+                <li><i className="fa-li fa fa-user" aria-hidden="true"></i><Link className='list' to='/Main/Profile'>My Profile</Link></li>
+                <li><i className="fa-li fa fa-code-fork" aria-hidden="true"></i><Link className='list' to='/Main/GitTree'>Git Tree</Link></li>
+                <li><i className="fa-li fa fa-bar-chart" aria-hidden="true"></i><Link className='list' to='/Main/Analytics'>Analytics</Link></li>
+  							<li><i className="fa-li fa fa-terminal" aria-hidden="true"></i><Link className='list' to='/Main/Terminal'>Terminal</Link></li>
+  							<li><i className="fa-li fa fa-comment-o" aria-hidden="true"></i><Link className='list' to='/Main/Chat'>Chat</Link></li>
+                <li><i className="fa-li fa fa-sign-out" aria-hidden="true"></i><Link className='list' to='/'>Log Out</Link></li>
+              </ul>
+            </div>
+            {/* <img className="nav-logo" src="../images/darknaviGitorLogo_1.png" /> */}
+          </div>
 
-      <div className='view-container'>
-         {this.props.children}
-      </div>
-
+	      <div className='view-container'>{this.props.children && React.cloneElement(this.props.children, { setAppState: this.props.setAppState, getAppState: this.props.getAppState } )}</div>
       </div>
     )
   }
