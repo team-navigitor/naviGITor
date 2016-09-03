@@ -71,12 +71,26 @@ io.sockets.on('connection', function (socket) {
  *** User Sign in/up ***
  ***********************/
 
-app.post('/signup', UserController.add, (req, res) => {
+app.post('/signup', (req, res) => {
+  UserController.add(req, () => {
+    console.log('hi')
+  })
   //console.log('signed up')
 })
 
-app.post('/verify', UserController.verify, (req, res) => {
+app.post('/verify', (req, res) => {
+UserController.verify(req, function(){})
   //console.log(req)
 })
 
-module.exports = server;
+
+/*****************
+ *** Analytics ***
+ *****************/
+
+app.get('/days', (req, res) => {
+  EventController.getByTime(req, function() {
+})
+})
+
+module.exports = server

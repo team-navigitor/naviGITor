@@ -11,6 +11,7 @@ mongoose.connection.on('error', function() {console.log('CONNECTION ERROR FROM E
 const eventSchema = new Schema({
   user: {type: String, required: true},
   data: {type: String, required: true},
+  time: {type: Number}
 });
 
 //initialize EventController as empty object
@@ -18,6 +19,7 @@ let EventController = {}
 
 //create post method for EventController
 EventController.post = arg => {
+    console.log(arg)
     //create Event model using room property passed from argument as the collection name
     let Event = mongoose.model(arg.room, eventSchema);
     //create new instance of event
@@ -29,6 +31,7 @@ EventController.post = arg => {
         arg.data.forEach(elem => {
             //parse user from each element in array
             NewEvent.user = elem.data.substring(83, elem.data.indexOf('<') - 1);
+            NewEvent.time = elem.data.substring(elem.data.indexOf('>') + 1, elem.data.indexOf('>') + 12);
             NewEvent.data = JSON.stringify(elem);
             //save event to collection or create new collection
             Event.create(NewEvent)
@@ -37,7 +40,9 @@ EventController.post = arg => {
     } else {
         //parse user from data
         NewEvent.user = arg.data.substring(83, arg.data.indexOf('<') - 1),
+        NewEvent.time = arg.data.substring(arg.data.indexOf('>') + 1, arg.data.indexOf('>') + 12)
         NewEvent.data = JSON.stringify(arg.data);
+        console.log('newevent: ', NewEvent)
         //save event to collection or create new collection
         Event.create(NewEvent);
     };
@@ -46,14 +51,25 @@ EventController.post = arg => {
 //fetch collection/repo
 EventController.getRepo = (arg, callback) => {
     //define which collection we're looking for
+    
     let coll = mongoose.model(arg.room + 's', eventSchema)
+    //console.log(coll)
     //return all docs in collection
-    coll.find((err, repo) => {
+    coll.find((err, events) => {
         if (err) return console.error(err)
-        callback(repo);
+        callback(events);
     })
 }
 
+EventController.getByTime = (arg, callback) => {
+    let time = Math.floor(arg.time / 1000)
+    
+    let coll = mongoose.model(arg.room + 's', eventSchema)
+    coll.find({time: {$gt: time}}, 'user data time', (err, data) => {
+        if (err) console.log('getByTime error: ', err)
+        callback(data)
+    })
+}
 // EventController.getUser = (arg, callback) => {
 //     mongoose.connect('mongodb://localhost/test', err => {
 //         if (err) return console.error(err);
@@ -77,6 +93,10 @@ EventController.getRepo = (arg, callback) => {
 //         callback(collArr)
 //     })
 // }
-
+// const test = {
+//     room: 'testrepo',
+//     data: '"19cbd65fba1ba345fc927395d572830162f7b1cf 5e860081d9f7ccc7cbc0a64922beed6d6ac09de9 Colin Brownlie <colin@Colins-MacBook-Pro.local> 1472261199 -0700     \\tcommit (merge): fixing merge conflict"'
+// }
+// EventController.post(test)
 
 module.exports = EventController;
