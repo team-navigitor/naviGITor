@@ -1,11 +1,11 @@
 //This is organized by general areas (ie body) and then alphabetically by component
+@import 'colors';
 
 // **** general *****
 body {
 	position: relative;
-  color: black;
-	font-family: 'Titillium Web', sans-serif;
-  // overflow-y: hidden;
+  color: $black;
+  font-family: 'Catamaran', sans-serif;
 }
 
 #app {
@@ -16,7 +16,7 @@ body {
 .gitTree-container {
 	width: 100%;
 	height: 100vh;
-	color: black;
+	color: $black;
 }
 
 // ***** login.js *****
@@ -26,111 +26,186 @@ body {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-
 	max-width: 300px;
-	margin-left: auto;
-	margin-right: auto;
+	text-align: center;
+	color: $gray;
+}
 
-	h2 {
-		text-align: center;
+.login-logo {
+	width: 80%;
+	margin-bottom: 30px;
+}
+
+.login-form {
+	input {
+		width: 100%;
+		border: none;
+		border-bottom: 2px solid $login-gray;
+		margin-bottom: 20px;
+		letter-spacing: 3px;
+		color: $login-gray;
+		height: 30px;
+		font-size: 12px;
+
+		&:focus {
+			outline:none;
+		}
 	}
 }
-.login-logo {
-	margin: 0 auto;
-	width: 100%;
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: $gray;
 }
-.enter-form {
+
+.login-form {
 	margin-top: 30px;
 }
-.form-control {
-	margin-bottom: 10px;
+
+.login-button {
+  background-color: $white;
+	border: 2px solid $login-gray;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	width: 100%;
+	height: 40px;
+	padding-top: 9px;
+	letter-spacing: 3px;
+	font-size: 12px;
 }
-.enter-form .btn {
-  width: 49%;
+
+.signup-link {
+	color: green;
 }
-#LoginButton {
-	float: left;
+
+// ****** teamLogin.js *****
+#teamLogin-container {
+	text-align: center;
+
+	.team-h5 {
+		margin-bottom: 25px;
+	}
+
+	h3 {
+		margin-bottom: 50px;
+		letter-spacing: 2px;
+	}
 }
-#signUpButton {
-	float: right;
-}
+
 
 // ****** Main.js *****
-.side-nav-bar-container {
-	padding: 10px;
-	color: white;
-	max-width: 200px;
+.nav-bar-container {
+	max-width: 13em;
 	width: 100%;
 	height: 100vh;
+	background-color: $dark-green;
+	color: white;
 	float: left;
-	background-color: #eee;
+	position: relative;
+}
 
-	h5 {
-		color: #666;
-		text-align: left;
-		font-weight: bold;
-		text-transform: capitalize;
-	}
-}
-.side-nav-logo {
-	width: 100%;
-}
 .view-container {
-	margin-left: 200px;
+	margin-left: 13em;
 	height: 100%;
 }
-.login {
-	margin-top: 30px;
-}
-#login-org,
-#login-repo {
-	color: #000;
-	display: block;
+
+.nav-image {
+  background: rgba(0,0,0,.1);
   margin: 0 auto;
-	width: 100%;
+  padding: 20px 0;
+  text-align: center;
+
+	p {
+		font-size: 18px;
+		margin-bottom: 7px;
+
+		&:last-child {
+			font-size: 14px;
+			margin-bottom: 0;
+		}
+	}
 }
-.login-submit {
-  background: #2874A6;
-	color: white!important;
+
+#profile-pic {
+	border-radius: 50%;
+	margin-bottom: 10px;
+	width: 60px;
+}
+
+.nav-links-container {
+	padding: 0;
+	margin: 20px;
+
+	ul {
+		list-style-type: none;
+		padding-left: 0;
+		text-align: left;
+	}
+
+	li {
+		font-size: 1.1em;
+		width: 100%;
+		color: $gray;
+		margin-bottom: 10px;
+		font-weight: bold;
+	  &:hover {
+	  	color: $white;
+	  }
+	}
+}
+
+.fa {
+	width: 25px;
+}
+
+.login-submit2 {
+	background: #2874A6;
+	color: $white !important;
   border: none;
-  color: #000;
+  color: $black;
   transition: 0.3s all ease-in-out;
-	width: 100%;
-	text-align: left;
   &:hover {
-  	border: 1px solid #ccc;
-  	background: #ccc;
+  	background: $gray;
   }
   &:active {
   	outline: none;
   }
 }
+
 .folder-button {
 	width: 100%;
 	color: #2874A6;
 	text-align: left;
 }
-ul {
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
-	margin-top: 30px;
-	text-align: left;
+
+.list {
+	color: $gray;
+	font-size: .8em;
+	&:hover {
+		color: $white;
+		text-decoration: none;
+	}
+	&:active {
+		color: $white;
+	}
 }
-li {
-  transition: 0.3s all ease-in-out;
-	width: 100%;
-	color: white!important;
-	font-weight: bold;
-  &:hover {
-  	background: white;
-  }
-  &:active {
-  	outline: none;
-  }
+
+.nav-logo {
+	height: 4em;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	position: absolute;
+	bottom: 1em;
 }
 // ***** end main.js *****
 
+.landing-logo {
+	width: 25em;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	opacity: .5;
+	padding-top: 5em;
+}
 
 // ***** terminal *******
 .terminal-container {
@@ -154,9 +229,11 @@ textarea {
 
 .cytocontainer {
 	position: relative;
-	height: 800px;
+	height: 700px;
 }
 
-.qtip {
-	color: #000;
+.git-tree-header {
+	form {
+		float: left;
+	}
 }

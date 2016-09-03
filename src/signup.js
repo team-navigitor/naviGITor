@@ -28,7 +28,7 @@ e.preventDefault();
         <form className="reg-form" onSubmit={this.regClicked}>
           <input id="userNameInput" type="text" className="form-control"
           	placeholder="Please enter name" required />
-					<input id="email" type="email" className="form-control" 
+					<input id="email" type="email" className="form-control"
 						placeholder="Please enter email"/>
           <input id="password1" type="password" className="form-control"
             placeholder="Please enter Password" required />

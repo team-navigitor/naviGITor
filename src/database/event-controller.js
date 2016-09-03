@@ -9,8 +9,8 @@ mongoose.connection.on('connected', function() {console.log('event connected on 
 mongoose.connection.on('error', function() {console.log('CONNECTION ERROR FROM EVENT')})
 
 const eventSchema = new Schema({
-    user: {type: String, required: true},
-    data: {type: String, required: true}, 
+  user: {type: String, required: true},
+  data: {type: String, required: true},
 });
 
 //initialize EventController as empty object
@@ -22,11 +22,10 @@ EventController.post = arg => {
     let Event = mongoose.model(arg.room, eventSchema);
     //create new instance of event
     let NewEvent = new Event();
-    
     //check if data is coming in as array, which will only happen if a new user
     //with prior history in Git tree joins team
     if (Array.isArray(arg.data)) {
-        //iterate through array, adding each 
+        //iterate through array, adding each
         arg.data.forEach(elem => {
             //parse user from each element in array
             NewEvent.user = elem.data.substring(83, elem.data.indexOf('<') - 1);
@@ -52,7 +51,7 @@ EventController.getRepo = (arg, callback) => {
     coll.find((err, repo) => {
         if (err) return console.error(err)
         callback(repo);
-    })  
+    })
 }
 
 // EventController.getUser = (arg, callback) => {

@@ -10,6 +10,9 @@ const exec = child.exec();
 const Shell = require ('shelljs');
 const fs = require('fs');
 
+/******************************************************************************
+        *** Core Electron Startup Process ***
+*******************************************************************************/
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
@@ -17,7 +20,6 @@ const BrowserWindow = electron.BrowserWindow;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-
 
 
 function createWindow () {
@@ -60,16 +62,14 @@ app.on('activate', function () {
   }
 })
 
-
-
 /******************************************************************************
         *** File Watching and Emitting Events to Rendering Process ***
-        Following methods, when triggered, calls simpleGit to parse log event
+        Following methods, when triggered, calls git parser to parse log event
         then send that event and data to the render process in app.js
 *******************************************************************************/
 // to receive the path of file to be watched from renderer process,
-ipcMain.on('dirChoice', function(event, input){
-    openDirChoice();
+ipcMain.on('dirChoice', function(event, input) {
+  openDirChoice();
 });
 // sets file watching and triggers event chain when git log is modified
 function openDirChoice() {
@@ -77,14 +77,14 @@ function openDirChoice() {
   // to resolve to home path and append path given from renderer process
   var gitPath = (path.resolve('~', projectPath.toString()));
 
-  // Watches for all local git activity
+  // Watches for  local git activity, sends most revent git event to renderer process
   chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) =>
-        gitParser.mostRecentEvent(gitPath, function(data) { 
-          mainWindow.webContents.send('commitMade', data)})
+    gitParser.mostRecentEvent(gitPath, function(data) {
+      mainWindow.webContents.send('parsedCommit', data)})
   );
 
-  // Just loads git log history
-  gitParser.allEvents(gitPath, function(data) { 
+  // Loads entire local user's git log history after file path chosen on UI
+  gitParser.allEvents(gitPath, function(data) {
     mainWindow.webContents.send('parsedCommitAll', data);
   });
 };
@@ -95,10 +95,8 @@ function openDirChoice() {
 // receive input from terminal
 const fork = child.fork(`${__dirname}/fork.js`);
 ipcMain.on('term-input', (event, input) => {
-  //const fork = child.fork(`${__dirname}/fork.js`);
-  console.log('ipcmain firing')
   fork.send(input)
-  })
+})
 
 // ipcMain.on('send-dir', dir => {
 //   console.log('ipc main send-dir firing')

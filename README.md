@@ -1,10 +1,11 @@
 # navigITor
 
-__navigITor__ is a D3 visualization of a team-based Git workflow that updates in real-time when users emit Git events. Technologies used in this project include:
+__navigITor__ is a visualization of a team-based Git workflow that updates in real-time when users emit Git events. Technologies used in this project include:
 
   - Electron
   - React
   - Cytoscape
+  - RxJS
   - Socket.io
   - Node / Express
   - Webpack

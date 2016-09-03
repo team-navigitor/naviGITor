@@ -1,52 +1,54 @@
 import React, {Component} from 'react';
 import { Router, Route, Link } from 'react-router';
 import { hashHistory } from 'react-router';
-import $ from 'jquery';
-import Main from './Main';
-import App from './app';
 
-function verifyUser(){
-  let user = {
-    name: document.getElementById('userNameInput').value,
-    password: document.getElementById('loginPwd').value
-  }
-  console.log(user)
-  $.ajax({
-    url: "http://localhost:3000/verify",
-    type: 'POST',
-    data: user
-  }).then(data => {
-    console.log(data)
-  })
-}
-// function signUpClicked(){
-//   hashHistory.push('/signup');
-// }
-function loginClicked(e){
-  e.preventDefault();
-  verifyUser()
-  // if(isAuthenticated){
-  //   console.log('isAuthenticated');
-  //   hashHistory.push('Main');
-  // }
-  // else {hashHistory.push('/signup');}
-}
+import Main from './main';
+
+import App from './app';
+import Signup from './signup';
+import TeamLogin from './teamLogin';
+
+
 
 export default class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.loginClicked = this.loginClicked.bind(this);
+  }
   render() {
     return (
       <div className='login-container'>
-        <img className="login-logo" src="../images/darknaviGitorLogo_1.png" />
-        <h2>LOG IN</h2>
-        <form className="enter-form" onSubmit={loginClicked}>
-            <input id='userNameInput' className="form-control"
-                  placeholder="Please enter name" required />
-            <input id="loginPwd" type='password' className="form-control"
-                  placeholder="Please enter Password" required />
-            <button id='LoginButton' type="submit" className="btn btn-primary" onClick={this.loginClicked}>Enter</button>
-            <button id='signUpButton' className="btn btn-primary">Sign Up</button>
+
+        <img className='login-logo' src='../images/darknaviGitorLogo_1.png' />
+        <form className='login-form'>
+            <input id='userNameInput' placeholder='USERNAME' type='text' required />
+            <input type='password' placeholder='PASSWORD' type='text' required />
+            <button className='login-button' type="submit" onClick={this.loginClicked}>LOG IN</button>
+
         </form>
+
+        <div id='signup-button'>
+          <p>Don't have an account?  <Link to='Signup' className='signup-link'>Sign Up</Link></p>
+        </div>
     </div>
     )
   }
+
+  // let isAuthenticated = true;
+
+  verifyUser(){
+    console.log(document.getElementById('userNameInput').value);
+  }
+
+  loginClicked(e){
+    e.preventDefault();
+    // this.verifyUser();
+    // if(isAuthenticated){
+    //   console.log('isAuthenticated');
+    //   hashHistory.push('TeamLogin');
+    // }
+    // else hashHistory.push('Signup');
+     hashHistory.push('/TeamLogin');
+  }
+
 }

@@ -1,25 +1,20 @@
 const fs = require('fs');
 const path = require('path');
-
 const gitParser = {};
-
 
 // parses the most recent git event and passes value to callback function
 gitParser.mostRecentEvent = (gitPath, callback) => {
-    let res = '';
-    fs.readFile(gitPath +'/.git/logs/HEAD', 'utf8', (err, data) => {
-      if (err) return callback(err);
-      //console.log('fs running')
-      let i = data.length - 2;
-      while (data[i] !== "\n") {
-      //console.log(i)
-        let temp = data[i] += res;
-        res = temp;
-        i--;
+  let res = '';
+  fs.readFile(gitPath +'/.git/logs/HEAD', 'utf8', (err, data) => {
+    if (err) return callback(err);
+    let i = data.length - 2;
+    while (data[i] !== "\n") {
+      let temp = data[i] += res;
+      res = temp;
+      i--;
     }
-       callback(res)
+    callback(parseGit(res));
   })
-
 }
 
 // parses the entire .git log file and returns an array of commit objects
@@ -28,44 +23,16 @@ gitParser.allEvents = (gitPath, callback) => {
   fs.readFile(gitPath +'/.git/logs/HEAD', 'utf8', (err, data) => {
     if (err) return callback(err);
     let dataArr = data.split('\n');
-    for (let i = 0; i < dataArr.length - 2; i++) {
+    // the last array in dataArr is empty, so it is ommited in for loop
+    for (let i = 0; i < dataArr.length - 1; i++) {
       res.push(parseGit(dataArr[i]));
     }
     callback(res)
-
   });
 }
 
-//used as a helper function to gitParser an individual git event from the .git log
-function parseSingleGit(commitStr){
-  var commitObj = {};
-  commitObj.parent = commitStr.substring(0, 41)
-  commitObj.secondSHA = commitStr.substring(41, 81);
-  commitObj.author = '';
-  commitObj.time = '';
-  var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
-  commitObj.event = commitStr.match(eventTest)[0].substring(6);
-  commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + commitObj.event.length + 2));
-
-  var i = 81;
-  while(commitStr.charAt(i) !== '>'){
-    commitObj.author += commitStr.charAt(i);
-    i++;
-  }
-  commitObj.author = commitObj.author.trim();
-  commitObj.author += '>';
-  i++;
-
-  while(commitStr.charAt(i) !== '-'){
-    commitObj.time += commitStr.charAt(i);
-    i++;
-  }
-  commitObj.time = commitObj.time.trim();
-return commitObj;
-};
-
-
-function parseGit(commitStr){
+// helper function to parse git data into an object from string
+function parseGit(commitStr) {
   var commitObj = {};
   commitObj.parent = [commitStr.substring(0, 40)];
   commitObj.SHA = commitStr.substring(41, 81);
@@ -77,23 +44,22 @@ function parseGit(commitStr){
     commitObj.parent.push(commitObj.SHA);
     commitObj.SHA = null;
   }
-  commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + commitObj.event.length));
+  commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + 1 + commitObj.event.length)).trim();
 
   var i = 81;
-  while(commitStr.charAt(i) !== '>'){
+  while(commitStr.charAt(i) !== '>') {
     commitObj.author += commitStr.charAt(i);
     i++;
   }
   commitObj.author += '>';
   i++;
 
-  while(commitStr.charAt(i) !== '-'){
+  while(commitStr.charAt(i) !== '-') {
     commitObj.time += commitStr.charAt(i);
     i++;
   }
   commitObj.time.trim();
 return commitObj;
 };
-
 
 module.exports = gitParser;
