@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
-mongoose.connect('http://localhost:3000/test')
+//mongoose.connect('mongodb://ec2-54-152-1-18.compute-1.amazonaws.com');
 
 //define user schema
 const userSchema = new Schema ({

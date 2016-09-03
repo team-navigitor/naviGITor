@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-mongoose.connection.once('open', () => {console.log('open on: mongodb://localhost/test')});
-//mongoose.connect('mongodb://localhost/test');
-
+// mongoose.connect('mongodb://ec2-54-152-1-18.compute-1.amazonaws.com');
+var MONGO_URI = 'mongodb://navigitor:browncouch123@ds019826.mlab.com:19826/navigitor'
+// var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }, 
+//                 replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };       
+mongoose.connect(MONGO_URI);
+mongoose.connection.on('connected', function() {console.log('event connected on mLab')})
+mongoose.connection.on('error', function() {console.log('CONNECTION ERROR FROM EVENT')})
 
 const eventSchema = new Schema({
     user: {type: String, required: true},
