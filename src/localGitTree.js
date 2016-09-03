@@ -4,12 +4,10 @@ import $ from 'jquery';
 import qtip from 'qtip2';
 import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
-import cyqtip from 'cytoscape-qtip';
 import { ipcRenderer } from 'electron';
 import io from 'socket.io-client';
 
 // register extension
-cyqtip( cytoscape, $ );
 cydagre( cytoscape, dagre );
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
@@ -123,9 +121,11 @@ export default class LocalGitTree extends Component {
 					}
 				]).style({
 					'border-style': 'double',
-					'border-color': '#93dbff',
-					'border-width': 5,
-					'line-color': '#93dbff',
+					'border-color': '#19C383',
+					'border-width': 7,
+					'line-color': '#19C383',
+					'target-arrow-color': '#19C383',
+					'color': '#19C383'
 				});
 
 				cy.layout({
@@ -168,15 +168,15 @@ export default class LocalGitTree extends Component {
 							selector: 'node',
 							style: {
 								'content': 'data(label)',
-								'width': 80,
-								'height': 80,
+								'width': 65,
+								'height': 65,
 								'text-opacity': 0.5,
 								'text-valign': 'center',
 								'text-halign': 'right',
 								'background-image': 'https://github.com/binhxn.png',
 								'border-width': 3,
 								'background-fit': 'cover',
-								'border-color': '#42dca3'
+								'border-color': '#ccc'
 							}
 						},
 						{
@@ -185,8 +185,8 @@ export default class LocalGitTree extends Component {
 								'width': 4,
 								'curve-style': 'bezier',
 								'target-arrow-shape': 'triangle',
-								'line-color': '#42dca3',
-								'target-arrow-color': '#42dca3'
+								'line-color': '#ccc',
+								'target-arrow-color': '#ccc'
 							}
 						}
 					],
