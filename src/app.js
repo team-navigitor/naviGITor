@@ -13,6 +13,7 @@ import Main from './main';
 import Login from './login';
 import Signup from './signup.js'
 import GitTree from './gitTree';
+import LocalGitTree from './localGitTree';
 import TerminalView from './terminal/terminal.js'
 import TeamLogin from './teamLogin';
 import Analytics from './analytics';
@@ -21,7 +22,7 @@ import Profile from './profilePage';
 import Chat from './chat';
 
 
-let socket = io('http://localhost:3000');
+let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
 
 class App extends Component {
@@ -47,7 +48,7 @@ class App extends Component {
 		//NEED TO TEST
 		socket.on('incomingCommit', function(data){
 			console.log('broadcast loud and clear: ' + data);
-			this.setState.bind(this)(data);
+			// this.setState.bind(this)(data);
 		});
 	}
 
@@ -70,8 +71,6 @@ class App extends Component {
 	}
 
 	render() {
-		console.log('app page')
-		console.log(this.props.location);
     return (
 			<div>
 			{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
@@ -85,17 +84,18 @@ export default App;
 ReactDOM.render((
    <Router history = {hashHistory}>
       <Route path = "/" component = {App}>
-         <IndexRoute component = {Login} />
-				 <Route path = "Signup" component = {Signup} />
-				 <Route path = "TeamLogin" component = {TeamLogin} />
+        <IndexRoute component = {Login} />
+				<Route path = "Signup" component = {Signup} />
+				<Route path = "TeamLogin" component = {TeamLogin} />
 
-					 <Route path = "Main" component = {Main}>
-					   <IndexRoute component = {Logo} />
-					 	 <Route path = "GitTree" component = {GitTree} />
-				     <Route path = "Terminal" component = {TerminalView} />
-				     <Route path = "Analytics" component = {Analytics} />
-						 <Route path = "Profile" component = {Profile} />
-						 <Route path = "Chat" component = {Chat} />
+				<Route path = "Main" component = {Main}>
+				  <IndexRoute component = {Logo} />
+				 	<Route path = "GitTree" component = {GitTree} />
+				 	<Route path = "LocalGitTree" component = {LocalGitTree} />
+			    <Route path = "Terminal" component = {TerminalView} />
+			    <Route path = "Analytics" component = {Analytics} />
+					<Route path = "Profile" component = {Profile} />
+					<Route path = "Chat" component = {Chat} />
 				</Route>
       </Route>
   </Router>

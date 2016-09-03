@@ -41,19 +41,22 @@ TODO: handle subscribe/getRepo functionality on client side
 ****************************/
 
 io.sockets.on('connection', function (socket) {
+  // Socket test
+  socket.once("echo", function (msg, callback) {
+    socket.emit("echo", msg);
+  });
+
   // room handling
   socket.on('subscribe', function(data) {
 		console.log(data.room);
     EventController.getRepo(data, function(x) {
       console.log(x)
     })
+
     socket.join(data.room)}
   );
+
   socket.on('unsubscribe', function(data) { socket.leave(data.room)});
-  // Socket test
-  socket.once("echo", function (msg, callback) {
-    socket.emit("echo", msg);
-  });
   //listening for Git Action from local client, then broadcasts to all connected clients in team
 	// TODO: handle callback in post method
 	socket.on('broadcastGit', function(arg){
@@ -75,45 +78,5 @@ app.post('/signup', UserController.add, (req, res) => {
 app.post('/verify', UserController.verify, (req, res) => {
   //console.log(req)
 })
-
-/*************
-*** O Auth ***
-**************/
-// const options = {
-//   client_id: 'INSERT CLIENT ID',
-//   client_secret: 'INSERT CLIENT SECRET'
-// }
-//
-// var oauth = require("oauth").OAuth2;
-// var OAuth2 = new oauth(options.client_id, options.client_secret, "https://github.com/", "login/oauth/authorize", "login/oauth/access_token");
-//
-// app.get('/auth/github',function(req,res){
-//
-//   res.writeHead(303, {
-//     Location: OAuth2.getAuthorizeUrl({
-//       redirect_uri: 'http://localhost:3000/auth/github/callback',
-//       scope: "user,repo,gist"
-//     })
-//   });
-//   res.end();
-// });
-//
-//
-// app.get('/auth/github/callback',function (req, res) {
-//   var code = req.query.code;
-//   OAuth2.getOAuthAccessToken(code, {}, function (err, access_token, refresh_token) {
-//     if (err) {
-//       console.log(err);
-//     }
-//     accessToken = access_token;
-//     // authenticate github API
-//     console.log("AccessToken: "+accessToken+"\n");
-//     github.authenticate({
-//       type: "oauth",
-//       token: accessToken
-//     });
-//   });
-//   res.redirect('/');
-// });
 
 module.exports = server;
