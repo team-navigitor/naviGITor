@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-const localGit = require('../src/localGitAccess/localGitREAD');
+//const localGit = require('../src/localGitAccess/localGitREAD');
 const path = require('path');
 const localGitPath = path.join(__dirname, '../.git')
 const simpleGit = require('simple-git')(localGitPath);
