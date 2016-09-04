@@ -23,7 +23,7 @@ e.preventDefault();
 	render() {
     return (
       <div className="login-container">
-        <img className="login-logo" src="../images/darknaviGitorLogo_1.png" />
+        <img className="login-logo" src="./images/darknaviGitorLogo_1.png" />
         <h2>LOG IN</h2>
         <form className="reg-form" onSubmit={this.regClicked}>
           <input id="userNameInput" type="text" className="form-control"

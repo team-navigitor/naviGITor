@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import $ from 'jquery';
-import qtip from 'qtip2';
 import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
-import cyqtip from 'cytoscape-qtip';
 import { ipcRenderer } from 'electron';
 import io from 'socket.io-client';
 
@@ -34,7 +32,6 @@ socket.on('incomingCommit', function(data){
 
 
 // register extension
-cyqtip( cytoscape, $ );
 cydagre( cytoscape, dagre );
 
 export default class GitTree extends Component {
@@ -60,9 +57,6 @@ export default class GitTree extends Component {
 		let orgName = document.getElementById('login-org2').value;
 		let repoName = document.getElementById('login-repo2').value;
 
-		if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
-		socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
-		socketRoom = `${orgName}.${repoName}live`;
 		// Not really using this GET request, may need to switch it with database uri
 		// $.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`, function(commits) {
 		// 	this.setState({
@@ -72,50 +66,88 @@ export default class GitTree extends Component {
 		// 	console.log('Made get request', commits);
 
 		// }.bind(this));
+		if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
+		socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
+		socketRoom = `${orgName}.${repoName}live`;
 	}
 
 	componentDidMount() {
 		let incomingGitNodes = [];
 		let incomingGitEdges = [];
 
+		/** Steve enters the room
+		*   He then makes a Git action
+		*   incomingCommit will listen to ANY CHANGES and REFRESH the entire page
+		*
+		*   TODO:
+		*   1. If tree is visible, load tree once and not load any more data 
+		*   2. Then add any incoming nodes with cy.add();
+		**/
+
 		socket.on('incomingCommit', function(data){
 			var incomingData = JSON.parse(data);
 			console.log('broadcast loud and clear: ' + incomingData);
 
-			// loop through all local git activity, and store as nodes
-			for (var i = 0; i < incomingData.length; i++) {
-				incomingGitNodes.push({
-					data: {
-						id: incomingData[i].SHA
+			if (!Array.isArray(incomingData)) {
+				cy.add([
+					{
+				    data: {
+				    	id: incomingData.SHA,
+				    	commit: incomingData.message
+				    }
+					},
+					{
+				    data: {
+				    	id: 'edge ' + incomingData.message,
+				    	source: incomingData.parent[0],
+				    	target: incomingData.SHA
+				    }
 					}
-				});
-			}
+				]);
 
-			for (var i = 0; i < incomingData.length; i++) {
-				// loop through git merge activity and connect current node with parent nodes
-				if (incomingData[i]['event'] === 'merge' && incomingData[i]['event'] !== 'checkout') {
-					console.log('entered merge');
-					incomingGitEdges.push({
+				cy.layout({
+					name: 'dagre',
+					animate: true,
+					fit: true,
+					animationDuration: 1000,
+				});
+			} else {
+				// loop through all local git activity, and store as nodes
+				for (var i = 0; i < incomingData.length; i++) {
+					incomingGitNodes.push({
 						data: {
-							source: incomingData[i].parent[0],
-							target: incomingData[i].SHA
-						}
-					},{
-						data: {
-							source: incomingData[i].parent[1],
-							target: incomingData[i].SHA
+							id: incomingData[i].SHA,
+							commit: incomingData[i].message
 						}
 					});
 				}
 
-				// loop through all other events and connect current node to parent node
-				if (incomingData[i]['event'] !== 'checkout') {
-					incomingGitEdges.push({
-						data: {
-							source: incomingData[i].parent[0],
-							target: incomingData[i].SHA
-						}
-					});
+				for (var i = 0; i < incomingData.length; i++) {
+					// loop through git merge activity and connect current node with parent nodes
+					if (incomingData[i]['event'] === 'merge' && incomingData[i]['event'] !== 'checkout') {
+						console.log('entered merge');
+						incomingGitEdges.push({
+							data: {
+								source: incomingData[i].parent[0],
+								target: incomingData[i].SHA
+							}
+						},{
+							data: {
+								source: incomingData[i].parent[1],
+								target: incomingData[i].SHA
+							}
+						});
+					}
+
+					// loop through all other events and connect current node to parent node
+					if (incomingData[i]['event'] !== 'checkout') {
+						incomingGitEdges.push({
+							data: {
+								source: incomingData[i].parent[0],
+								target: incomingData[i].SHA
+							}
+						});
+					}
 				}
 			}
 
@@ -135,10 +167,11 @@ export default class GitTree extends Component {
 					{
 						selector: 'node',
 						style: {
-							'content': 'data(id)',
+							'content': 'data(commit)',
 							'text-opacity': 0.5,
 							'text-valign': 'center',
 							'text-halign': 'right',
+							'background-image': 'https://github.com/Harla101.png',
 							'background-color': '#11479e'
 						}
 					},

@@ -141,9 +141,9 @@ body {
 
 	li {
 		font-size: 1.1em;
-		width: 100%;
 		color: $gray;
 		font-weight: bold;
+
 	  &:hover {
 	  	color: $white;
 	  }
@@ -160,9 +160,11 @@ body {
   border: none;
   color: $black;
   transition: 0.3s all ease-in-out;
+
   &:hover {
   	background: $gray;
   }
+
   &:active {
   	outline: none;
   }
@@ -186,6 +188,7 @@ body {
 		color: $white;
 		text-decoration: none;
 	}
+	
 	&:visited {
 		color: $white;
 		text-decoration: none;
