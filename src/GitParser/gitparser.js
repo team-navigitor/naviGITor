@@ -1,35 +1,27 @@
 const fs = require('fs');
 const path = require('path');
 const gitParser = {};
+var Rx = require('rxjs/Rx');
 
+var fileStream = Rx.Observable.bindNodeCallback(fs.readFile);
 // parses the most recent git event and passes value to callback function
-gitParser.mostRecentEvent = (gitPath, callback) => {
-  let res = '';
-  fs.readFile(gitPath +'/.git/logs/HEAD', 'utf8', (err, data) => {
-    if (err) return callback(err);
-    let i = data.length - 2;
-    while (data[i] !== "\n") {
-      let temp = data[i] += res;
-      res = temp;
-      i--;
-    }
-    callback(parseGit(res));
-  })
-}
+gitParser.mostRecentEvent = (gitPath) => {
+  let result = fileStream(gitPath +'/.git/logs/HEAD', 'utf8');
+    result.map(x => x.split('\n'))
+      .flatMap(x => x)
+      .filter(x => x.length > 40)
+      .last()
+      .subscribe(x => parseGit((x), e => console.error(e), () => console.log('completed FullgitLog')))
+  },
 
 // parses the entire .git log file and returns an array of commit objects
-gitParser.allEvents = (gitPath, callback) => {
-  const res = [];
-  fs.readFile(gitPath +'/.git/logs/HEAD', 'utf8', (err, data) => {
-    if (err) return callback(err);
-    let dataArr = data.split('\n');
-    // the last array in dataArr is empty, so it is ommited in for loop
-    for (let i = 0; i < dataArr.length - 1; i++) {
-      res.push(parseGit(dataArr[i]));
-    }
-    callback(res)
-  });
-}
+gitParser.allEvents = (gitPath) => {
+  let result = fileStream(gitPath +'/.git/logs/HEAD', 'utf8');
+    result.map(x => x.split('\n'))
+      .flatMap(x => x)
+      .filter(x => x.length > 40)
+      .subscribe(x => parseGit((x), e => console.error(e), () => console.log('completed FullgitLog')))
+};
 
 // helper function to parse git data into an object from string
 function parseGit(commitStr) {
@@ -59,7 +51,7 @@ function parseGit(commitStr) {
     i++;
   }
   commitObj.time.trim();
-return commitObj;
+console.log(commitObj);
 };
 
 module.exports = gitParser;
