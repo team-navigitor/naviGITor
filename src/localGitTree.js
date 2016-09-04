@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import $ from 'jquery';
-import qtip from 'qtip2';
 import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
@@ -60,7 +59,7 @@ export default class LocalGitTree extends Component {
 				localGitNodes.push({
 					data: {
 						id: data[i].SHA,
-						label: data[i].message
+						commit: data[i].message
 					}
 				});
 			}
@@ -102,7 +101,7 @@ export default class LocalGitTree extends Component {
 					{
 				    data: {
 				    	id: localGit.SHA,
-				    	label: localGit.message
+				    	commit: localGit.message
 				    }
 					},
 					{
@@ -138,7 +137,7 @@ export default class LocalGitTree extends Component {
 				style: cytoscape.stylesheet()
 				.selector('node')
 				  .css({
-				    'content': 'data(label)',
+				    'content': 'data(commit)',
 				    'width': 65,
 				    'height': 65,
 				    'text-opacity': 0.5,
