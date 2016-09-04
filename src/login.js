@@ -1,10 +1,6 @@
 import React, {Component} from 'react';
 import { Router, Route, Link } from 'react-router';
 import { hashHistory } from 'react-router';
-
-import Main from './main';
-
-import App from './app';
 import Signup from './signup';
 import TeamLogin from './teamLogin';
 
@@ -19,7 +15,7 @@ export default class Login extends Component {
     return (
       <div className='login-container'>
 
-        <img className='login-logo' src='../images/darknaviGitorLogo_1.png' />
+        <img className='login-logo' src='./images/darknaviGitorLogo_1.png' />
         <form className='login-form'>
             <input id='userNameInput' placeholder='USERNAME' type='text' required />
             <input type='password' placeholder='PASSWORD' type='text' required />
