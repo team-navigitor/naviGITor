@@ -3,9 +3,9 @@ const child = require('child_process');
 const {ipcMain, dialog} = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-const gitParser = require('./src/GitParser/gitparser.js');
+const gitParser = require('./src/gitParser/gitparser.js');
 const exec = child.exec();
-
+const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
 //var ls = child.fork('fork.js');
 const Shell = require ('shelljs');
 const fs = require('fs');
@@ -31,9 +31,11 @@ function createWindow () {
     minHeight: 600
   })
 
-  // REMOVE /dist WHEN READY TO DEPLOY
-  // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/dist/index.html`)
+  /*********************
+  *** For Deployment ***
+  *********************/
+  // replace dev.html with index.html in root directory
+  mainWindow.loadURL(`file://${__dirname}/dev.html`)
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
@@ -93,7 +95,7 @@ function openDirChoice() {
 *******************************************************************************/
 
 // receive input from terminal
-const fork = child.fork(`${__dirname}/fork.js`);
+
 ipcMain.on('term-input', (event, input) => {
   fork.send(input)
 })
