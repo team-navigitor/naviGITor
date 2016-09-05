@@ -16,7 +16,7 @@ let socketRoom = null;
 /* listens for an git commit event from main.js webContent.send
  then sends commit string to the server via socket.
  Also enters socketRoom after filling out form and making AJAX request */
-ipcRenderer.on('parsedCommit', function(event, arg){
+ipcRenderer.on('parsedCommitAll', function(event, arg){
 	if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 });
 
@@ -52,7 +52,7 @@ export default class LocalGitTree extends Component {
 		let localGitNodes = [];
 		let localGitEdges = [];
 
-		ipcRenderer.on('parsedCommitAll', function(event, data) {
+		ipcRenderer.on('parsedCommitAll', function(event, dataIn) {
 			console.log(data);
 			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < data.length; i++) {

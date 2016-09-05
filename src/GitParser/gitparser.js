@@ -17,14 +17,14 @@ gitParser.mostRecentEvent = (gitPath) => {
 // parses the entire .git log file and returns an array of commit objects
 gitParser.allEvents = (gitPath) => {
   let result = fileStream(gitPath +'/.git/logs/HEAD', 'utf8');
-    result.map(x => x.split('\n'))
-      .flatMap(x => x)
-      .filter(x => x.length > 40)
-      .subscribe(x => parseGit((x), e => console.error(e), () => console.log('completed FullgitLog')))
+    observer.next(10)
+    // result.map(x => x.split('\n'))
+    //   .flatMap(x => x)
+    //   .filter(x => x.length > 40)
 };
 
 // helper function to parse git data into an object from string
-function parseGit(commitStr) {
+gitParser.parseGit = commitStr => {
   var commitObj = {};
   commitObj.parent = [commitStr.substring(0, 40)];
   commitObj.SHA = commitStr.substring(41, 81);
@@ -51,7 +51,7 @@ function parseGit(commitStr) {
     i++;
   }
   commitObj.time.trim();
-console.log(commitObj);
+  return commitObj;
 };
 
 module.exports = gitParser;

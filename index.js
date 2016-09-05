@@ -9,6 +9,8 @@ const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
 //var ls = child.fork('fork.js');
 const Shell = require ('shelljs');
 const fs = require('fs');
+const Rx = require('rxjs/Rx');
+
 
 /******************************************************************************
         *** Core Electron Startup Process ***
@@ -80,15 +82,45 @@ function openDirChoice() {
   var gitPath = (path.resolve('~', projectPath.toString()));
 
   // Watches for  local git activity, sends most revent git event to renderer process
-  chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) =>
+  chokidar.watch((gitPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) =>
     gitParser.mostRecentEvent(gitPath, function(data) {
       mainWindow.webContents.send('parsedCommit', data)})
   );
 
-  // Loads entire local user's git log history after file path chosen on UI
-  gitParser.allEvents(gitPath, function(data) {
-    mainWindow.webContents.send('parsedCommitAll', data);
-  });
+  var fileSource = Rx.Observable.bindNodeCallback(fs.readFile)
+// Loads entire local user's git log history after file path chosen on UI
+    let result = fileSource(gitPath +'/.git/logs/HEAD', 'utf8');
+      result.map(x => x.split('\n'))
+        .flatMap(x => x)
+        .filter(x => x.length > 40)
+        .map(x => gitParser.parseGit(x))
+        .toArray(x => x)
+        .subscribe(
+          x => mainWindow.webContents.send('parsedCommitAll', x),
+          e => console.log('error steve'),
+          () => console.log('gitObservableDone')
+        );
+
+  // gitParser.allEvents(gitPath, function(data) {
+  //   mainWindow.webContents.send('parsedCommitAll', data);
+  // });
+
+
+
+
+
+
+// // Wrap the exists method TODO: ADD FILE VERIFICATION
+// var exists = Rx.Observable.bindCallback(fs.exists);
+//
+// var source = exists(projectPath + '/.git/logs/HEAD');
+//
+// // Get the first argument only which is true/false
+// var subscription = source.subscribe(
+//     function (x) { console.log('onNext: %s', x); },
+//     function (e) { console.log('onError: %s', e); },
+//     function ()  { console.log('onCompleted'); });
+
 };
 /******************************************************************************
         *** Terminal Emulation ***
