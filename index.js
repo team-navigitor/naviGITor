@@ -112,15 +112,15 @@ function openDirChoice() {
         );
 
 // // Wrap the exists method TODO: ADD FILE VERIFICATION
-// var exists = Rx.Observable.bindCallback(fs.exists);
-//
-// var source = exists(projectPath + '/.git/logs/HEAD');
-//
-// // Get the first argument only which is true/false
-// var subscription = source.subscribe(
-//     function (x) { console.log('onNext: %s', x); },
-//     function (e) { console.log('onError: %s', e); },
-//     function ()  { console.log('onCompleted'); });
+var exists = Rx.Observable.bindCallback(fs.exists);
+
+var source = exists(projectPath + '/.git/logs/HEAD');
+
+// Get the first argument only which is true/false
+var subscription = source.subscribe(
+    function (x) { (x)? console.log('valid'): dialog.showErrorBox("No Git File found", "Make sure you have chosen your project's root folder or that you have made at least one Git commit") },
+    function (e) { console.log('onError: %s', e); },
+    function ()  { console.log('onCompleted'); });
 
 };
 /******************************************************************************

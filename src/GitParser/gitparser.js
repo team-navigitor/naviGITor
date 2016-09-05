@@ -1,27 +1,4 @@
-const fs = require('fs');
-const path = require('path');
 const gitParser = {};
-var Rx = require('rxjs/Rx');
-
-var fileStream = Rx.Observable.bindNodeCallback(fs.readFile);
-// parses the most recent git event and passes value to callback function
-gitParser.mostRecentEvent = (gitPath) => {
-  let result = fileStream(gitPath +'/.git/logs/HEAD', 'utf8');
-    result.map(x => x.split('\n'))
-      .flatMap(x => x)
-      .filter(x => x.length > 40)
-      .last()
-      .subscribe(x => parseGit((x), e => console.error(e), () => console.log('completed FullgitLog')))
-  },
-
-// parses the entire .git log file and returns an array of commit objects
-gitParser.allEvents = (gitPath) => {
-  let result = fileStream(gitPath +'/.git/logs/HEAD', 'utf8');
-    observer.next(10)
-    // result.map(x => x.split('\n'))
-    //   .flatMap(x => x)
-    //   .filter(x => x.length > 40)
-};
 
 // helper function to parse git data into an object from string
 gitParser.parseGit = commitStr => {
