@@ -9,55 +9,64 @@ mongoose.connect(MONGO_URI);
 mongoose.connection.on('connected', function() {console.log('event connected on mLab')})
 mongoose.connection.on('error', function(e) {console.log('CONNECTION ERROR FROM EVENT: ' + e)})
 
-const eventSchema = new Schema({
+let eventSchema = new mongoose.Schema({
   user: {type: String, required: true},
   SHA: String,
   parent: [String],
   eventType: String,
   message: String,
-  time: Number
+  time: String
 });
 
 //initialize EventController as empty object
-let EventController = {}
+var EventController = {}
 
 //create post method for EventController
-EventController.post = arg => {
+EventController.saveEvent = function(arg) {
+  let gitData = JSON.parse([arg.data]);
     //create Event model using room property passed from argument as the collection name
     let Event = mongoose.model(arg.room, eventSchema);
     //create new instance of event
-    let NewEvent = new Event();
+    //let eventToAdd = new Event();
     //check if data is coming in as array, which will only happen if a new user
     //with prior history in Git tree joins team
-    if (Array.isArray(arg.data)) {
-        //iterate through array, adding each
-        arg.data.forEach(elem => {
-            //parse user from each element in array
-            //NewEvent.user = elem.data.substring(83, elem.data.indexOf('<') - 1);
-            //NewEvent.time = elem.data.substring(elem.data.indexOf('>') + 1, elem.data.indexOf('>') + 12);
-            //NewEvent.data = JSON.stringify(elem);
-            NewEvent.user = elem.data.author;
-            NewEvent.SHA = elem.data.SHA;
-            NewEvent.parent = elem.data.parent;
-            NewEvent.eventType = elem.data.event;
-            NewEvent.message = elem.data.message;
-            NewEvent.time = elem.data.time;
-            //save event to collection or create new collection
-            Event.create(NewEvent)
-        })
-    //else if a single instance of Git event
-    } else {
+    // if (Array.isArray(arg.data)) {
+    //     //iterate through array, adding each
+    //     arg.data.forEach(elem => {
+    //         //parse user from each element in array
+    //         //eventToAdd.user = elem.data.substring(83, elem.data.indexOf('<') - 1);
+    //         //eventToAdd.time = elem.data.substring(elem.data.indexOf('>') + 1, elem.data.indexOf('>') + 12);
+    //         //eventToAdd.data = JSON.stringify(elem);
+    //         eventToAdd.user = elem.data.author;
+    //         eventToAdd.SHA = elem.data.SHA;
+    //         eventToAdd.parent = elem.data.parent;
+    //         eventToAdd.eventType = elem.data.event;
+    //         eventToAdd.message = elem.data.message;
+    //         eventToAdd.time = elem.data.time;
+    //         //save event to collection or create new collection
+    //         //Event.create(eventToAdd)
+    //       eventToAdd.save(function(err){
+    //         if(err) console.log('error saving in DB: ' + err)
+    //       })
+    //     })
+    // //else if a single instance of Git event
+    // } else {
         //parse user from data
-        NewEvent.user = arg.data.author;
-        NewEvent.SHA = arg.data.SHA;
-        NewEvent.parent = arg.data.parent;
-        NewEvent.eventType = arg.data.event;
-        NewEvent.message = arg.data.message;
-        NewEvent.time = arg.data.time;
-        console.log('newevent: ', NewEvent)
+      var eventToAdd = new Event({
+      user: gitData.author,
+      SHA: gitData.SHA,
+      parent: gitData.parent,
+      eventType: gitData.event,
+      message: gitData.message,
+      time: gitData.time
+      });
+        console.log('newevent: ', eventToAdd)
         //save event to collection or create new collection
-        Event.create(NewEvent);
-    };
+        //Event.create(eventToAdd);
+        eventToAdd.save(function(err){
+          if(err) console.log('error saving in DB: ' + err)
+        })
+  //  };
 }
 
 //fetch collection/repo

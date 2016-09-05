@@ -2,6 +2,7 @@ const gitParser = {};
 
 // helper function to parse git data into an object from string
 gitParser.parseGit = commitStr => {
+  commitStr.replace(/(\r\n|\n|\r)/gm,"");
   var commitObj = {};
   commitObj.parent = [commitStr.substring(0, 40)];
   commitObj.SHA = commitStr.substring(41, 81);

@@ -78,9 +78,8 @@ io.sockets.on('connection', function(socket){
 	const socketGitBroadcastingObservable = Rx.Observable.create(function(observer){
 		socket.on('broadcastGit', function(arg){
 			try {
-				EventController.post(arg, function(data) {
-					console.log('returned from db: ' + data);
-				});
+				console.log('from server bcast git ' + arg.data)
+				EventController.saveEvent(arg);
 				io.in(arg.room).emit('incomingCommit', arg.data);
 			} catch (err) {
 				observer.error(err);
