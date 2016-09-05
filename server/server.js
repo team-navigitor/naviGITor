@@ -79,7 +79,7 @@ io.sockets.on('connection', function(socket){
 		socket.on('broadcastGit', function(arg){
 			try {
 				EventController.post(arg, function(data) {
-					console.log(data);
+					console.log('returned from db: ' + data);
 				});
 				io.in(arg.room).emit('incomingCommit', arg.data);
 			} catch (err) {
@@ -89,7 +89,7 @@ io.sockets.on('connection', function(socket){
 	});
 
 	const socketGitBroadcastingObserver = socketGitBroadcastingObservable
-		.subscribe(x => console.log(x), e => console.log(e), () => console.log('git broadcasted and saved | complete'))
+		.subscribe(x => console.log('broadcasted'), e => console.log(e), () => console.log('git broadcasted and saved | complete'))
 });
 
 /***********************

@@ -11,8 +11,11 @@ mongoose.connection.on('error', function(e) {console.log('CONNECTION ERROR FROM 
 
 const eventSchema = new Schema({
   user: {type: String, required: true},
-  data: {type: String, required: true},
-  time: {type: Number}
+  SHA: String,
+  parent: [String],
+  eventType: String,
+  message: String,
+  time: Number
 });
 
 //initialize EventController as empty object
@@ -20,7 +23,6 @@ let EventController = {}
 
 //create post method for EventController
 EventController.post = arg => {
-    console.log(arg)
     //create Event model using room property passed from argument as the collection name
     let Event = mongoose.model(arg.room, eventSchema);
     //create new instance of event
@@ -31,18 +33,27 @@ EventController.post = arg => {
         //iterate through array, adding each
         arg.data.forEach(elem => {
             //parse user from each element in array
-            NewEvent.user = elem.data.substring(83, elem.data.indexOf('<') - 1);
-            NewEvent.time = elem.data.substring(elem.data.indexOf('>') + 1, elem.data.indexOf('>') + 12);
-            NewEvent.data = JSON.stringify(elem);
+            //NewEvent.user = elem.data.substring(83, elem.data.indexOf('<') - 1);
+            //NewEvent.time = elem.data.substring(elem.data.indexOf('>') + 1, elem.data.indexOf('>') + 12);
+            //NewEvent.data = JSON.stringify(elem);
+            NewEvent.user = elem.data.author;
+            NewEvent.SHA = elem.data.SHA;
+            NewEvent.parent = elem.data.parent;
+            NewEvent.eventType = elem.data.event;
+            NewEvent.message = elem.data.message;
+            NewEvent.time = elem.data.time;
             //save event to collection or create new collection
             Event.create(NewEvent)
         })
     //else if a single instance of Git event
     } else {
         //parse user from data
-        NewEvent.user = arg.data.substring(83, arg.data.indexOf('<') - 1),
-        NewEvent.time = arg.data.substring(arg.data.indexOf('>') + 1, arg.data.indexOf('>') + 12)
-        NewEvent.data = JSON.stringify(arg.data);
+        NewEvent.user = arg.data.author;
+        NewEvent.SHA = arg.data.SHA;
+        NewEvent.parent = arg.data.parent;
+        NewEvent.eventType = arg.data.event;
+        NewEvent.message = arg.data.message;
+        NewEvent.time = arg.data.time;
         console.log('newevent: ', NewEvent)
         //save event to collection or create new collection
         Event.create(NewEvent);
