@@ -84,20 +84,22 @@ function openDirChoice() {
     var gitPath = (path.resolve('~', projectPath.toString()));
 
     //Creates observable from fs method
-    var fileSource = Rx.Observable.bindNodeCallback(fs.readFile)
-    var fileSourceObservable = fileSource(gitPath + '/.git/logs/HEAD', 'utf8');
+    var fileSource = Rx.Observable.bindNodeCallback(fs.readFile);
+
 
     // Watches for  local git activity, sends most revent git event to renderer process
     chokidar.watch((gitPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', function (event, path){
+      let fileSourceObservable = fileSource(gitPath + '/.git/logs/HEAD', 'utf8');
       fileSourceObservable.map(x => x.split('\n'))
         .flatMap(x => x)
         .filter(x => x.length > 40)
         .last()
         .map(x => gitParser.parseGit(x))
-        .subscribe(x => mainWindow.webContents.send('parsedCommit', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitMostRecentDone'));
+        .subscribe(x => mainWindow.webContents.send('parsedCommit', x));
       });
 
   // Loads entire local user's git log history after file path chosen on UI
+  let fileSourceObservable = fileSource(gitPath + '/.git/logs/HEAD', 'utf8');
         fileSourceObservable.map(x => x.split('\n'))
           .flatMap(x => x)
           .filter(x => x.length > 40)

@@ -37,12 +37,7 @@ EventController.saveEvent = function(arg) {
     //         //eventToAdd.user = elem.data.substring(83, elem.data.indexOf('<') - 1);
     //         //eventToAdd.time = elem.data.substring(elem.data.indexOf('>') + 1, elem.data.indexOf('>') + 12);
     //         //eventToAdd.data = JSON.stringify(elem);
-    //         eventToAdd.user = elem.data.author;
-    //         eventToAdd.SHA = elem.data.SHA;
-    //         eventToAdd.parent = elem.data.parent;
-    //         eventToAdd.eventType = elem.data.event;
-    //         eventToAdd.message = elem.data.message;
-    //         eventToAdd.time = elem.data.time;
+    //
     //         //save event to collection or create new collection
     //         //Event.create(eventToAdd)
     //       eventToAdd.save(function(err){
@@ -51,7 +46,6 @@ EventController.saveEvent = function(arg) {
     //     })
     // //else if a single instance of Git event
     // } else {
-        //parse user from data
       var eventToAdd = new Event({
       user: gitData.author,
       SHA: gitData.SHA,
