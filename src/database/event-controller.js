@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // mongoose.connect('mongodb://ec2-54-152-1-18.compute-1.amazonaws.com');
-var MONGO_URI = 'mongodb://navigitor:browncouch123@ds019826.mlab.com:19826/navigitor'
-// var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }, 
-//                 replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };       
+//var MONGO_URI = 'mongodb://navigitor:browncouch123@ds019826.mlab.com:19826/navigitor'
+var MONGO_URI = 'mongodb://localhost/test'
+// var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+//                 replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };
 mongoose.connect(MONGO_URI);
 mongoose.connection.on('connected', function() {console.log('event connected on mLab')})
-mongoose.connection.on('error', function() {console.log('CONNECTION ERROR FROM EVENT')})
+mongoose.connection.on('error', function(e) {console.log('CONNECTION ERROR FROM EVENT: ' + e)})
 
 const eventSchema = new Schema({
   user: {type: String, required: true},
@@ -51,7 +52,7 @@ EventController.post = arg => {
 //fetch collection/repo
 EventController.getRepo = (arg, callback) => {
     //define which collection we're looking for
-    
+
     let coll = mongoose.model(arg.room + 's', eventSchema)
     //console.log(coll)
     //return all docs in collection
@@ -63,7 +64,7 @@ EventController.getRepo = (arg, callback) => {
 
 EventController.getByTime = (arg, callback) => {
     let time = Math.floor(arg.time / 1000)
-    
+
     let coll = mongoose.model(arg.room + 's', eventSchema)
     coll.find({time: {$gt: time}}, 'user data time', (err, data) => {
         if (err) console.log('getByTime error: ', err)

@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT);
 const io = require('socket.io').listen(server);
 const bodyParser = require ('body-parser');
+const Rx = require('rxjs/Rx');
+
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -34,37 +36,60 @@ if (PORT === process.env.PORT) {
 
 console.log('Polling server is running on http://localhost:' + PORT);
 
-
 /***************************
 *** Socket Handling + RxJS ***
 TODO: handle subscribe/getRepo functionality on client side
 ****************************/
+io.sockets.on('connection', function(socket){
+	// Room Handling
+	const socketJoinRoomObservable = Rx.Observable.create(function(observer){
+		socket.on('subscribe', function(data) {
+			try {
+				EventController.getRepo(data, function(x) {
+					socket.emit('completeDBLog', x)
+				})
+				socket.join(data.room)
+				observer.next(data.room);
+			} catch (err) {
+				observer.error(err);
+			}
+		}
+		);
+	})
 
-io.sockets.on('connection', function (socket) {
-  // Socket test
-  socket.once("echo", function (msg, callback) {
-    socket.emit("echo", msg);
-  });
+	const socketJoinRoomObserver = socketJoinRoomObservable
+		.subscribe(x => console.log('joined team: ' + x), e => 'connection error: ' + e, () => console.log('team connected complete'))
 
-  // room handling
-  socket.on('subscribe', function(data) {
-		console.log(data.room);
-    EventController.getRepo(data, function(x) {
-      console.log(x)
-    })
-
-    socket.join(data.room)}
-  );
-
-  socket.on('unsubscribe', function(data) { socket.leave(data.room)});
-  //listening for Git Action from local client, then broadcasts to all connected clients in team
-	// TODO: handle callback in post method
-	socket.on('broadcastGit', function(arg){
-    EventController.post(arg, function(data) {
-			console.log(data);
-    });
-		io.in(arg.room).emit('incomingCommit', arg.data);
+	const socketLeaveRoomObservable = Rx.Observable.create(function(observer){
+		socket.on('unsubscribe', function(data) {
+			try{
+				socket.leave(data.room);
+				observer.next(data.room);
+			} catch (err) {
+				observer.error(err);
+			}
+		});
 	});
+
+	const socketLeaveRoomObserver = socketLeaveRoomObservable
+		.subscribe(x => console.log('left room: ' + x), e => console.log('error on leave: ' + e),() => console.log('left room completed'))
+
+	// Broadcasting Git Actions from local clients to connected team members
+	const socketGitBroadcastingObservable = Rx.Observable.create(function(observer){
+		socket.on('broadcastGit', function(arg){
+			try {
+				EventController.post(arg, function(data) {
+					console.log(data);
+				});
+				io.in(arg.room).emit('incomingCommit', arg.data);
+			} catch (err) {
+				observer.error(err);
+			}
+		});
+	});
+
+	const socketGitBroadcastingObserver = socketGitBroadcastingObservable
+		.subscribe(x => console.log(x), e => console.log(e), () => console.log('git broadcasted and saved | complete'))
 });
 
 /***********************
@@ -83,14 +108,13 @@ UserController.verify(req, function(){})
   //console.log(req)
 })
 
-
 /*****************
  *** Analytics ***
  *****************/
 
 app.get('/days', (req, res) => {
   EventController.getByTime(req, function() {
-})
+	})
 })
 
 module.exports = server

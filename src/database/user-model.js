@@ -8,6 +8,7 @@ const SALT_WORK_FACTOR = 10;
 const userSchema = new Schema ({
     user: {type: String, required: true, unique: true},
     email: {type: String},
+    github: {type: String},
     password: {type: String, required: true}
 })
 

@@ -94,12 +94,8 @@ function openDirChoice() {
         .filter(x => x.length > 40)
         .last()
         .map(x => gitParser.parseGit(x))
-        .subscribe(
-          x => mainWindow.webContents.send('parsedCommit', x),
-          e => console.log('Error on fullGitLog: ' + e),
-          () => console.log('gitMostRecentDone')
-        );
-    });
+        .subscribe(x => mainWindow.webContents.send('parsedCommit', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitMostRecentDone'));
+      });
 
   // Loads entire local user's git log history after file path chosen on UI
         fileSourceObservable.map(x => x.split('\n'))
@@ -107,19 +103,13 @@ function openDirChoice() {
           .filter(x => x.length > 40)
           .map(x => gitParser.parseGit(x))
           .toArray(x => x)
-          .subscribe(
-            x => mainWindow.webContents.send('parsedCommitAll', x),
-            e => console.log('Error on fullGitLog: ' + e),
-            () => console.log('gitFullLogDone')
-          );
+          .subscribe(x => mainWindow.webContents.send('parsedCommitAll', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitFullLogDone'));
 
   // // Wrap the exists method TODO: ADD FILE VERIFICATION
   var exists = Rx.Observable.bindCallback(fs.exists);
-
-  var source = exists(projectPath + '/.git/logs/HEAD');
-
+  var existsSource = exists(projectPath + '/.git/logs/HEAD');
   // Get the first argument only which is true/false
-  var subscription = source.subscribe(
+  var existsSubsription = existsSource.subscribe(
     function (x) { (x)? console.log('valid'): dialog.showErrorBox("No Git File found", "Make sure you have chosen your project's root folder or that you have made at least one Git commit") },
     function (e) { console.log('onError: %s', e); },
     function ()  { console.log('onCompleted'); });

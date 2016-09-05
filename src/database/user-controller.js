@@ -3,10 +3,11 @@ const Schema = mongoose.Schema;
 const User = require('./user-model.js')
 const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
-var MONGO_URI = 'mongodb://navigitor:browncouch123@ds019826.mlab.com:19826/navigitor'    
+//var MONGO_URI = 'mongodb://navigitor:browncouch123@ds019826.mlab.com:19826/navigitor'
+var MONGO_URI = 'mongodb://localhost/test'
 mongoose.connect(MONGO_URI);
 mongoose.connection.on('connected', function() {console.log('user connected on mLab')})
-mongoose.connection.on('error', function() {console.log('CONNECTION ERROR FROM USER')})
+mongoose.connection.on('error', function(e) {console.log('CONNECTION ERROR FROM USER: ' + e)})
 
 //initialize UserController as empty object
 let UserController = {};
@@ -18,7 +19,8 @@ UserController.add = (req, res, next) => {
         user: req.body.name,
         email: req.body.email,
         password: req.body.password,
-        team: req.body.team
+        team: req.body.team,
+        github: req.body.github
     });
     //save NewUser to collection
     NewUser.save((err, req) => {
