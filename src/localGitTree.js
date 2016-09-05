@@ -94,6 +94,7 @@ export default class LocalGitTree extends Component {
 			/* listens for an git commit event from main.js webContent.send
 			 then sends commit string to the server via socket */
 			ipcRenderer.on('parsedCommit', function(event, localGit){
+				console.log(localGit);
 				cy.nodes().removeClass('new');
 				cy.edges().removeClass('new');
 
