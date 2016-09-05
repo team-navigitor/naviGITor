@@ -52,40 +52,46 @@ export default class LocalGitTree extends Component {
 		let localGitNodes = [];
 		let localGitEdges = [];
 
-		ipcRenderer.on('parsedCommitAll', function(event, data) {
-			console.log(data);
+		ipcRenderer.on('parsedCommitAll', function(event, fullLog) {
+			console.log(fullLog);
 			// loop through all local git activity, and store as nodes
-			for (var i = 0; i < data.length; i++) {
-				localGitNodes.push({
-					data: {
-						id: data[i].SHA,
-						commit: data[i].message
-					}
-				});
-			}
-
-			for (var i = 0; i < data.length; i++) {
-				// loop through git merge activity and connect current node with parent nodes
-				if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
-					localGitEdges.push({
+			for (var i = 0; i < fullLog.length; i++) {
+				if(fullLog[i].SHA){
+					localGitNodes.push({
 						data: {
-							source: data[i].parent[0],
-							target: data[i].SHA
-						}
-					},{
-						data: {
-							source: data[i].parent[1],
-							target: data[i].SHA
+							id: fullLog[i]['SHA'],
+							commit: fullLog[i]['message']
 						}
 					});
 				}
+			}
+			for (var i = 0; i < fullLog.length; i++) {
+				// loop through git merge activity and connect current node with parent nodes
+				if (/^merge/.test(fullLog[i]['event'])) {
 
-				// loop through all other events and connect current node to parent node
-				if (data[i]['event'] !== 'checkout') {
+					if(fullLog[i].parent[0] !== fullLog[i].parent[1]){
 					localGitEdges.push({
 						data: {
-							source: data[i].parent[0],
-							target: data[i].SHA
+							source: fullLog[i].parent[0],
+							target: fullLog[i].parent[1]
+						}
+					});
+				}
+					// {
+					// 	data: {
+					// 		source: fullLog[i].parent[1],
+					// 		target: fullLog[i].SHA
+					// 	}
+					// });
+				}
+
+				// loop through all other events and connect current node to parent node
+				// else if (fullLog[i]['event'] !== 'checkout') {
+				else if(!/^merge/.test(fullLog[i]['event'])) {
+					localGitEdges.push({
+						data: {
+							source: fullLog[i].parent[0],
+							target: fullLog[i].SHA
 						}
 					});
 				}

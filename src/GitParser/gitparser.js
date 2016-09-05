@@ -10,7 +10,7 @@ gitParser.parseGit = commitStr => {
   commitObj.time = '';
   var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
   commitObj.event = commitStr.match(eventTest)[0].substring(6);
-  if(commitObj.event.substring(0, 6).trim() === 'merge'){
+  if(/^merge/.test(commitObj.event)  || /^checkout/.test(commitObj.event)){
     commitObj.parent.push(commitObj.SHA);
     commitObj.SHA = null;
   }
