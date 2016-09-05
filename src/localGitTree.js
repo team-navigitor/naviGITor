@@ -52,7 +52,7 @@ export default class LocalGitTree extends Component {
 		let localGitNodes = [];
 		let localGitEdges = [];
 
-		ipcRenderer.on('parsedCommitAll', function(event, dataIn) {
+		ipcRenderer.on('parsedCommitAll', function(event, data) {
 			console.log(data);
 			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < data.length; i++) {
