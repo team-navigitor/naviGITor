@@ -33,15 +33,15 @@ export default class TeamLogin extends Component {
 
         <div className='login-container' id='teamLogin-container'>
         <h3>PROJECT INFORMATION</h3>
-            <h5 >Select the local file where your project is located:</h5>
-            <button className="login-button" onClick = {this.dirChoice}>FIND FOLDER</button>
+          <h5 >Select the local file where your project is located:</h5>
+          <button className="login-button" onClick = {this.dirChoice}>FIND FOLDER</button>
 
-            <form onSubmit={this.handleData} className="login-form">
-              <h5 className='team-h5'>Enter your team's Github repository:</h5>
-              <input id="login-org" placeholder="GITHUB ORGANIZATION" type="text" />
-              <input id="login-repo" placeholder="REPO NAME" type="text" />
-              <button className="login-button" type="submit">SUBMIT</button>
-            </form>
+          <form onSubmit={this.handleData} className="login-form">
+            <h5 className='team-h5'>Enter your team's Github repository:</h5>
+            <input id="login-org" placeholder="GITHUB ORGANIZATION" type="text" />
+            <input id="login-repo" placeholder="REPO NAME" type="text" />
+            <button className="login-button" type="submit">SUBMIT</button>
+          </form>
         </div>
     )
   }

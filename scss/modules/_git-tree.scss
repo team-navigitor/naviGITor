@@ -1,0 +1,20 @@
+// Git Tree View
+#git-tree {
+	left: 0;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 999;
+}
+
+.git-tree-header {
+	form {
+		float: left;
+	}
+}
+
+.git-tree-body {
+	height: 700px;
+	position: relative;
+}

@@ -1,0 +1,10 @@
+// Terminal View
+.terminal-container {
+	height: 100vh;
+
+	textarea {
+		background: transparent;
+		border: 0;
+		outline: 0;
+	}
+}
