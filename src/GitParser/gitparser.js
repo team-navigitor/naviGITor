@@ -10,14 +10,12 @@ gitParser.parseGit = commitStr => {
   commitObj.time = '';
   var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
   commitObj.event = commitStr.match(eventTest)[0].substring(6);
-  if(/^merge/.test(commitObj.event)  || /^checkout/.test(commitObj.event)){
+  //
+  if(/^merge/.test(commitObj.event) || /^checkout/.test(commitObj.event)){
     commitObj.parent.push(commitObj.SHA);
     commitObj.SHA = null;
   }
-  if(/^branch/.test(commitObj.event)){
-    commitObj.parent[0] = commitObj.SHA;
-    commitObj.SHA = null;
-  }
+
   commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + 1 + commitObj.event.length)).trim();
 
   var i = 81;

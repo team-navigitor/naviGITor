@@ -87,13 +87,28 @@ function openDirChoice() {
     let branchSourcesObserver = branchSources(gitPath + '/.git/logs/refs/heads')
     .mergeMap(x => Rx.Observable.from(x));
 
-    var subscribe = branchSourcesObserver.subscribe(x => console.log(x))
-
-
+    // var subscribe = branchSourcesObserver.subscribe(x => console.log(x))
 
     var fileSource = Rx.Observable.bindNodeCallback(fs.readFile);
 
-    //Creates observable from fs method
+
+      // Loads entire local user's git log history after file path chosen on UI
+    // branchSourcesObserver.subscribe(function(b){
+      fileSource(gitPath + '/.git/logs/HEAD' , 'utf8')
+          .map(x => x.split('\n'))
+          .flatMap(x => x)
+          .filter(x => x.length > 40)
+          .map(x => gitParser.parseGit(x))
+          .toArray(x => x)
+        //  .subscribe(x => console.log('NEW ' + x))
+          .subscribe(x => mainWindow.webContents.send('parsedCommitAll', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitFullLogDone'));
+        // });
+
+
+
+
+
+
 
 
 
@@ -107,15 +122,6 @@ function openDirChoice() {
         .map(x => gitParser.parseGit(x))
         .subscribe(x => mainWindow.webContents.send('parsedCommit', x));
       });
-
-  // Loads entire local user's git log history after file path chosen on UI
-  let fileSourceObservable = fileSource(gitPath + '/.git/logs/refs/heads/' + 'master' , 'utf8');
-        fileSourceObservable.map(x => x.split('\n'))
-          .flatMap(x => x)
-          .filter(x => x.length > 40)
-          .map(x => gitParser.parseGit(x))
-          .toArray(x => x)
-          .subscribe(x => mainWindow.webContents.send('parsedCommitAll', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitFullLogDone'));
 
   // // Wrap the exists method TODO: ADD FILE VERIFICATION
   var exists = Rx.Observable.bindCallback(fs.exists);
