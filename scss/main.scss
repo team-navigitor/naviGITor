@@ -1,7 +1,14 @@
-//This is organized by general areas (ie body) and then alphabetically by component
-@import 'colors';
+// Variables
+@import 'variables/colors';
 
-// **** general *****
+// Modules
+@import 'modules/login';
+@import 'modules/nav-bar';
+@import 'modules/git-tree';
+@import 'modules/terminal';
+@import 'modules/chat-room';
+
+// General Styles
 body {
 	position: relative;
   color: $black;
@@ -12,73 +19,9 @@ body {
   height: 100vh;
 }
 
-// ***** gitTree.js *******
-.gitTree-container {
-	width: 100%;
-	height: 100vh;
-	color: $black;
-}
-
-// ***** login.js *****
-.login-container {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	max-width: 300px;
-	text-align: center;
-	color: $gray;
-}
-
-.login-logo {
-	width: 80%;
-	margin-bottom: 30px;
-}
-
-.login-form {
-	input {
-		width: 100%;
-		border: none;
-		border-bottom: 2px solid $login-gray;
-		margin-bottom: 20px;
-		letter-spacing: 3px;
-		color: $login-gray;
-		height: 30px;
-		font-size: 12px;
-
-		&:focus {
-			outline:none;
-		}
-	}
-}
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: $gray;
-}
-
-.login-form {
-	margin-top: 30px;
-}
-
-.login-button {
-  background-color: $white;
-	border: 2px solid $login-gray;
-	margin-bottom: 20px;
-	margin-top: 20px;
-	width: 100%;
-	height: 40px;
-	padding-top: 9px;
-	letter-spacing: 3px;
-	font-size: 12px;
-}
-
-.signup-link {
-	color: green;
-}
-
+// Will need to clean up and move to _login.scss file
 // ****** teamLogin.js *****
 #teamLogin-container {
-	text-align: center;
-
 	.team-h5 {
 		margin-bottom: 25px;
 	}
@@ -89,121 +32,13 @@ body {
 	}
 }
 
-
-// ****** Main.js *****
-.nav-bar-container {
-	max-width: 13em;
-	width: 100%;
-	height: 100vh;
-	background-color: $dark-green;
-	color: white;
-	float: left;
-	position: relative;
-}
-
+// Main.js View
 .view-container {
 	margin-left: 13em;
 	height: 100%;
+	// height: 100vh;
+	// position: relative;
 }
-
-.nav-image {
-  background: rgba(0,0,0,.1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 0 auto;
-  padding: 20px 0;
-  text-align: center;
-
-	p {
-		font-size: 18px;
-		margin-bottom: 7px;
-
-		&:last-child {
-			font-size: 14px;
-			margin-bottom: 0;
-		}
-	}
-}
-
-#profile-pic {
-	border-radius: 50%;
-	margin-bottom: 10px;
-	width: 60px;
-}
-
-.nav-links-container {
-	padding: 0;
-
-	ul {
-		list-style-type: none;
-		padding-left: 0;
-		text-align: left;
-	}
-
-	li {
-		font-size: 1.1em;
-		color: $gray;
-		font-weight: bold;
-
-	  &:hover {
-	  	color: $white;
-	  }
-	}
-}
-
-.fa {
-	width: 25px;
-}
-
-.login-submit2 {
-	background: #2874A6;
-	color: $white !important;
-  border: none;
-  color: $black;
-  transition: 0.3s all ease-in-out;
-
-  &:hover {
-  	background: $gray;
-  }
-
-  &:active {
-  	outline: none;
-  }
-}
-
-.folder-button {
-	width: 100%;
-	color: #2874A6;
-	text-align: left;
-}
-
-.list {
-	color: $gray;
-	display: block;
-	font-size: .8em;
-	padding: 10px 20px;
-	width: 100%;
-
-	&:hover {
-		background: rgba(0,0,0,.1);
-		color: $white;
-		text-decoration: none;
-	}
-	
-	&:visited {
-		color: $white;
-		text-decoration: none;
-	}
-}
-
-// .nav-logo {
-// 	height: 4em;
-// 	margin-left: auto;
-// 	margin-right: auto;
-// 	display: block;
-// 	position: absolute;
-// 	bottom: 1em;
-// }
-// ***** end main.js *****
 
 .landing-logo {
 	width: 25em;
@@ -214,33 +49,26 @@ body {
 	padding-top: 5em;
 }
 
-// ***** terminal *******
-.terminal-container {
-	height: 100vh;
+// Temporary workaround - will clean up later
+.login-submit2 {
+	background: #2874A6;
+	color: $white !important;
+  border: none;
+  color: $black;
+  transition: 0.3s all ease-in-out;
+
+  &:hover {
+  	background: $login-gray;
+  }
+
+  &:active {
+  	outline: none;
+  }
 }
 
-textarea {
-	background: transparent;
-	border: 0;
-	outline: 0;
-}
-
-#cy {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: 999;
-}
-
-.cytocontainer {
-	position: relative;
-	height: 700px;
-}
-
-.git-tree-header {
-	form {
-		float: left;
-	}
-}
+// Not sure if this is still needed
+// .folder-button {
+// 	width: 100%;
+// 	color: #2874A6;
+// 	text-align: left;
+// }

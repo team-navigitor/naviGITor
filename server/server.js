@@ -89,6 +89,14 @@ io.sockets.on('connection', function(socket){
 
 	const socketGitBroadcastingObserver = socketGitBroadcastingObservable
 		.subscribe(x => console.log('broadcasted'), e => console.log(e), () => console.log('git broadcasted and saved | complete'))
+		//Chat room
+	  socket.on('sendMessage', function (data) {
+	    socket.broadcast.to(data.room).emit('sendMessage', {
+	      text: data.text
+	    });
+
+	    console.log(data.text);
+	  });
 });
 
 /***********************

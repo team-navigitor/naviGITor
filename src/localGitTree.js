@@ -134,7 +134,7 @@ export default class LocalGitTree extends Component {
 
 		function dagTree() {
 			var cy = window.cy = cytoscape({
-				container: document.getElementById('cy'),
+				container: document.getElementById('git-tree'),
 				boxSelectionEnabled: false,
 				autounselectify: true,
 				layout: {
@@ -190,7 +190,7 @@ export default class LocalGitTree extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="git-tree-container">
 				<div className="git-tree-header">
 					<form onSubmit={this._handleSubmit2}>
 					  <input id="login-org2" placeholder="Github Org" type="text" />
@@ -199,8 +199,8 @@ export default class LocalGitTree extends Component {
 					</form>
 					<button className="folder-button2" onClick = {this._dirChoice2}> Select Project Folder </button>
 				</div>
-				<div className="cytocontainer">
-					<div id="cy"></div>
+				<div className="git-tree-body">
+					<div id="git-tree"></div>
 				</div>
 			</div>
 		);
