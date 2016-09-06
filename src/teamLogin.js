@@ -18,7 +18,8 @@ export default class TeamLogin extends Component {
   }
 
   //sends org name and repo name data to app state
-  handleData() {
+  handleData(e) {
+    e.preventDefault();
     var data = {};
     data['orgName'] = document.getElementById('login-org').value;
     data['repoName'] = document.getElementById('login-repo').value;
@@ -28,7 +29,6 @@ export default class TeamLogin extends Component {
   }
 
   render() {
-    console.log('teamlogin')
     return (
 
         <div className='login-container' id='teamLogin-container'>
