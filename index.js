@@ -9,6 +9,8 @@ const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
 //var ls = child.fork('fork.js');
 const Shell = require ('shelljs');
 const fs = require('fs');
+const Rx = require('rxjs/Rx');
+
 
 /******************************************************************************
         *** Core Electron Startup Process ***
@@ -75,20 +77,51 @@ ipcMain.on('dirChoice', function(event, input) {
 });
 // sets file watching and triggers event chain when git log is modified
 function openDirChoice() {
-  let projectPath = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
-  // to resolve to home path and append path given from renderer process
-  var gitPath = (path.resolve('~', projectPath.toString()));
+  let projectPath = dialog.showOpenDialog({properties: ['openDirectory']});
+  if(!projectPath)dialog.showErrorBox("No File Selected", "Make sure you have chosen your project's root folder or that you have made at least one Git commit")
+  else {
+    // to resolve to home path and append path given from renderer process
+    var gitPath = (path.resolve('~', projectPath.toString()));
 
-  // Watches for  local git activity, sends most revent git event to renderer process
-  chokidar.watch((projectPath + '/.git/logs/HEAD'), {ignoreInitial: true}).on('all', (event, path) =>
-    gitParser.mostRecentEvent(gitPath, function(data) {
-      mainWindow.webContents.send('parsedCommit', data)})
-  );
+    var branchSources = Rx.Observable.bindNodeCallback(fs.readdir);
+    let branchSourcesObserver = branchSources(gitPath + '/.git/logs/refs/heads')
+    .mergeMap(x => Rx.Observable.from(x));
 
-  // Loads entire local user's git log history after file path chosen on UI
-  gitParser.allEvents(gitPath, function(data) {
-    mainWindow.webContents.send('parsedCommitAll', data);
-  });
+    // var subscribe = branchSourcesObserver.subscribe(x => console.log(x))
+
+    var fileSource = Rx.Observable.bindNodeCallback(fs.readFile);
+
+
+      // Loads entire local user's git log history after file path chosen on UI
+    // branchSourcesObserver.subscribe(function(b){
+      fileSource(gitPath + '/.git/logs/HEAD' , 'utf8')
+          .map(x => x.split('\n'))
+          .flatMap(x => x)
+          .filter(x => x.length > 40)
+          .map(x => gitParser.parseGit(x))
+          .toArray(x => x)
+          .subscribe(x => mainWindow.webContents.send('parsedCommitAll', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitFullLogDone'));
+        // });
+
+    // Watches for  local git activity, sends most revent git event to renderer process
+    chokidar.watch((gitPath + '/.git/logs/refs/heads'), {ignoreInitial: true}).on('all', function (event, path){
+      let fileSourceObservable = fileSource(path, 'utf8');
+      fileSourceObservable.map(x => x.split('\n'))
+        .flatMap(x => x)
+        .filter(x => x.length > 40)
+        .last()
+        .map(x => gitParser.parseGit(x))
+        .subscribe(x => mainWindow.webContents.send('parsedCommit', x));
+      });
+
+  // verify if user has selected a folder with a git directory
+  var exists = Rx.Observable.bindCallback(fs.exists);
+  var existsSource = exists(projectPath + '/.git/logs/HEAD');
+  var existsSubsription = existsSource.subscribe(
+    function (x) { (x)? console.log('valid'): dialog.showErrorBox("No Git File found", "Make sure you have chosen your project's root folder or that you have made at least one Git commit") },
+    function (e) { console.log('onError: %s', e); },
+    function ()  { console.log('onCompleted'); });
+    }
 };
 /******************************************************************************
         *** Terminal Emulation ***
