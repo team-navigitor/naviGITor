@@ -14,6 +14,10 @@ gitParser.parseGit = commitStr => {
     commitObj.parent.push(commitObj.SHA);
     commitObj.SHA = null;
   }
+  if(/^branch/.test(commitObj.event)){
+    commitObj.parent[0] = commitObj.SHA;
+    commitObj.SHA = null;
+  }
   commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + 1 + commitObj.event.length)).trim();
 
   var i = 81;
