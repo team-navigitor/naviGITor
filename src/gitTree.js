@@ -196,7 +196,7 @@ export default class GitTree extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="git-tree-container">
 				<div className="git-tree-header">
 					<form onSubmit={this._handleSubmit2}>
 					  <input id="login-org2" placeholder="Github Org" type="text" />

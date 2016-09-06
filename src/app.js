@@ -19,7 +19,7 @@ import TeamLogin from './teamLogin';
 import Analytics from './analytics';
 import Logo from './logopage';
 import Profile from './profilePage';
-import Chat from './chat';
+import Chat from './chat/chat';
 
 
 let socket = io('http://navigitorsite.herokuapp.com');
