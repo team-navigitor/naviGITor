@@ -67,8 +67,7 @@ export default class LocalGitTree extends Component {
 			}
 			for (var i = 0; i < fullLog.length; i++) {
 				// loop through git merge activity and connect current node with parent nodes
-				if (/^merge/.test(fullLog[i]['event'])) {
-
+				if (fullLog[i].event.trim() === 'merge') {
 					if(fullLog[i].parent[0] !== fullLog[i].parent[1]){
 					localGitEdges.push({
 						data: {
@@ -87,7 +86,7 @@ export default class LocalGitTree extends Component {
 
 				// loop through all other events and connect current node to parent node
 				// else if (fullLog[i]['event'] !== 'checkout') {
-				else if(!/^merge/.test(fullLog[i]['event'])) {
+				else if(!fullLog[i].event.trim() === 'merge' || !/^checkout/.test(fullLog[i]['event'])) {
 					localGitEdges.push({
 						data: {
 							source: fullLog[i].parent[0],

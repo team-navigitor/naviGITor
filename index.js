@@ -100,17 +100,8 @@ function openDirChoice() {
           .filter(x => x.length > 40)
           .map(x => gitParser.parseGit(x))
           .toArray(x => x)
-        //  .subscribe(x => console.log('NEW ' + x))
           .subscribe(x => mainWindow.webContents.send('parsedCommitAll', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitFullLogDone'));
         // });
-
-
-
-
-
-
-
-
 
     // Watches for  local git activity, sends most revent git event to renderer process
     chokidar.watch((gitPath + '/.git/logs/refs/heads'), {ignoreInitial: true}).on('all', function (event, path){
@@ -123,10 +114,9 @@ function openDirChoice() {
         .subscribe(x => mainWindow.webContents.send('parsedCommit', x));
       });
 
-  // // Wrap the exists method TODO: ADD FILE VERIFICATION
+  // verify if user has selected a folder with a git directory
   var exists = Rx.Observable.bindCallback(fs.exists);
   var existsSource = exists(projectPath + '/.git/logs/HEAD');
-  // Get the first argument only which is true/false
   var existsSubsription = existsSource.subscribe(
     function (x) { (x)? console.log('valid'): dialog.showErrorBox("No Git File found", "Make sure you have chosen your project's root folder or that you have made at least one Git commit") },
     function (e) { console.log('onError: %s', e); },
