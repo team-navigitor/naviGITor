@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import $ from 'jquery';
-import qtip from 'qtip2';
 import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
@@ -44,33 +43,23 @@ export default class LocalGitTree extends Component {
 		let orgName = document.getElementById('login-org2').value;
 		let repoName = document.getElementById('login-repo2').value;
 
-		// Not really using this GET request, may need to switch it with database uri
-		$.get(`https://api.github.com/repos/${orgName}/${repoName}/commits`, function(commits) {
-			this.setState({
-				commits: commits
-			});
-
-			console.log('Made get request', commits);
-
-			if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
-			socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
-			socketRoom = `${orgName}.${repoName}live`;
-		}.bind(this));
+		if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
+		socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
+		socketRoom = `${orgName}.${repoName}live`;
 	}
 
 	componentDidMount() {
-		let localGitAction;
 		let localGitNodes = [];
 		let localGitEdges = [];
 
-		localGitAction = ipcRenderer.on('parsedCommitAll', function(event, data) {
+		ipcRenderer.on('parsedCommitAll', function(event, data) {
 			console.log(data);
 			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < data.length; i++) {
 				localGitNodes.push({
 					data: {
 						id: data[i].SHA,
-						label: data[i].message
+						commit: data[i].message
 					}
 				});
 			}
@@ -105,11 +94,14 @@ export default class LocalGitTree extends Component {
 			/* listens for an git commit event from main.js webContent.send
 			 then sends commit string to the server via socket */
 			ipcRenderer.on('parsedCommit', function(event, localGit){
+				cy.nodes().removeClass('new');
+				cy.edges().removeClass('new');
+
 				cy.add([
 					{
 				    data: {
 				    	id: localGit.SHA,
-				    	label: localGit.message
+				    	commit: localGit.message
 				    }
 					},
 					{
@@ -119,89 +111,80 @@ export default class LocalGitTree extends Component {
 				    	target: localGit.SHA
 				    }
 					}
-				]).style({
-					'border-style': 'double',
-					'border-color': '#19C383',
-					'border-width': 7,
-					'line-color': '#19C383',
-					'target-arrow-color': '#19C383',
-					'color': '#19C383'
-				});
+				])
+				.addClass('new');
 
 				cy.layout({
 					name: 'dagre',
 					animate: true,
 					fit: true,
-					animationDuration: 500,
+					animationDuration: 1000,
 				});
 			});
 
 			dagTree();
-
-			// cy.elements().qtip({
-			// 	content: 'Example qTip on ele',
-			// 	position: {
-			// 		my: 'top center',
-			// 		at: 'bottom center'
-			// 	},
-			// 	style: {
-			// 		tip: {
-			// 			width: 16,
-			// 			height: 8
-			// 		}
-			// 	}
-			// });
 		});
 
 
 		function dagTree() {
-			$(function() {
-				var cy = window.cy = cytoscape({
-					container: document.getElementById('cy'),
-					boxSelectionEnabled: false,
-					autounselectify: true,
-					layout: {
-						name: 'dagre'
-					},
-					style: [
-						{
-							selector: 'node',
-							style: {
-								'content': 'data(label)',
-								'width': 65,
-								'height': 65,
-								'text-opacity': 0.5,
-								'text-valign': 'center',
-								'text-halign': 'right',
-								'background-image': 'https://github.com/binhxn.png',
-								'border-width': 3,
-								'background-fit': 'cover',
-								'border-color': '#ccc'
-							}
-						},
-						{
-							selector: 'edge',
-							style: {
-								'width': 4,
-								'curve-style': 'bezier',
-								'target-arrow-shape': 'triangle',
-								'line-color': '#ccc',
-								'target-arrow-color': '#ccc'
-							}
-						}
-					],
-					elements: {
-						nodes: localGitNodes,
-						edges: localGitEdges
-					}
-				});
+			var cy = window.cy = cytoscape({
+				container: document.getElementById('git-tree'),
+				boxSelectionEnabled: false,
+				autounselectify: true,
+				layout: {
+					name: 'dagre'
+				},
+				style: cytoscape.stylesheet()
+				.selector('node')
+				  .css({
+				    'content': 'data(commit)',
+				    'width': 65,
+				    'height': 65,
+				    'text-opacity': 0.5,
+				    'text-valign': 'center',
+				    'text-halign': 'right',
+				    'background-image': 'https://github.com/binhxn.png',
+				    'border-width': 3,
+				    'background-fit': 'cover',
+				    'border-color': '#ccc'
+				  })
+				.selector('edge')
+				  .css({
+				    'width': 4,
+						'curve-style': 'bezier',
+						'target-arrow-shape': 'triangle',
+						'line-color': '#ccc',
+						'target-arrow-color': '#ccc'
+				  })
+				.selector('node.new')
+				  .css({
+				    'border-style': 'double',
+  					'border-color': '#19C383',
+  					'border-width': 7,
+  					'line-color': '#19C383',
+  					'target-arrow-color': '#19C383',
+  					'color': '#19C383'
+				  })
+				.selector('edge.new')
+				  .css({
+				    'width': 4,
+						'curve-style': 'bezier',
+						'target-arrow-shape': 'triangle',
+						'line-color': '#19C383',
+						'target-arrow-color': '#19C383'
+				  })
+				,
+				elements: {
+					nodes: localGitNodes,
+					edges: localGitEdges
+				}
 			});
 		};
 	}
 
 	render() {
 		return (
-			<div>
+			<div className="git-tree-container">
 				<div className="git-tree-header">
 					<form onSubmit={this._handleSubmit2}>
 					  <input id="login-org2" placeholder="Github Org" type="text" />
@@ -210,8 +193,8 @@ export default class LocalGitTree extends Component {
 					</form>
 					<button className="folder-button2" onClick = {this._dirChoice2}> Select Project Folder </button>
 				</div>
-				<div className="cytocontainer">
-					<div id="cy"></div>
+				<div className="git-tree-body">
+					<div id="git-tree"></div>
 				</div>
 			</div>
 		);

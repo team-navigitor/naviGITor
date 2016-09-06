@@ -1,0 +1,56 @@
+// Login View
+.login-container {
+	color: $login-gray;
+	left: 50%;
+	max-width: 300px;
+	position: absolute;
+	text-align: center;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.login-logo {
+	margin-bottom: 30px;
+	width: 80%;
+}
+
+.login-form {
+	input {
+		border: none;
+		border-bottom: 2px solid $login-gray;
+		color: $login-gray;
+		font-size: 12px;
+		height: 30px;
+		letter-spacing: 3px;
+		margin-bottom: 20px;
+		width: 100%;
+
+		&:focus {
+			outline:none;
+		}
+	}
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: $login-gray;
+}
+
+.login-form {
+	margin-top: 30px;
+}
+
+.login-button {
+  background-color: $white;
+	border: 2px solid $login-gray;
+	font-size: 12px;
+	height: 40px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	padding-top: 9px;
+	letter-spacing: 3px;
+	width: 100%;
+}
+
+.signup-link {
+	color: $login-green;
+}

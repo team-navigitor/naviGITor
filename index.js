@@ -32,9 +32,11 @@ function createWindow () {
     minHeight: 600
   })
 
-  // REMOVE /dist WHEN READY TO DEPLOY
-  // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/dist/index.html`)
+  /*********************
+  *** For Deployment ***
+  *********************/
+  // replace dev.html with index.html in root directory
+  mainWindow.loadURL(`file://${__dirname}/dev.html`)
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()

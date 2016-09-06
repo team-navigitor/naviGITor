@@ -53,8 +53,8 @@ io.sockets.on('connection', function (socket) {
       console.log(x)
     })
 
-    socket.join(data.room)}
-  );
+    socket.join(data.room);
+  });
 
   socket.on('unsubscribe', function(data) { socket.leave(data.room)});
   //listening for Git Action from local client, then broadcasts to all connected clients in team
@@ -65,6 +65,15 @@ io.sockets.on('connection', function (socket) {
     });
 		io.in(arg.room).emit('incomingCommit', arg.data);
 	});
+
+  //Chat room
+  socket.on('sendMessage', function (data) {
+    socket.broadcast.to(data.room).emit('sendMessage', {
+      text: data.text
+    });
+
+    console.log(data.text);
+  });
 });
 
 /***********************
