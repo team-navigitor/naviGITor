@@ -30,15 +30,24 @@ UserController.add = (req, res, next) => {
 }
 
 //create method to verify user
-UserController.verify = (req, res, next) => {
+UserController.verify = (req, callback) => {
+    console.log('verify firing', req.body)
     //make sure needed info is included
+    let verUser;
     if(!(req.body.name) || !(req.body.password)) {
-        return;
+        veruser = false;
+        console.log('verUser: ', verUser)
+        return verUser;
     }
     //find user in collection
     User.findOne({'user': req.body.name}, 'password', (err, person) => {
+        console.log('finding firing')
         //if user not found
-        if (!(person)) res.send('User not found');
+        if (!(person)) {
+            verUser = false;
+            console.log('no person found')
+            callback(verUser)
+        }
         else {
             //get password from req
             const userPwd = req.body.password;
@@ -47,11 +56,16 @@ UserController.verify = (req, res, next) => {
             //verify passwords match
             bcrypt.compare(userPwd, hashedPwd, (err, result) => {
                 if (result) {
-                    next();
-                } else console.log('invalid password')
+                    verUser = true;
+                    callback(verUser)
+                } else {
+                    console.log('invalid password');
+                    verUser = false;
+                    callback(verUser)
+                }
             })
         }
-    })
+    })   
 }
 
 module.exports = UserController

@@ -6,7 +6,7 @@ export default class Signup extends Component {
 
 regClicked(e) {
 e.preventDefault();
-  if (document.getElementById('password1').value !== document.getElementById('password2').value) return console.log('Password doesn\'t match')
+  if ($('#password1').val() !== $('#password2').val()) return console.log('Password doesn\'t match')
   let newUser = {
     name: document.getElementById('userNameInput').value,
     email: document.getElementById('email').value,
@@ -15,9 +15,9 @@ e.preventDefault();
   $.ajax({
     url: 'http://localhost:3000/signup',
     method: 'POST',
-    data: newUser,
-    success: console.log('success!')
+    data: newUser
   })
+  hashHistory.push('TeamLogin')
 }
 
 	render() {
