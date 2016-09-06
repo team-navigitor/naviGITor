@@ -84,9 +84,10 @@ function openDirChoice() {
     var gitPath = (path.resolve('~', projectPath.toString()));
 
     var branchSources = Rx.Observable.bindNodeCallback(fs.readdir);
-    let branchSourcesObserver = branchSources(gitPath + '/.git/logs/refs/heads');
+    let branchSourcesObserver = branchSources(gitPath + '/.git/logs/refs/heads')
+    .mergeMap(x => Rx.Observable.from(x));
 
-    // branchSourcesObserver.subscribe(x => console.log(x))
+    var subscribe = branchSourcesObserver.subscribe(x => console.log(x))
 
 
 
@@ -108,14 +109,14 @@ function openDirChoice() {
       });
 
   // Loads entire local user's git log history after file path chosen on UI
-  let fileSourceObservable = fileSource(gitPath + '/.git/logs/refs/heads/' + 'master', 'utf8');
+  let fileSourceObservable = fileSource(gitPath + '/.git/logs/refs/heads/' + 'master' , 'utf8');
         fileSourceObservable.map(x => x.split('\n'))
           .flatMap(x => x)
           .filter(x => x.length > 40)
           .map(x => gitParser.parseGit(x))
           .toArray(x => x)
           .subscribe(x => mainWindow.webContents.send('parsedCommitAll', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitFullLogDone'));
-  
+
   // // Wrap the exists method TODO: ADD FILE VERIFICATION
   var exists = Rx.Observable.bindCallback(fs.exists);
   var existsSource = exists(projectPath + '/.git/logs/HEAD');
