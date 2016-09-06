@@ -30,7 +30,6 @@ export default class TeamLogin extends Component {
 
   render() {
     return (
-
         <div className='login-container' id='teamLogin-container'>
         <h3>PROJECT INFORMATION</h3>
             <h5 >Select the local file where your project is located:</h5>

@@ -8,24 +8,12 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import { ipcRenderer } from 'electron';
 
-const { Router, Route, Link, hashHistory, IndexRoute } = require('react-router');
-import Main from './main';
-import Login from './login';
-import Signup from './signup.js'
-import GitTree from './gitTree';
-import LocalGitTree from './localGitTree';
-import TerminalView from './terminal/terminal.js'
-import TeamLogin from './teamLogin';
-import Analytics from './analytics';
-import Logo from './logopage';
-import Profile from './profilePage';
-import Chat from './chat';
-
-
 let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
+import Routes from './routes';
+// require('../Styles/styles.scss');
 
-class App extends Component {
+export default class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -78,25 +66,5 @@ class App extends Component {
     )
 	}
 }
-export default App;
 
-
-ReactDOM.render((
-   <Router history = {hashHistory}>
-      <Route path = "/" component = {App}>
-        <IndexRoute component = {Login} />
-				<Route path = "Signup" component = {Signup} />
-				<Route path = "TeamLogin" component = {TeamLogin} />
-
-				<Route path = "Main" component = {Main}>
-				  <IndexRoute component = {Logo} />
-				 	<Route path = "GitTree" component = {GitTree} />
-				 	<Route path = "LocalGitTree" component = {LocalGitTree} />
-			    <Route path = "Terminal" component = {TerminalView} />
-			    <Route path = "Analytics" component = {Analytics} />
-					<Route path = "Profile" component = {Profile} />
-					<Route path = "Chat" component = {Chat} />
-				</Route>
-      </Route>
-  </Router>
-), document.getElementById('app'))
+ReactDOM.render((<Routes />), document.getElementById('app'));
