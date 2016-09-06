@@ -90,7 +90,8 @@ UserController.verify(req, function(){})
 
 app.get('/days', (req, res) => {
   EventController.getByTime(req, function() {
-})
+  
+  })
 })
 
 module.exports = server

@@ -10,6 +10,7 @@ const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
 const Shell = require ('shelljs');
 const fs = require('fs');
 
+
 /******************************************************************************
         *** Core Electron Startup Process ***
 *******************************************************************************/
