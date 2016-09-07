@@ -22,7 +22,7 @@ import Profile from './profilePage';
 import Chat from './chat/chat';
 
 
-let socket = io('http://navigitorsite.herokuapp.com');
+let socket = io('http://localhost:3000');
 let socketRoom = null;
 
 class App extends Component {
