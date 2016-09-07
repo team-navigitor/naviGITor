@@ -30,7 +30,7 @@ export default class Login extends Component {
           hashHistory.push('/TeamLogin');
         }
         else if (data) {
-          console.log('no github');
+          console.log('no github ');
           hashHistory.push('/TeamLogin');
         }
         else hashHistory.push('/Signup')
