@@ -33,6 +33,10 @@ module.exports = {
     // Won't run webpack if an error is found and fixed
     new webpack.NoErrorsPlugin()
   ],
+  node: {
+    __dirname: false,
+    __filename: false
+  },
   module: {
     loaders: [
       {

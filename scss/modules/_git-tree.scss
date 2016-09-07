@@ -4,7 +4,8 @@
 	position: relative;
 }
 
-#git-tree {
+#global-git-tree,
+#local-git-tree {
 	left: 0;
 	height: 100%;
 	position: absolute;
