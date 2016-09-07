@@ -42,12 +42,12 @@ UserController.verify = (req, callback) => {
         return verUser;
     }
     //find user in collection
-    User.findOne({'user': req.body.name}, 'password', (err, person) => {
+    User.findOne({'user': req.body.name}, 'password github', (err, person) => {
         console.log('finding firing')
         //if user not found
         if (!(person)) {
             verUser = false;
-            console.log('no person found')
+            console.log('no person found ')
             callback(verUser)
         }
         else {
@@ -59,7 +59,8 @@ UserController.verify = (req, callback) => {
             bcrypt.compare(userPwd, hashedPwd, (err, result) => {
                 if (result) {
                     verUser = true;
-                    callback(verUser)
+                    if (person.github) callback({person: github})
+                    else (callback(verUser))
                 } else {
                     console.log('invalid password');
                     verUser = false;
