@@ -34,7 +34,7 @@ export default class Analytics extends Component {
         // }
         chart.push({x: "Colin", y: 12}, {x: "Sarah", y: 6}, {x: "Steve", y: 9}, {x: "Binh", y: 14})
         let jason = JSON.stringify(chart)
-        console.log('chart: ', jason)
+        console.log('chart:  ', jason)
         this.props.setAppState({commitsPerUser: chart})
       }.bind(this)
     })
