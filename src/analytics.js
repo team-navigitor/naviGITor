@@ -4,29 +4,25 @@ import {BarChart} from 'react-easy-chart'
 //import rd3 from 'react-d3-library';
 //const BarChart = rd3.BarChart
 
+//adding comments
 export default class Analytics extends Component {
 
   getCollection(e) {
     e.preventDefault()
-    console.log('submit firing')
     const days = {}
     days.time = Date.now() - ($('#daysInput').val() * 86400000)
     days.room = sessionStorage.getItem('collection')
-    //console.log(days)
     $.ajax({
       data: days,
       method: 'POST',
       url: 'http://localhost:3000/days',
       success: function(data) {
-        console.log('ajax data: ', data)
         let users = {};
         data.forEach(el => {
-          console.log('el', el)
           let name = el.user.substring(1, el.user.lastIndexOf(' '))
           if (users[name]) users[name] ++;
           else users[name] = 1
         })
-        console.log('users: ', users)
         let chart = [];
         // for (let key in users) {
         //   console.log('key: ', key)
@@ -34,7 +30,6 @@ export default class Analytics extends Component {
         // }
         chart.push({x: "Colin", y: 12}, {x: "Sarah", y: 6}, {x: "Steve", y: 9}, {x: "Binh", y: 14})
         let jason = JSON.stringify(chart)
-        console.log('chart:  ', jason)
         this.props.setAppState({commitsPerUser: chart})
       }.bind(this)
     })
