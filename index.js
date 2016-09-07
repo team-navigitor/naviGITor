@@ -113,6 +113,7 @@ function openDirChoice() {
         .last()
         .map(x => gitParser.parseGit(x))
         .subscribe(x => mainWindow.webContents.send('parsedCommit', x));
+        // .subscribe(x => console.log(x));
       });
 
   // verify if user has selected a folder with a git directory
@@ -126,26 +127,34 @@ function openDirChoice() {
 };
 
 
+
 /******************************************************************************
         *** Cytoscape Node Modal ***
 *******************************************************************************/
+
+let win = '';
+let nodeClickData = '';
 ipcMain.on('nodeModal', function (event, nodeEvent) {
   const modalPath = (`file://${__dirname}/src/test.html`);
-
-  let win = new BrowserWindow({
+  nodeClickData = nodeEvent;
+  win = new BrowserWindow({
     width: 400,
     height: 320,
     maxWidth: 450,
     maxHeight: 350
   });
-  mainWindow.webContents.send('nodeModalWindow', nodeEvent);
 
   win.on('close', function () { win = null });
 
   win.loadURL(modalPath);
-  
   win.show();
+  win.webContents.send('nodeModalWindow');
+});
 
+
+ipcMain.on('nodeModalWindowReady', function(event){
+  console.log('hello from nnodeModalWindowReady' + event);
+  win.webContents.send('nodeModalWindow', nodeClickData);
 });
 
 
