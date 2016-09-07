@@ -26,10 +26,6 @@ export default class LocalGitTree extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			commits: []
-		}
-
 		this._dirChoice2 = this._dirChoice2.bind(this);
 		this._handleSubmit2 = this._handleSubmit2.bind(this);
 	}
@@ -57,7 +53,8 @@ export default class LocalGitTree extends Component {
 		ipcRenderer.on('parsedCommitAll', function(event, fullLog) {
 			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < fullLog.length; i++) {
-				if(fullLog[i].SHA){
+				// if node has merge event, add merge class to add css properties
+				if (fullLog[i].event === 'commit (merge)') {
 					localGitNodes.push({
 						data: {
 							author: fullLog[i]['author'],
@@ -65,28 +62,36 @@ export default class LocalGitTree extends Component {
 							event: fullLog[i]['event'],
 							commit: fullLog[i]['message']
 						},
-						grabbable: false
+						grabbable: false,
+						classes: 'merge'
+					});
+				}
+
+				// all other nodes are normal
+				else if (fullLog[i].SHA) {
+					localGitNodes.push({
+						data: {
+							author: fullLog[i]['author'],
+							id: fullLog[i]['SHA'],
+							event: fullLog[i]['event'],
+							commit: fullLog[i]['message']
+						},
+						grabbable: false,
 					});
 				}
 			}
 			for (var i = 0; i < fullLog.length; i++) {
 				// loop through git merge activity and connect current node with parent nodes
 				if (fullLog[i].event.trim() === 'merge') {
-					if(fullLog[i].parent[0] !== fullLog[i].parent[1]){
-					localGitEdges.push({
-						data: {
-							id: 'merge',
-							source: fullLog[i].parent[0],
-							target: fullLog[i].parent[1]
-						}
-					}).addClass('merge');
-				}
-					// {
-					// 	data: {
-					// 		source: fullLog[i].parent[1],
-					// 		target: fullLog[i].SHA
-					// 	}
-					// });
+					if(fullLog[i].parent[0] !== fullLog[i].parent[1]) {
+						localGitEdges.push({
+							data: {
+								source: fullLog[i].parent[0],
+								target: fullLog[i].parent[1]
+							},
+							classes: 'merge'
+						});
+					}
 				}
 
 				// loop through all other events and connect current node to parent node
@@ -183,16 +188,19 @@ export default class LocalGitTree extends Component {
 						'line-color': '#19C383',
 						'target-arrow-color': '#19C383'
 				  })
-				 .selector('node.merge')
+				.selector('node.merge')
 				 	.css({
-		 		    'width': 4,
 				    'border-style': 'double',
   					'border-color': 'red',
-  					'border-width': 7,
-		 				'curve-style': 'bezier',
-		 				'target-arrow-shape': 'triangle',
-		 				'line-color': 'red',
-		 				'target-arrow-color': 'red'
+  					'border-width': 7
+				 	})
+				.selector('edge.merge')
+				 	.css({
+				    'width': 4,
+						'curve-style': 'bezier',
+						'target-arrow-shape': 'triangle',
+						'line-color': 'red',
+						'target-arrow-color': 'red'
 				 	})
 				,
 				elements: {
@@ -202,28 +210,25 @@ export default class LocalGitTree extends Component {
 			});
 
 			cy.on('click', 'node', function(evt) {
-				console.log(evt.cyTarget._private.data);
-			  // const modalPath = (`file://${__dirname}/src/test.html`);
+				let nodeEventData = evt.cyTarget._private.data;
+				console.log(nodeEventData);
+				console.log(nodeEventData.event);
 
-				// let win = new BrowserWindow({
-				// 	width: 400,
-				// 	height: 320,
-				// 	maxWidth: 450,
-				// 	maxHeight: 350
-				// });
+				if (nodeEventData.event === 'commit (merge)') {
 
-			 //  win.on('close', function () { win = null });
+					console.log('passed conditional');
+				}
+			});
 
-			 //  win.loadURL(modalPath);
+			cy.on('click', 'edge', function(evt) {
+				let edgeEventData = evt.cyTarget._private.data;
+				console.log(edgeEventData);
+				console.log(edgeEventData.event);
 
-			  ipcRenderer.send('nodeModal', evt.cyTarget._private.data);
-			  // win.show();
+				if (edgeEventData.event === 'commit (merge)') {
 
-
-
-				// evt.cyTarget.connectedEdges().animate({
-			 //    style: { lineColor: 'red' }
-			 //  });
+					console.log('passed conditional');
+				}
 			});
 		};
 	}
