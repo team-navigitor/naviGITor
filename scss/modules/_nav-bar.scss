@@ -1,31 +1,36 @@
 // Nav Bar View
 .nav-bar-container {
-	background-color: $nav-bar-green;
+	font-family: 'Work Sans', sans-serif;
+	background:
+	linear-gradient(
+		rgba(32, 90, 66, 0.45),
+		rgba(32, 90, 66, 0.45)
+	),
+	url(http://wallpaperlab.net/wp-content/uploads/2015/09/Black-and-white-mountains-in-fog.jpg);
+
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center;
 	color: white;
 	float: left;
 	height: 100vh;
 	max-width: 13em;
 	position: relative;
 	width: 100%;
-}
 
-.nav-bar-user {
-  background: rgba(0,0,0,.1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   margin: 0 auto;
   padding: 20px 0;
   text-align: center;
 
 	p {
 		font-size: 18px;
-		margin-bottom: 7px;
+		margin-bottom: 10px;
 
 		&:last-child {
 			font-size: 14px;
-			margin-bottom: 0;
+			margin-bottom: 10px;
 		}
 	}
-}
 
 .nav-bar-avatar {
 	border-radius: 50%;
@@ -33,30 +38,33 @@
 	width: 60px;
 }
 
-.nav-bar-links {
-	padding: 0;
+.nav-bar-divider {
+  width:100%;
+  height:1px;
+  border-bottom: 1px solid rgba(255,255,255,.25);
+}
 
-	ul {
+ul {
 		list-style-type: none;
 		padding-left: 0;
 		text-align: left;
+		padding-top: 20px;
 	}
 
-	a {
-		color: $nav-bar-text;
+a {
+		color: white;
+		text-transform: uppercase;
 		display: block;
-		font-size: 13px;
-		font-weight: bold;
-		line-height: 13px;
+		font-size: .9em;
 		padding: 12px 20px;
 		width: 100%;
 
 		&:hover {
-			background: rgba(0,0,0,.1);
-			color: $white;
+			background: rgba(255,255,255,.3);
+			color: white;
 			text-decoration: none;
 		}
-		
+
 		&:visited {
 			color: $white;
 			text-decoration: none;
