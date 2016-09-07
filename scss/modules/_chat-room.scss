@@ -1,0 +1,31 @@
+// Chat Room View
+.chat-room {
+	// float: left;
+	//temporary workaround
+	height: 100vh;
+	position: relative;
+}
+
+.chat-messages {
+	margin: 0;
+	padding: 10px 10px 46px;
+	height: 100%;
+	list-style-type: none;
+	width: 100%;
+}
+
+.chat-message {
+	overflow: hidden;
+}
+
+.chat-field {
+	bottom: 0;
+	padding: 10px;
+	position: absolute;
+	z-index: 1000;
+	width: 100%;
+
+	input {
+		width: 100%;
+	}
+}

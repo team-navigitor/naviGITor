@@ -10,13 +10,13 @@ import io from 'socket.io-client';
 cydagre( cytoscape, dagre );
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
-let socket = io('http://navigitorsite.herokuapp.com');
+let socket = io('http://localhost:3000');
 let socketRoom = null;
 
 /* listens for an git commit event from main.js webContent.send
  then sends commit string to the server via socket.
  Also enters socketRoom after filling out form and making AJAX request */
-ipcRenderer.on('parsedCommit', function(event, arg){
+ipcRenderer.on('parsedCommitAll', function(event, arg){
 	if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 });
 
@@ -52,40 +52,45 @@ export default class LocalGitTree extends Component {
 		let localGitNodes = [];
 		let localGitEdges = [];
 
-		ipcRenderer.on('parsedCommitAll', function(event, data) {
-			console.log(data);
+		ipcRenderer.on('parsedCommitAll', function(event, fullLog) {
+			console.log(fullLog);
 			// loop through all local git activity, and store as nodes
-			for (var i = 0; i < data.length; i++) {
-				localGitNodes.push({
-					data: {
-						id: data[i].SHA,
-						commit: data[i].message
-					}
-				});
-			}
-
-			for (var i = 0; i < data.length; i++) {
-				// loop through git merge activity and connect current node with parent nodes
-				if (data[i]['event'] === 'merge' && data[i]['event'] !== 'checkout') {
-					localGitEdges.push({
+			for (var i = 0; i < fullLog.length; i++) {
+				if(fullLog[i].SHA){
+					localGitNodes.push({
 						data: {
-							source: data[i].parent[0],
-							target: data[i].SHA
-						}
-					},{
-						data: {
-							source: data[i].parent[1],
-							target: data[i].SHA
+							id: fullLog[i]['SHA'],
+							commit: fullLog[i]['message']
 						}
 					});
 				}
-
-				// loop through all other events and connect current node to parent node
-				if (data[i]['event'] !== 'checkout') {
+			}
+			for (var i = 0; i < fullLog.length; i++) {
+				// loop through git merge activity and connect current node with parent nodes
+				if (fullLog[i].event.trim() === 'merge') {
+					if(fullLog[i].parent[0] !== fullLog[i].parent[1]){
 					localGitEdges.push({
 						data: {
-							source: data[i].parent[0],
-							target: data[i].SHA
+							source: fullLog[i].parent[0],
+							target: fullLog[i].parent[1]
+						}
+					});
+				}
+					// {
+					// 	data: {
+					// 		source: fullLog[i].parent[1],
+					// 		target: fullLog[i].SHA
+					// 	}
+					// });
+				}
+
+				// loop through all other events and connect current node to parent node
+				// else if (fullLog[i]['event'] !== 'checkout') {
+				else if(!fullLog[i].event.trim() === 'merge' || !/^checkout/.test(fullLog[i]['event'])) {
+					localGitEdges.push({
+						data: {
+							source: fullLog[i].parent[0],
+							target: fullLog[i].SHA
 						}
 					});
 				}
@@ -94,6 +99,7 @@ export default class LocalGitTree extends Component {
 			/* listens for an git commit event from main.js webContent.send
 			 then sends commit string to the server via socket */
 			ipcRenderer.on('parsedCommit', function(event, localGit){
+				console.log(localGit);
 				cy.nodes().removeClass('new');
 				cy.edges().removeClass('new');
 
@@ -128,7 +134,7 @@ export default class LocalGitTree extends Component {
 
 		function dagTree() {
 			var cy = window.cy = cytoscape({
-				container: document.getElementById('cy'),
+				container: document.getElementById('git-tree'),
 				boxSelectionEnabled: false,
 				autounselectify: true,
 				layout: {
@@ -184,7 +190,7 @@ export default class LocalGitTree extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="git-tree-container">
 				<div className="git-tree-header">
 					<form onSubmit={this._handleSubmit2}>
 					  <input id="login-org2" placeholder="Github Org" type="text" />
@@ -193,8 +199,8 @@ export default class LocalGitTree extends Component {
 					</form>
 					<button className="folder-button2" onClick = {this._dirChoice2}> Select Project Folder </button>
 				</div>
-				<div className="cytocontainer">
-					<div id="cy"></div>
+				<div className="git-tree-body">
+					<div id="git-tree"></div>
 				</div>
 			</div>
 		);

@@ -1,6 +1,14 @@
-//This is organized by general areas (ie body) and then alphabetically by component
+// Variables
+@import 'variables/colors';
 
-// **** general *****
+// Modules
+@import 'modules/login';
+@import 'modules/nav-bar';
+@import 'modules/git-tree';
+@import 'modules/terminal';
+@import 'modules/chat-room';
+
+// General Styles
 body {
 	position: relative;
   color: black;
@@ -10,66 +18,9 @@ body {
 #app {
   height: 100vh;
 }
-
-// ***** gitTree.js *******
-.gitTree-container {
-	width: 100%;
-	height: 100vh;
-	color: black;
-}
-
-// ***** login.js *****
-.login-container {
-	// Center div horizontally and vertically
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	max-width: 300px;
-	text-align: center;
-	color: gray;
-}
-.login-logo {
-	width: 80%;
-	margin-bottom: 30px;
-}
-input {
-	width: 100%;
-	border: none;
-	border-bottom: 2px solid gray;
-	margin-bottom: 20px;
-	letter-spacing: 3px;
-	color: gray;
-	height: 30px;
-	font-size: 12px;
-}
-input:focus {
-	outline:none;
-}
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: gray;
-}
-.login-form {
-	margin-top: 30px;
-}
-.login-button {
-  background-color: white;
-	border: 2px solid gray;
-	margin-bottom: 20px;
-	margin-top: 20px;
-	width: 100%;
-	height: 40px;
-	padding-top: 9px;
-	letter-spacing: 3px;
-	font-size: 12px;
-}
-.signup-link {
-	color: green;
-}
-
+// Will need to clean up and move to _login.scss file
 // ****** teamLogin.js *****
 #teamLogin-container {
-	text-align: center;
 	.team-h5 {
 		margin-bottom: 25px;
 	}
@@ -79,67 +30,13 @@ input:focus {
 	}
 }
 
-
-// ****** Main.js *****
-.side-nav-bar-container {
-	max-width: 13em;
-	width: 100%;
-	height: 100vh;
-	background-color: #424949;
-	color: white;
-	float: left;
-	position: relative;
-}
+// Main.js View
 .view-container {
 	margin-left: 13em;
 	height: 100%;
+	// height: 100vh;
+	// position: relative;
 }
-.nav-image {
-	background:linear-gradient(rgba(66, 73, 73, 0.7), rgba(66, 73, 73, 0.7)), url(https://t4.ftcdn.net/jpg/01/16/66/99/240_F_116669961_zNY1cxr3rupc1CeazvIK6hUyvS9joZrd.jpg);
-	background-size: 120% auto;
-	background-position: right-top;
-	height: 10.2em;
-	text-align: center;
-}
-#profile-pic {
-	height: 60px;
-	border-radius: 50%;
-	margin-top: 20px;
-}
-ul {
-	list-style-type: none;
-	padding: 1em;
-	margin-top: .9em;
-	text-align: left;
-}
-li {
-	font-size: 1.1em;
-	width: 100%;
-	color: darkGray;
-	margin:0 0 1em 1em;
-	padding-left: 1em;
-	font-weight: bold;
-  &:hover {
-  	color: white;
-  }
-}
-.list {
-	color: darkGray;
-	font-size: .8em;
-	&:hover {
-		color: white;
-		text-decoration: none;
-	}
-}
-.nav-logo {
-	height: 4em;
-	margin-left: auto;
-	margin-right: auto;
-	display: block;
-	position: absolute;
-	bottom: 1em;
-}
-// ***** end main.js *****
 
 .landing-logo {
 	width: 25em;
@@ -147,34 +44,29 @@ li {
 	margin-right: auto;
 	display: block;
 	opacity: .5;
-	margin-top: 5em;
+	padding-top: 5em;
 }
 
-// ***** terminal *******
-.terminal-container {
-	height: 100vh;
+// Temporary workaround - will clean up later
+.login-submit2 {
+	background: #2874A6;
+	color: $white !important;
+  border: none;
+  color: $black;
+  transition: 0.3s all ease-in-out;
+
+  &:hover {
+  	background: $login-gray;
+  }
+
+  &:active {
+  	outline: none;
+  }
 }
 
-textarea {
-	background: transparent;
-	border: 0;
-	outline: 0;
-}
-
-#cy {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: 999;
-}
-
-.cytocontainer {
-	position: relative;
-	height: 800px;
-}
-
-.qtip {
-	color: #000;
-}
+// Not sure if this is still needed
+// .folder-button {
+// 	width: 100%;
+// 	color: #2874A6;
+// 	text-align: left;
+// }

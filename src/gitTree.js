@@ -7,7 +7,7 @@ import { ipcRenderer } from 'electron';
 import io from 'socket.io-client';
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
-let socket = io('http://navigitorsite.herokuapp.com');
+let socket = io('http://localhost:3000');
 let socketRoom = null;
 
 
@@ -80,7 +80,7 @@ export default class GitTree extends Component {
 		*   incomingCommit will listen to ANY CHANGES and REFRESH the entire page
 		*
 		*   TODO:
-		*   1. If tree is visible, load tree once and not load any more data 
+		*   1. If tree is visible, load tree once and not load any more data
 		*   2. Then add any incoming nodes with cy.add();
 		**/
 
@@ -157,7 +157,7 @@ export default class GitTree extends Component {
 
 		function dagTree() {
 			var cy = window.cy = cytoscape({
-				container: document.getElementById('cy'),
+				container: document.getElementById('git-tree'),
 				boxSelectionEnabled: false,
 				autounselectify: true,
 				layout: {
@@ -196,7 +196,7 @@ export default class GitTree extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="git-tree-container">
 				<div className="git-tree-header">
 					<form onSubmit={this._handleSubmit2}>
 					  <input id="login-org2" placeholder="Github Org" type="text" />
@@ -205,10 +205,8 @@ export default class GitTree extends Component {
 					</form>
 					<button className="folder-button2" onClick = {this._dirChoice2}> Select Project Folder </button>
 				</div>
-				<div className="cytocontainer">
-				  {/*<p>This is the Org Name: {this.props.getAppState.orgName}</p>
-					<p>This is the Repo Name: {this.props.getAppState.repoName}</p>*/}
-					<div id="cy"></div>
+				<div className="git-tree-body">
+					<div id="git-tree"></div>
 				</div>
 			</div>
 		);
