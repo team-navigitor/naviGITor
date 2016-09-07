@@ -13,12 +13,10 @@ export default class Main extends Component {
 
       <div id='main-container'>
         <div className='nav-bar-container'>
-          <div className='nav-bar-user'>
             <img className='nav-bar-avatar' src={this.props.getAppState.profilePic}></img>
             <p>{this.props.getAppState.username}</p>
             <p>{this.props.getAppState.repoName}</p>
-          </div>
-          <div className='nav-bar-links'>
+            <div className='nav-bar'></div>
             <ul>
               <li><Link to='/Main/Profile'><i className="fa fa-user" aria-hidden="true"></i>My Profile</Link></li>
               <li><Link to='/Main/GitTree'><i className="fa fa-tree" aria-hidden="true"></i>Global Git Tree</Link></li>
@@ -29,7 +27,6 @@ export default class Main extends Component {
               <li><Link to='/'><i className="fa fa-sign-out" aria-hidden="true"></i>Log Out</Link></li>
             </ul>
           </div>
-        </div>
 
 	      <div className='view-container'>{this.props.children && React.cloneElement(this.props.children, { setAppState: this.props.setAppState, getAppState: this.props.getAppState } )}</div>
       </div>
