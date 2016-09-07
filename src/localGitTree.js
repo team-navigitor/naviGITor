@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import $ from 'jquery';
-import cydagre from 'cytoscape-dagre';
+// import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
 import io from 'socket.io-client';
+import dagTree from './createLocalGitTree';
+
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const path = require('path');
 
 // register extension
-cydagre( cytoscape, dagre );
+// cydagre( cytoscape, dagre );
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
 let socket = io('http://localhost:3000');
@@ -88,10 +90,17 @@ export default class LocalGitTree extends Component {
 							data: {
 								source: fullLog[i].parent[0],
 								target: fullLog[i].parent[1]
-							},
-							classes: 'merge'
+							}
 						});
 					}
+				} else if (fullLog[i].event === 'commit (merge)') {
+					localGitEdges.push({
+						data: {
+							source: fullLog[i].parent[0],
+							target: fullLog[i].SHA
+						},
+						classes: 'merge'
+					});
 				}
 
 				// loop through all other events and connect current node to parent node
@@ -137,100 +146,8 @@ export default class LocalGitTree extends Component {
 				});
 			});
 
-			dagTree();
+			dagTree(localGitNodes, localGitEdges);
 		});
-
-
-		function dagTree() {
-			var cy = window.cy = cytoscape({
-				container: document.getElementById('git-tree'),
-				boxSelectionEnabled: false,
-				autounselectify: true,
-				layout: {
-					name: 'dagre'
-				},
-				style: cytoscape.stylesheet()
-				.selector('node')
-				  .css({
-				    'content': 'data(commit)',
-				    'width': 65,
-				    'height': 65,
-				    'text-opacity': 0.5,
-				    'text-valign': 'center',
-				    'text-halign': 'right',
-				    'background-image': 'https://github.com/binhxn.png',
-				    'border-width': 3,
-				    'background-fit': 'cover',
-				    'border-color': '#ccc'
-				  })
-				.selector('edge')
-				  .css({
-				    'width': 4,
-						'curve-style': 'bezier',
-						'target-arrow-shape': 'triangle',
-						'line-color': '#ccc',
-						'target-arrow-color': '#ccc'
-				  })
-				.selector('node.new')
-				  .css({
-				    'border-style': 'double',
-  					'border-color': '#19C383',
-  					'border-width': 7,
-  					'line-color': '#19C383',
-  					'target-arrow-color': '#19C383',
-  					'color': '#19C383'
-				  })
-				.selector('edge.new')
-				  .css({
-				    'width': 4,
-						'curve-style': 'bezier',
-						'target-arrow-shape': 'triangle',
-						'line-color': '#19C383',
-						'target-arrow-color': '#19C383'
-				  })
-				.selector('node.merge')
-				 	.css({
-				    'border-style': 'double',
-  					'border-color': 'red',
-  					'border-width': 7
-				 	})
-				.selector('edge.merge')
-				 	.css({
-				    'width': 4,
-						'curve-style': 'bezier',
-						'target-arrow-shape': 'triangle',
-						'line-color': 'red',
-						'target-arrow-color': 'red'
-				 	})
-				,
-				elements: {
-					nodes: localGitNodes,
-					edges: localGitEdges
-				}
-			});
-
-			cy.on('click', 'node', function(evt) {
-				let nodeEventData = evt.cyTarget._private.data;
-				console.log(nodeEventData);
-				console.log(nodeEventData.event);
-
-				if (nodeEventData.event === 'commit (merge)') {
-
-					console.log('passed conditional');
-				}
-			});
-
-			cy.on('click', 'edge', function(evt) {
-				let edgeEventData = evt.cyTarget._private.data;
-				console.log(edgeEventData);
-				console.log(edgeEventData.event);
-
-				if (edgeEventData.event === 'commit (merge)') {
-
-					console.log('passed conditional');
-				}
-			});
-		};
 	}
 
 	render() {
