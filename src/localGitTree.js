@@ -40,17 +40,18 @@ export default class LocalGitTree extends Component {
 	_handleSubmit2(e) {
 		e.preventDefault();
 
-		let orgName = document.getElementById('login-org2').value;
-		let repoName = document.getElementById('login-repo2').value;
+		let orgName = document.getElementById('login-org2').value,
+				repoName = document.getElementById('login-repo2').value;
 
-		if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
+		if (socketRoom) socket.emit("unsubscribe", { room: socketRoom });
 		socket.emit("subscribe", { room: `${orgName}.${repoName}live` });
 		socketRoom = `${orgName}.${repoName}live`;
 	}
 
 	componentDidMount() {
-		let localGitNodes = [];
-		let localGitEdges = [];
+		let gitTreeId = 'local-git-tree',
+				localGitNodes = [],
+				localGitEdges = [];
 
 		ipcRenderer.on('parsedCommitAll', function(event, fullLog) {
 			// loop through all local git activity, and store as nodes
@@ -93,7 +94,9 @@ export default class LocalGitTree extends Component {
 							}
 						});
 					}
-				} else if (fullLog[i].event === 'commit (merge)') {
+				}
+				// if committed a fixed merge conflict, add merge class to edges
+				else if (fullLog[i].event === 'commit (merge)') {
 					localGitEdges.push({
 						data: {
 							source: fullLog[i].parent[0],
@@ -146,7 +149,7 @@ export default class LocalGitTree extends Component {
 				});
 			});
 
-			dagTree(localGitNodes, localGitEdges);
+			dagTree(gitTreeId, localGitNodes, localGitEdges);
 		});
 	}
 
@@ -162,7 +165,7 @@ export default class LocalGitTree extends Component {
 					<button className="folder-button2" onClick = {this._dirChoice2}> Select Project Folder </button>
 				</div>
 				<div className="git-tree-body">
-					<div id="git-tree"></div>
+					<div id="local-git-tree"></div>
 				</div>
 			</div>
 		);

@@ -157,7 +157,7 @@ export default class GitTree extends Component {
 
 		function dagTree() {
 			var cy = window.cy = cytoscape({
-				container: document.getElementById('git-tree'),
+				container: document.getElementById('global-git-tree'),
 				boxSelectionEnabled: false,
 				autounselectify: true,
 				layout: {
@@ -189,7 +189,7 @@ export default class GitTree extends Component {
 				elements: {
 					nodes: incomingGitNodes,
 					edges: incomingGitEdges
-				},
+				}
 			});
 		};
 	}
@@ -206,7 +206,7 @@ export default class GitTree extends Component {
 					<button className="folder-button2" onClick = {this._dirChoice2}> Select Project Folder </button>
 				</div>
 				<div className="git-tree-body">
-					<div id="git-tree"></div>
+					<div id="global-git-tree"></div>
 				</div>
 			</div>
 		);

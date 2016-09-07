@@ -1,8 +1,8 @@
 import cytoscape from 'cytoscape';
 
-export default function dagTree(gitNodes, gitEdges) {
+export default function dagTree(gitTreeId, gitNodes, gitEdges) {
 	var cy = window.cy = cytoscape({
-		container: document.getElementById('git-tree'),
+		container: document.getElementById(gitTreeId),
 		boxSelectionEnabled: false,
 		autounselectify: true,
 		layout: {
