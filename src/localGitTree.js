@@ -5,6 +5,8 @@ import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
 import io from 'socket.io-client';
+const BrowserWindow = require('electron').remote.BrowserWindow;
+const path = require('path');
 
 // register extension
 cydagre( cytoscape, dagre );
@@ -53,15 +55,17 @@ export default class LocalGitTree extends Component {
 		let localGitEdges = [];
 
 		ipcRenderer.on('parsedCommitAll', function(event, fullLog) {
-			console.log(fullLog);
 			// loop through all local git activity, and store as nodes
 			for (var i = 0; i < fullLog.length; i++) {
 				if(fullLog[i].SHA){
 					localGitNodes.push({
 						data: {
+							author: fullLog[i]['author'],
 							id: fullLog[i]['SHA'],
+							event: fullLog[i]['event'],
 							commit: fullLog[i]['message']
-						}
+						},
+						grabbable: false
 					});
 				}
 			}
@@ -71,10 +75,11 @@ export default class LocalGitTree extends Component {
 					if(fullLog[i].parent[0] !== fullLog[i].parent[1]){
 					localGitEdges.push({
 						data: {
+							id: 'merge',
 							source: fullLog[i].parent[0],
 							target: fullLog[i].parent[1]
 						}
-					});
+					}).addClass('merge');
 				}
 					// {
 					// 	data: {
@@ -99,7 +104,6 @@ export default class LocalGitTree extends Component {
 			/* listens for an git commit event from main.js webContent.send
 			 then sends commit string to the server via socket */
 			ipcRenderer.on('parsedCommit', function(event, localGit){
-				console.log(localGit);
 				cy.nodes().removeClass('new');
 				cy.edges().removeClass('new');
 
@@ -179,11 +183,47 @@ export default class LocalGitTree extends Component {
 						'line-color': '#19C383',
 						'target-arrow-color': '#19C383'
 				  })
+				 .selector('node.merge')
+				 	.css({
+		 		    'width': 4,
+				    'border-style': 'double',
+  					'border-color': 'red',
+  					'border-width': 7,
+		 				'curve-style': 'bezier',
+		 				'target-arrow-shape': 'triangle',
+		 				'line-color': 'red',
+		 				'target-arrow-color': 'red'
+				 	})
 				,
 				elements: {
 					nodes: localGitNodes,
 					edges: localGitEdges
 				}
+			});
+
+			cy.on('click', 'node', function(evt) {
+				console.log(evt.cyTarget._private.data);
+			  // const modalPath = (`file://${__dirname}/src/test.html`);
+
+				// let win = new BrowserWindow({
+				// 	width: 400,
+				// 	height: 320,
+				// 	maxWidth: 450,
+				// 	maxHeight: 350
+				// });
+
+			 //  win.on('close', function () { win = null });
+
+			 //  win.loadURL(modalPath);
+
+			  ipcRenderer.send('nodeModal', evt.cyTarget._private.data);
+			  // win.show();
+
+
+
+				// evt.cyTarget.connectedEdges().animate({
+			 //    style: { lineColor: 'red' }
+			 //  });
 			});
 		};
 	}

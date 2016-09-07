@@ -1,6 +1,6 @@
 const electron = require('electron');
 const child = require('child_process');
-const {ipcMain, dialog} = require('electron');
+const { ipcMain, dialog } = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
 const gitParser = require('./src/gitParser/gitparser.js');
@@ -123,6 +123,33 @@ function openDirChoice() {
     function ()  { console.log('onCompleted'); });
     }
 };
+
+
+/******************************************************************************
+        *** Cytoscape Node Modal ***
+*******************************************************************************/
+ipcMain.on('nodeModal', function (event, nodeEvent) {
+  const modalPath = (`file://${__dirname}/src/test.html`);
+
+  let win = new BrowserWindow({
+    width: 400,
+    height: 320,
+    maxWidth: 450,
+    maxHeight: 350
+  });
+  mainWindow.webContents.send('nodeModalWindow', nodeEvent);
+
+  win.on('close', function () { win = null });
+
+  win.loadURL(modalPath);
+  
+  win.show();
+
+});
+
+
+
+
 /******************************************************************************
         *** Terminal Emulation ***
 *******************************************************************************/
