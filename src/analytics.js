@@ -16,6 +16,15 @@ export default class Analytics extends Component {
       url: 'http://localhost:3000/days',
       success: function(data) {
         console.log('ajax data: ', data)
+        let users = {};
+        data.forEach(el => {
+          if (users[el.name]) users[el.name] ++;
+          else users[el.name] = 0
+        })
+        let chart = {data: []};
+        for (let key in users) {
+          chart.data.push({x: key, y: users[key]})
+        }
       }
     })
   }
