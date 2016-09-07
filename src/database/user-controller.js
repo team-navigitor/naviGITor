@@ -47,7 +47,7 @@ UserController.verify = (req, callback) => {
         //if user not found
         if (!(person)) {
             verUser = false;
-            console.log('no person found')
+            console.log('no person found ')
             callback(verUser)
         }
         else {
