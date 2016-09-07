@@ -2,7 +2,7 @@ const child = require('child_process')
 const gitFork = child.fork('./git-fork.js');
 const GitParser = require('../GitParser/gitparser.js');
 const $ = require('jquery');
-
+const rd3 = require('react-d3-library')
 let Commits = {}
 
 gitDiff.pastDays = (days) => {
@@ -20,9 +20,6 @@ gitDiff.pastDays = (days) => {
         })
     }))
     return users;
-    /*
-    need to be able to go into log and find SHA, then 
-    */
 }
 
 gitFork.send('git diff 786c4002028ecda77283b62e677428021af0791f^!')
