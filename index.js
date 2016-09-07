@@ -139,7 +139,9 @@ ipcMain.on('nodeModal', function (event, nodeEvent) {
   nodeClickData = nodeEvent;
   win = new BrowserWindow({
     width: 450,
-    height: 200
+    height: 200,
+    maxWidth: 470,
+    maxHeight: 220
   });
 
   win.on('close', function () { win = null });
