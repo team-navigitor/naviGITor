@@ -196,9 +196,6 @@ export default class GitTree extends Component {
 	}
 
 	render() {
-
-		console.log(this.getAppState.localData)
-
 		return (
 			<div className="git-tree-container">
 				<div className="git-tree-header">
