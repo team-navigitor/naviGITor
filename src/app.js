@@ -9,7 +9,7 @@ import io from 'socket.io-client';
 import { ipcRenderer } from 'electron';
 import $ from 'jquery';
 
-let socket = io('http://localhost:3000');
+let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
 import Routes from './routes';
 
@@ -74,10 +74,9 @@ export default class App extends Component {
 	}
 
 	render() {
-		console.log('this.state.localdata ', this.state.localData)
     return (
 			<div>
-			{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
+				{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
 			</div>
     )
 	}

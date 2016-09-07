@@ -138,22 +138,20 @@ ipcMain.on('nodeModal', function (event, nodeEvent) {
   const modalPath = (`file://${__dirname}/src/test.html`);
   nodeClickData = nodeEvent;
   win = new BrowserWindow({
-    width: 400,
-    height: 320,
-    maxWidth: 450,
-    maxHeight: 350
+    width: 450,
+    height: 200
   });
 
   win.on('close', function () { win = null });
 
   win.loadURL(modalPath);
   win.show();
-  win.webContents.send('nodeModalWindow');
+  win.webContents.send('nodeModalWindow', nodeClickData);
 });
 
 
 ipcMain.on('nodeModalWindowReady', function(event){
-  console.log('hello from nnodeModalWindowReady' + event);
+  console.log('hello from nodeModalWindowReady' + event);
   win.webContents.send('nodeModalWindow', nodeClickData);
 });
 

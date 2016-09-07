@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router';
-import { ipcRenderer } from 'electron';
-
 import { hashHistory } from 'react-router';
+import { ipcRenderer } from 'electron';
 import Main from './main';
 
 
@@ -44,8 +43,6 @@ export default class TeamLogin extends Component {
             <input id="login-repo" placeholder="REPO NAME" type="text" />
             <button className="login-button" type="submit">SUBMIT</button>
           </form>
-
-          <Link to='/Main' className='signup-link'>Main Page</Link>
         </div>
     )
   }

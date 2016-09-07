@@ -20,7 +20,7 @@ export default class Signup extends Component {
         github: document.getElementById('githubUsername').value
       }
       $.ajax({
-        url: 'http://localhost:3000/signup',
+        url: 'http://navigitorsite.herokuapp.com/signup',
         method: 'POST',
         data: newUser,
         success: console.log('success!')

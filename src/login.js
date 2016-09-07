@@ -21,10 +21,18 @@ export default class Login extends Component {
 
     $.ajax({
       method: 'POST',
-      url: 'http://localhost:3000/verify',
+      url: 'http://navigitorsite.herokuapp.com/verify',
       data: user,
-      success: function(x) {
-        if (x) hashHistory.push('/TeamLogin')
+      success: function(data) {
+        if (data.github) {
+          console.log('github: ' + data.github)
+          this.props.setAppState({github: 'https://avatars.githubusercontent.com/'+data.github})
+          hashHistory.push('/TeamLogin');
+        }
+        else if (data) {
+          console.log('no github ');
+          hashHistory.push('/TeamLogin');
+        }
         else hashHistory.push('/Signup')
       }
     })

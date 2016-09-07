@@ -1,13 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>TEST</title>
+  <title>Node Details</title>
 </head>
+<style>
+  body {
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  }
+</style>
 <body>
-	<div id="test">
-	 TEST WINDOW
-	 <h1>HELLLLOOOOO</h1>
-	</div>
+  <!-- <div id="nodeWindow">
+    <p>ID: <span class="node-id"></span><p>
+    <p>Commit: <span class="node-commit"></span><p>
+    <p>Author: <span class="node-author"></span><p>
+    <p>Event: <span class="node-event"></span><p>
+  </div> -->
+
+  <table id="nodeWindow">
+    <tr>
+      <td>ID:</td>
+      <td class="node-id"></td>
+    </tr>
+    <tr>
+      <td>Parent:</td>
+      <td class="node-parent"></td>
+    </tr>
+    <tr>
+      <td>Commit:</td>
+      <td class="node-commit"></td>
+    </tr>
+    <tr>
+      <td>Author:</td>
+      <td class="node-author"></td>
+    </tr>
+    <tr>
+      <td>Event:</td>
+      <td class="node-event"></td>
+    </tr>
+  </table>
 </body>
 
 <script type="text/javascript" src="./nodeWindow.js"></script>
