@@ -16,7 +16,7 @@ let UserController = {};
 UserController.add = (req, res, next) => {
     //initialize new instance of user
     let NewUser = new User({
-        user: req.body.name,
+        user: req.body.username,
         email: req.body.email,
         password: req.body.password,
         team: req.body.team,
@@ -26,10 +26,11 @@ UserController.add = (req, res, next) => {
     NewUser.save((err, req) => {
         if (err) {
             console.error('err: ', err)
-            // res.send('error!!!!')
         }
+
     });
 }
+
 
 //create method to verify user
 UserController.verify = (req, callback) => {
