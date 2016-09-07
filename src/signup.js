@@ -33,15 +33,17 @@ export default class Signup extends Component {
       return (
         <div className="login-container">
           <img className="login-logo" src="./images/darknaviGitorLogo_1.png" />
-          <h2>SIGN UP</h2>
-          <form className="reg-form" onSubmit={this.regClicked}>
-            <input id="userNameInput" type="text" className="form-control" placeholder="Please enter username" required />
-            <input id="githubUsername" type="text" className="form-control" placeholder="Please enter your github username"/>
-            <input id="email" type="email" className="form-control" placeholder="Please enter email"/>
-            <input id="password1" type="password" className="form-control" placeholder="Please enter Password" required />
-  					<input id="password2" type="password" className="form-control" placeholder="please verify password"/>
-            <button id="signUpButton" className="btn btn-primary">Sign Up</button>
+          <form className="login-form" onSubmit={this.regClicked}>
+            <input id="userNameInput" type="text" placeholder="Please enter username" required />
+            <input id="githubUsername" type="text" placeholder="Please enter your github username"/>
+            <input id="email" type="email" placeholder="Please enter email"/>
+            <input id="password1" type="password" placeholder="Please enter Password" required />
+  					<input id="password2" type="password" placeholder="please verify password"/>
+            <button id="signUpButton" className="login-button">Sign Up</button>
           </form>
+          <div id='signup-button'>
+            <Link to='/' className='signup-link'>Back to Login Page</Link>
+          </div>
       </div>
       )
     }

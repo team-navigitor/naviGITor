@@ -55,11 +55,7 @@ export default class Login extends Component {
         <div id='signup-button'>
           <p>Don't have an account? <Link to='Signup' className='signup-link'>Sign Up</Link></p>
         </div>
-        <Link to='TeamLogin' className='signup-link'>Team Login Page</Link>
     </div>
     )
   }
-
-
-
 }
