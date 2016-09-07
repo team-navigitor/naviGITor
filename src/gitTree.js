@@ -38,10 +38,6 @@ export default class GitTree extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			commits: []
-		}
-
 		this._dirChoice2 = this._dirChoice2.bind(this);
 		this._handleSubmit2 = this._handleSubmit2.bind(this);
 	}
