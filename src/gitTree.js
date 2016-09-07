@@ -187,6 +187,7 @@ export default class GitTree extends Component {
 					edges: incomingGitEdges
 				}
 			});
+			cy.on('click', function() {console.log('clicked')})
 		};
 	}
 

@@ -10,7 +10,9 @@ import Main from './main';
 export default class TeamLogin extends Component {
   constructor(props) {
 		super(props);
+
 	  this.handleData = this.handleData.bind(this);
+    this.dirChoice = this.dirChoice.bind(this);
 	}
 
   dirChoice() {
@@ -23,6 +25,7 @@ export default class TeamLogin extends Component {
     var data = {};
     data['orgName'] = document.getElementById('login-org').value;
     data['repoName'] = document.getElementById('login-repo').value;
+    sessionStorage.setItem('collection', data.orgName + data.repoName)
     console.log("data from child "+JSON.stringify(data));
     this.props.setAppState(data);
     hashHistory.push('/Main');
@@ -30,7 +33,6 @@ export default class TeamLogin extends Component {
 
   render() {
     return (
-
         <div className='login-container' id='teamLogin-container'>
         <h3>PROJECT INFORMATION</h3>
           <h5 >Select the local file where your project is located:</h5>
@@ -42,6 +44,8 @@ export default class TeamLogin extends Component {
             <input id="login-repo" placeholder="REPO NAME" type="text" />
             <button className="login-button" type="submit">SUBMIT</button>
           </form>
+
+          <Link to='/Main' className='signup-link'>Main Page</Link>
         </div>
     )
   }

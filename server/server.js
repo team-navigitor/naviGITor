@@ -111,7 +111,10 @@ app.post('/signup', (req, res) => {
 })
 
 app.post('/verify', (req, res) => {
-UserController.verify(req, function(){})
+  UserController.verify(req, function(data) {
+    console.log('data from server: ', data)
+    res.send(data)
+  })
   //console.log(req)
 })
 
@@ -121,7 +124,9 @@ UserController.verify(req, function(){})
 
 app.get('/days', (req, res) => {
   EventController.getByTime(req, function() {
-	})
+    res.send(data)
+  })
+
 })
 
 module.exports = server
