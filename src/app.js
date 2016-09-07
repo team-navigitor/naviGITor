@@ -9,7 +9,7 @@ import io from 'socket.io-client';
 import { ipcRenderer } from 'electron';
 import $ from 'jquery';
 
-let socket = io('http://localhost:3000');
+let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
 import Routes from './routes';
 
