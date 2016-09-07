@@ -5,6 +5,7 @@ import App from './app';
 import Main from './main';
 import Login from './login';
 import Signup from './signup.js'
+
 import GitTree from './gitTree';
 import LocalGitTree from './localGitTree';
 import TerminalView from './terminal/terminal.js'
@@ -16,6 +17,9 @@ import Chat from './chat';
 
 
 export default class Routes extends Component {
+  constructor(props) {
+    super(props);
+  }
 
   render() {
     return (

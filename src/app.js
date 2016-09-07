@@ -7,11 +7,12 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import { ipcRenderer } from 'electron';
+import $ from 'jquery';
 
 let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
 import Routes from './routes';
-// require('../Styles/styles.scss');
+
 
 export default class App extends Component {
 	constructor(props) {
@@ -22,8 +23,11 @@ export default class App extends Component {
 			newestGitEvent: '',
 			profilePic: 'https://avatars1.githubusercontent.com/u/8155387?v=3&s=400',
 			username: '',
+			repoData: '',
+
 		}
 		this.setAppState = this.setAppState.bind(this);
+		// this.setState = this.setState.bind(this);
 	}
 
 	componentDidMount() {
@@ -38,6 +42,18 @@ export default class App extends Component {
 			console.log('broadcast loud and clear: ' + data);
 			// this.setState.bind(this)(data);
 		});
+
+		ipcRenderer.on('parsedCommitAll', function(event, arg){
+			let data = {};
+			data['username'] = arg;
+			console.log('arg' + arg);
+			// console.log('setappstate' + this.props.setAppState);
+			// this.setState.bind(this)(data);
+			this.setAppState.bind(this)(data);
+		 });
+
+		 //call to database, fill in state
+		 //ajax call to fill in profile pic
 	}
 
 	// Socket handling for app. Must be global to current page for ipcRenderer + React
@@ -49,7 +65,6 @@ export default class App extends Component {
 
 	// need to test this func being called from other components
 	setAppState(obj){
-		console.log('this state '+JSON.stringify(this.state))
 		this.setState.bind(this)(obj);
 		console.log('data coming in ' +JSON.stringify(obj));
 		if (obj['orgName']) {

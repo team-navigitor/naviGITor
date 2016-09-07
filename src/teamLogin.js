@@ -10,7 +10,9 @@ import Main from './main';
 export default class TeamLogin extends Component {
   constructor(props) {
 		super(props);
+
 	  this.handleData = this.handleData.bind(this);
+    this.dirChoice = this.dirChoice.bind(this);
 	}
 
   dirChoice() {

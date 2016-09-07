@@ -20,9 +20,7 @@ export default class Login extends Component {
             <input id='userNameInput' placeholder='USERNAME' type='text' required />
             <input type='password' placeholder='PASSWORD' type='text' required />
             <button className='login-button' type="submit" onClick={this.loginClicked}>LOG IN</button>
-
         </form>
-
         <div id='signup-button'>
           <p>Don't have an account?  <Link to='Signup' className='signup-link'>Sign Up</Link></p>
         </div>
