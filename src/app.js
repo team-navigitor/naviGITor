@@ -31,28 +31,28 @@ export default class App extends Component {
 
 	componentDidMount() {
 		/* listens for a git commit event from main.js webContent.send then sends commit string to the server via socket */
-		//OwnLocalCommit
+		//OwnLocalCommit - Tested
 		ipcRenderer.on('parsedCommit', function(event, arg){
 			if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
-			this.setAppState({ localData: this.state.bind(this).localData.concat(data) }); //need to test
-		});
+			this.setAppState({ localData: this.state.localData.concat(arg) });
+		}.bind(this));
 
-		//TeamMemberLocalCommit
+		//TeamMemberLocalCommit - need to test
 		socket.on('incomingCommit', function(data){
 			console.log('broadcast loud and clear: ' + data);
-			this.setAppState({ globalData: this.state.bind(this).globalData.concat(data) }); //need to test
+			this.setAppState({ globalData: this.state.globalData.concat(data) });
 		}.bind(this));
 
-		//TeamGitLogFromDB
-		socket.on('completeDBLog', function(data){
-			this.setAppState({ globalData: data });
-		}.bind(this));
-
-		//OwnGitlogLocalFile
+		//OwnGitlogLocalFile - Tested
 		ipcRenderer.on('parsedCommitAll', function(event, arg){
 			let data = {};
 			data['localData'] = arg;
 			this.setAppState(data);
+		}.bind(this));
+
+		//TeamGitLogFromDB - need to test
+		socket.on('completeDBLog', function(data){
+			this.setAppState({ globalData: data });
 		}.bind(this));
 
 		//need function to get image
@@ -76,7 +76,7 @@ export default class App extends Component {
 	}
 
 	render() {
-		console.log(this.state)
+		console.log('this.state.localdata ', this.state.localData)
     return (
 			<div>
 			{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}

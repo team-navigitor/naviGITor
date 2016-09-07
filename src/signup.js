@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import { Router, Route, Link } from "react-router";
 import { hashHistory } from "react-router";
 import $ from 'jquery';
-import Main from './main';
+import TeamLogin from './teamLogin';
 
 
 export default class Signup extends Component {
@@ -25,7 +25,7 @@ export default class Signup extends Component {
         data: newUser,
         success: console.log('success!')
       })
-      hashHistory.push('/Main');
+      hashHistory.push('/TeamLogin');
   }
 
   	render() {

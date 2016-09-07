@@ -44,6 +44,8 @@ export default class TeamLogin extends Component {
             <input id="login-repo" placeholder="REPO NAME" type="text" />
             <button className="login-button" type="submit">SUBMIT</button>
           </form>
+
+          <Link to='/Main' className='signup-link'>Main Page</Link>
         </div>
     )
   }
