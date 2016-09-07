@@ -70,11 +70,9 @@ export default function dagTree(gitTreeId, gitNodes, gitEdges) {
 
 	cy.on('click', 'node', function(evt) {
 		let nodeEventData = evt.cyTarget._private.data;
-		console.log(nodeEventData);
-		console.log(nodeEventData.event);
+		// console.log(nodeEventData);
+		// console.log(nodeEventData.event);
+
 		ipcRenderer.send('nodeModal', nodeEventData);
-		if (nodeEventData.event === 'commit (merge)') {
-			console.log('passed conditional');
-		}
 	});
 };

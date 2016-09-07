@@ -32,32 +32,33 @@
 		}
 	}
 
-.nav-bar-avatar {
-	border-radius: 50%;
-	margin-bottom: 10px;
-	width: 60px;
-}
+	.nav-bar-avatar {
+		border-radius: 50%;
+		margin-bottom: 10px;
+		width: 60px;
+	}
 
-.nav-bar-divider {
-  width:100%;
-  height:1px;
-  border-bottom: 1px solid rgba(255,255,255,.25);
-}
+	.nav-bar-divider {
+	  width:100%;
+	  height:1px;
+	  border-bottom: 1px solid rgba(255,255,255,.25);
+	}
 
-ul {
+	ul {
 		list-style-type: none;
 		padding-left: 0;
 		text-align: left;
 		padding-top: 20px;
 	}
 
-a {
+	a {
 		color: white;
 		text-transform: uppercase;
 		display: block;
 		font-size: .9em;
 		padding: 12px 20px;
 		width: 100%;
+		transition: 0.1s all ease-in-out;
 
 		&:hover {
 			background: rgba(255,255,255,.3);

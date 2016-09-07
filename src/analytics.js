@@ -12,7 +12,7 @@ export default class Analytics extends Component {
     $.ajax({
       data: days,
       type: 'GET',
-      url: 'http://localhost:3000/days',
+      url: 'http://navigitorsite.herokuapp.com/days',
       success: function(data) {
         console.log(data)
       }

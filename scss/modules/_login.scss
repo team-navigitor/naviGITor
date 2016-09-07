@@ -43,9 +43,14 @@
 	height: 40px;
 	margin-bottom: 20px;
 	margin-top: 20px;
-	padding-top: 9px;
 	letter-spacing: 3px;
 	width: 100%;
+	transition: 0.1s all ease-in-out;
+
+	&:hover {
+		background: $login-gray;
+		color: $white;
+	}
 }
 
 .signup-link {
