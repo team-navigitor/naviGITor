@@ -6,8 +6,11 @@ export default class Signup extends Component {
 
 regClicked(e) {
 e.preventDefault();
-  if ($('#password1').val() !== $('#password2').val()) return console.log('Password doesn\'t match')
-  let newUser = {
+  if ($('#password1').val() !== $('#password2').val()) {
+    alert("Passwords do not match, please reenter")
+  }
+  else {
+    let newUser = {
     name: document.getElementById('userNameInput').value,
     email: document.getElementById('email').value,
     password: document.getElementById('password1').value
@@ -17,8 +20,10 @@ e.preventDefault();
     method: 'POST',
     data: newUser
   })
-  hashHistory.push('TeamLogin')
+  hashHistory.push('TeamLogin')  
+  }
 }
+
 
 	render() {
     return (
@@ -33,7 +38,7 @@ e.preventDefault();
           <input id="password1" type="password" className="form-control"
             placeholder="Please enter Password" required />
 					<input id="password2" type="password" className="form-control"
-						placeholder="please verify password"/>
+						placeholder="please reenter password" />
           <button id="signUpButton" className="btn btn-primary">Sign Up</button>
         </form>
     </div>
