@@ -16,7 +16,7 @@ export default class Main extends Component {
             <img className='nav-bar-avatar' src={this.props.getAppState.profilePic}></img>
             <p>{this.props.getAppState.username}</p>
             <p>{this.props.getAppState.repoName}</p>
-            <div className='nav-bar'></div>
+            <div className='nav-bar-divider'></div>
             <ul>
               <li><Link to='/Main/Profile'><i className="fa fa-user" aria-hidden="true"></i>My Profile</Link></li>
               <li><Link to='/Main/GitTree'><i className="fa fa-tree" aria-hidden="true"></i>Global Git Tree</Link></li>

@@ -14,6 +14,7 @@ import Analytics from './analytics';
 import Logo from './logopage';
 import Profile from './profilePage';
 // import Chat from './chat';
+import Graph from './graph';
 
 
 export default class Routes extends Component {
@@ -34,7 +35,7 @@ export default class Routes extends Component {
              <Route path = "GitTree" component = {GitTree} />
              <Route path = "LocalGitTree" component = {LocalGitTree} />
              <Route path = "Terminal" component = {TerminalView} />
-             <Route path = "Analytics" component = {Analytics} />
+             <Route path = "Analytics" component = {Graph} />
              <Route path = "Profile" component = {Profile} />
              {/* <Route path = "Chat" component = {Chat} /> */}
            </Route>
