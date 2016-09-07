@@ -8,6 +8,7 @@ export default class Main extends Component {
   }
 
   render() {
+    console.log('curent state: '+JSON.stringify(this.props.getAppState))
     return (
 
       <div id='main-container'>

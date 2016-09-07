@@ -17,7 +17,7 @@ export default class Signup extends Component {
         username: document.getElementById('userNameInput').value,
         email: document.getElementById('email').value,
         password: document.getElementById('password1').value,
-        githubName: document.getElementById('githubUsername').value
+        github: document.getElementById('githubUsername').value
       }
       $.ajax({
         url: 'http://localhost:3000/signup',

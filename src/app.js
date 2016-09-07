@@ -23,37 +23,39 @@ export default class App extends Component {
 			newestGitEvent: '',
 			profilePic: 'https://avatars1.githubusercontent.com/u/8155387?v=3&s=400',
 			username: '',
-			repoData: '',
-
+			globalData: [],
+			localData: [],
 		}
 		this.setAppState = this.setAppState.bind(this);
-		// this.setState = this.setState.bind(this);
 	}
 
 	componentDidMount() {
-		console.log('app component did mount')
 		/* listens for a git commit event from main.js webContent.send then sends commit string to the server via socket */
+		//OwnLocalCommit
 		ipcRenderer.on('parsedCommit', function(event, arg){
 			if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
+			this.setAppState({ localData: this.state.bind(this).localData.concat(data) }); //need to test
 		});
 
-		//NEED TO TEST
+		//TeamMemberLocalCommit
 		socket.on('incomingCommit', function(data){
 			console.log('broadcast loud and clear: ' + data);
-			// this.setState.bind(this)(data);
-		});
+			this.setAppState({ globalData: this.state.bind(this).globalData.concat(data) }); //need to test
+		}.bind(this));
 
+		//TeamGitLogFromDB
+		socket.on('completeDBLog', function(data){
+			this.setAppState({ globalData: data });
+		}.bind(this));
+
+		//OwnGitlogLocalFile
 		ipcRenderer.on('parsedCommitAll', function(event, arg){
 			let data = {};
-			data['username'] = arg;
-			console.log('arg' + arg);
-			// console.log('setappstate' + this.props.setAppState);
-			// this.setState.bind(this)(data);
-			this.setAppState.bind(this)(data);
-		 });
+			data['localData'] = arg;
+			this.setAppState(data);
+		}.bind(this));
 
-		 //call to database, fill in state
-		 //ajax call to fill in profile pic
+		//need function to get image
 	}
 
 	// Socket handling for app. Must be global to current page for ipcRenderer + React
@@ -74,6 +76,7 @@ export default class App extends Component {
 	}
 
 	render() {
+		console.log(this.state)
     return (
 			<div>
 			{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}

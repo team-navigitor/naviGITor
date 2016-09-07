@@ -13,7 +13,7 @@ import TeamLogin from './teamLogin';
 import Analytics from './analytics';
 import Logo from './logopage';
 import Profile from './profilePage';
-import Chat from './chat';
+// import Chat from './chat';
 
 
 export default class Routes extends Component {
@@ -36,7 +36,7 @@ export default class Routes extends Component {
              <Route path = "Terminal" component = {TerminalView} />
              <Route path = "Analytics" component = {Analytics} />
              <Route path = "Profile" component = {Profile} />
-             <Route path = "Chat" component = {Chat} />
+             {/* <Route path = "Chat" component = {Chat} /> */}
            </Route>
          </Route>
       </Router>
