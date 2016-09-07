@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // mongoose.connect('mongodb://ec2-54-152-1-18.compute-1.amazonaws.com');
-//var MONGO_URI = 'mongodb://navigitor:browncouch123@ds019826.mlab.com:19826/navigitor'
-var MONGO_URI = 'mongodb://localhost/test'
+var MONGO_URI = 'mongodb://navigitor:browncouch123@ds019826.mlab.com:19826/navigitor'
+// var MONGO_URI = 'mongodb://localhost/test'
 // var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
 //                 replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };
 mongoose.connect(MONGO_URI);

@@ -12,21 +12,20 @@ export default class Login extends Component {
     super(props);
     this.loginClicked = this.loginClicked.bind(this);
   }
+
   render() {
     return (
       <div className='login-container'>
-
         <img className='login-logo' src='./images/darknaviGitorLogo_1.png' />
         <form className='login-form'>
             <input id='userNameInput' placeholder='USERNAME' type='text' required />
             <input id='userPasswordInput' type='password' placeholder='PASSWORD' type='text' required />
             <button className='login-button' type="submit" onClick={this.loginClicked}>LOG IN</button>
-
         </form>
-
         <div id='signup-button'>
-          <p>Don't have an account?  <Link to='Signup' className='signup-link'>Sign Up</Link></p>
+          <p>Don't have an account? <Link to='Signup' className='signup-link'>Sign Up</Link></p>
         </div>
+        <Link to='TeamLogin' className='signup-link'>Team Login Page</Link>
     </div>
     )
   }
@@ -59,12 +58,6 @@ export default class Login extends Component {
   loginClicked(e){
     e.preventDefault();
     this.verifyUser();
-    // if(isAuthenticated){
-    //   console.log('isAuthenticated');
-    //   hashHistory.push('TeamLogin');
-    // }
-    // else hashHistory.push('Signup');
-     //hashHistory.push('/TeamLogin');
   }
 
 }
