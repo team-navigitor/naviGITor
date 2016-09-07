@@ -38,10 +38,6 @@ export default class GitTree extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			commits: []
-		}
-
 		this._dirChoice2 = this._dirChoice2.bind(this);
 		this._handleSubmit2 = this._handleSubmit2.bind(this);
 	}
@@ -157,7 +153,7 @@ export default class GitTree extends Component {
 
 		function dagTree() {
 			var cy = window.cy = cytoscape({
-				container: document.getElementById('git-tree'),
+				container: document.getElementById('global-git-tree'),
 				boxSelectionEnabled: false,
 				autounselectify: true,
 				layout: {
@@ -189,7 +185,7 @@ export default class GitTree extends Component {
 				elements: {
 					nodes: incomingGitNodes,
 					edges: incomingGitEdges
-				},
+				}
 			});
 			cy.on('click', function() {console.log('clicked')})
 		};
@@ -207,7 +203,7 @@ export default class GitTree extends Component {
 					<button className="folder-button2" onClick = {this._dirChoice2}> Select Project Folder </button>
 				</div>
 				<div className="git-tree-body">
-					<div id="git-tree"></div>
+					<div id="global-git-tree"></div>
 				</div>
 			</div>
 		);

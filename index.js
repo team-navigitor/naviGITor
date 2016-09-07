@@ -1,6 +1,6 @@
 const electron = require('electron');
 const child = require('child_process');
-const {ipcMain, dialog} = require('electron');
+const { ipcMain, dialog } = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
 const gitParser = require('./src/gitParser/gitparser.js');
@@ -147,9 +147,7 @@ ipcMain.on('nodeModal', function (event, nodeEvent) {
   win.on('close', function () { win = null });
 
   win.loadURL(modalPath);
-
   win.show();
-
   win.webContents.send('nodeModalWindow');
 });
 
