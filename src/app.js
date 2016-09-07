@@ -21,7 +21,7 @@ export default class App extends Component {
 			orgName: '',
 			repoName: '',
 			newestGitEvent: '',
-			profilePic: 'https://avatars1.githubusercontent.com/u/8155387?v=3&s=400',
+			profilePic: '',
 			username: '',
 			globalData: [],
 			localData: [],
@@ -54,8 +54,6 @@ export default class App extends Component {
 		socket.on('completeDBLog', function(data){
 			this.setAppState({ globalData: data });
 		}.bind(this));
-
-		//need function to get image
 	}
 
 	// Socket handling for app. Must be global to current page for ipcRenderer + React
