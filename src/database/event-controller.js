@@ -15,7 +15,7 @@ let eventSchema = new mongoose.Schema({
   parent: [String],
   eventType: String,
   message: String,
-  time: String
+  time: Number
 });
 
 //initialize EventController as empty object
@@ -24,6 +24,7 @@ var EventController = {}
 //create post method for EventController
 EventController.saveEvent = function(arg) {
   let gitData = JSON.parse([arg.data]);
+  console.log('author from db' + gitData.author)
     //create Event model using room property passed from argument as the collection name
     let Event = mongoose.model(arg.room, eventSchema);
     //create new instance of event
@@ -52,7 +53,7 @@ EventController.saveEvent = function(arg) {
       parent: gitData.parent,
       eventType: gitData.event,
       message: gitData.message,
-      time: gitData.time
+      time: parseInt(gitData.time)
       });
         console.log('newevent: ', eventToAdd)
         //save event to collection or create new collection

@@ -16,7 +16,7 @@ let UserController = {};
 UserController.add = (req, res, next) => {
     //initialize new instance of user
     let NewUser = new User({
-        user: req.body.name,
+        user: req.body.username,
         email: req.body.email,
         password: req.body.password,
         team: req.body.team,

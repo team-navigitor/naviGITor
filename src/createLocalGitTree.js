@@ -1,5 +1,5 @@
 import cytoscape from 'cytoscape';
-
+import { ipcRenderer } from 'electron';
 export default function dagTree(gitTreeId, gitNodes, gitEdges) {
 	var cy = window.cy = cytoscape({
 		container: document.getElementById(gitTreeId),
@@ -72,9 +72,8 @@ export default function dagTree(gitTreeId, gitNodes, gitEdges) {
 		let nodeEventData = evt.cyTarget._private.data;
 		console.log(nodeEventData);
 		console.log(nodeEventData.event);
-
+		ipcRenderer.send('nodeModal', nodeEventData);
 		if (nodeEventData.event === 'commit (merge)') {
-
 			console.log('passed conditional');
 		}
 	});
