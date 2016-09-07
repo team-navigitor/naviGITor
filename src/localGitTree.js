@@ -59,8 +59,10 @@ export default class LocalGitTree extends Component {
 				if(fullLog[i].SHA){
 					localGitNodes.push({
 						data: {
-							id: fullLog[i]['SHA'],
-							commit: fullLog[i]['message']
+						author: fullLog[i]['author'],
+						id: fullLog[i]['SHA'],
+						event: fullLog[i]['event'],
+						commit: fullLog[i]['message']
 						}
 					});
 				}
@@ -184,6 +186,11 @@ export default class LocalGitTree extends Component {
 					nodes: localGitNodes,
 					edges: localGitEdges
 				}
+			});
+			cy.on('click', 'node', function(evt) {
+				console.log(evt.cyTarget);
+				console.log(evt.cyTarget._private.data);
+				ipcRenderer.send('nodeModal', evt.cyTarget._private.data);
 			});
 		};
 	}
