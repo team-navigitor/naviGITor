@@ -24,6 +24,7 @@ var EventController = {}
 //create post method for EventController
 EventController.saveEvent = function(arg) {
   let gitData = JSON.parse([arg.data]);
+  console.log('author from db' + gitData.author)
     //create Event model using room property passed from argument as the collection name
     let Event = mongoose.model(arg.room, eventSchema);
     //create new instance of event
@@ -79,11 +80,11 @@ EventController.getRepo = (arg, callback) => {
 EventController.getByTime = (arg, callback) => {
     let ttime = Math.floor(arg.body.time / 1000)
     let coll = mongoose.model(arg.body.room + 's', eventSchema)
-    coll.find({time: {$gt: 1}}, 'user', (err, data) => {
+    coll.find({time: {$gt: ttime}}, 'user', (err, data) => {
         if (err) console.log('getByTime error: ', err)
         else {
           console.log('get by time firing with: ', data);
-          //callback(data)
+          callback(data)
         }      
     })
 }

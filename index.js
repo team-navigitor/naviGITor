@@ -1,6 +1,6 @@
 const electron = require('electron');
 const child = require('child_process');
-const {ipcMain, dialog} = require('electron');
+const { ipcMain, dialog } = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
 const gitParser = require('./src/gitParser/gitparser.js');
@@ -113,6 +113,7 @@ function openDirChoice() {
         .last()
         .map(x => gitParser.parseGit(x))
         .subscribe(x => mainWindow.webContents.send('parsedCommit', x));
+        // .subscribe(x => console.log(x));
       });
 
   // verify if user has selected a folder with a git directory
@@ -124,6 +125,41 @@ function openDirChoice() {
     function ()  { console.log('onCompleted'); });
     }
 };
+
+
+
+/******************************************************************************
+        *** Cytoscape Node Modal ***
+*******************************************************************************/
+
+let win = '';
+let nodeClickData = '';
+ipcMain.on('nodeModal', function (event, nodeEvent) {
+  const modalPath = (`file://${__dirname}/src/test.html`);
+  nodeClickData = nodeEvent;
+  win = new BrowserWindow({
+    width: 400,
+    height: 320,
+    maxWidth: 450,
+    maxHeight: 350
+  });
+
+  win.on('close', function () { win = null });
+
+  win.loadURL(modalPath);
+  win.show();
+  win.webContents.send('nodeModalWindow');
+});
+
+
+ipcMain.on('nodeModalWindowReady', function(event){
+  console.log('hello from nnodeModalWindowReady' + event);
+  win.webContents.send('nodeModalWindow', nodeClickData);
+});
+
+
+
+
 /******************************************************************************
         *** Terminal Emulation ***
 *******************************************************************************/
