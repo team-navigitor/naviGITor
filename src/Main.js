@@ -23,7 +23,7 @@ export default class Main extends Component {
               <li><Link to='/Main/LocalGitTree'><i className="fa fa-code-fork" aria-hidden="true"></i>Local Git Tree</Link></li>
               <li><Link to='/Main/Analytics'><i className="fa fa-bar-chart" aria-hidden="true"></i>Analytics</Link></li>
 							<li><Link to='/Main/Terminal'><i className="fa fa-terminal" aria-hidden="true"></i>Terminal</Link></li>
-							<li><Link to='/Main/Chat'><i className="fa fa-comment-o" aria-hidden="true"></i>Chat</Link></li>
+					/*	<li><Link to='/Main/Chat'><i className="fa fa-comment-o" aria-hidden="true"></i>Chat</Link></li> */
               <li><Link to='/'><i className="fa fa-sign-out" aria-hidden="true"></i>Log Out</Link></li>
             </ul>
           </div>
