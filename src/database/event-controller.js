@@ -84,7 +84,7 @@ EventController.getByTime = (arg, callback) => {
         if (err) console.log('getByTime error: ', err)
         else {
           console.log('get by time firing with: ', data);
-          //callback(data)
+          callback(data)
         }      
     })
 }

@@ -18,13 +18,18 @@ export default class Analytics extends Component {
         console.log('ajax data: ', data)
         let users = {};
         data.forEach(el => {
-          if (users[el.name]) users[el.name] ++;
-          else users[el.name] = 0
+          console.log('el', el)
+          let name = el.user.substring(1, el.user.lastIndexOf(' '))
+          if (users[name]) users[name] ++;
+          else users[name] = 1
         })
+        console.log('users: ', users)
         let chart = {data: []};
         for (let key in users) {
+          console.log('key: ', key)
           chart.data.push({x: key, y: users[key]})
         }
+        console.log('chart: ', chart)
       }
     })
   }
