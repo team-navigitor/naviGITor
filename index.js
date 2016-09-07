@@ -138,6 +138,7 @@ ipcMain.on('nodeModal', function (event, nodeEvent) {
   const modalPath = (`file://${__dirname}/src/test.html`);
   nodeClickData = nodeEvent;
   win = new BrowserWindow({
+    parent: mainWindow,
     width: 450,
     height: 200,
     maxWidth: 470,
@@ -145,8 +146,8 @@ ipcMain.on('nodeModal', function (event, nodeEvent) {
   });
 
   win.on('close', function () { win = null });
-
   win.loadURL(modalPath);
+
   win.show();
   win.webContents.send('nodeModalWindow', nodeClickData);
 });
