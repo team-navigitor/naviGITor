@@ -6,15 +6,16 @@ export default class Analytics extends Component {
   getCollection(e) {
     e.preventDefault()
     console.log('submit firing')
-    let days = {}
-    days.time = $('#daysInput').val()
+    const days = {}
+    days.time = Date.now() - ($('#daysInput').val() * 86400000)
     days.room = sessionStorage.getItem('collection')
+    //console.log(days)
     $.ajax({
       data: days,
-      type: 'GET',
+      method: 'POST',
       url: 'http://localhost:3000/days',
       success: function(data) {
-        console.log(data)
+        console.log('ajax data: ', data)
       }
     })
   }

@@ -42,6 +42,7 @@ class App extends Component {
 		console.log('app component did mount')
 		/* listens for a git commit event from main.js webContent.send then sends commit string to the server via socket */
 		ipcRenderer.on('parsedCommit', function(event, arg){
+			console.log('room: ', socketRoom)
 			if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 		});
 

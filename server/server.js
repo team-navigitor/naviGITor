@@ -46,6 +46,7 @@ io.sockets.on('connection', function(socket){
 		socket.on('subscribe', function(data) {
 			try {
 				EventController.getRepo(data, function(x) {
+					console.log(x)
 					socket.emit('completeDBLog', x)
 				})
 				socket.join(data.room)
@@ -122,7 +123,8 @@ app.post('/verify', (req, res) => {
  *** Analytics ***
  *****************/
 
-app.get('/days', (req, res) => {
+app.post('/days', (req, res) => {
+	
   EventController.getByTime(req, function() {
     res.send(data)
   })

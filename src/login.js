@@ -31,8 +31,6 @@ export default class Login extends Component {
     )
   }
 
-  
-
   verifyUser(){
     let user = {
       name: $('#userNameInput').val(),
@@ -43,9 +41,17 @@ export default class Login extends Component {
       method: 'POST',
       url: 'http://localhost:3000/verify',
       data: user,
-      success: function(x) {
-        if (x) hashHistory.push('TeamLogin')
-        else hashHistory.push('Signup')
+      success: function(data) {
+        if (data.github) {
+          console.log('github: ' + data.github)
+          this.props.setAppState({github: 'https://avatars.githubusercontent.com/'+data.github})
+          hashHistory.push('/TeamLogin');
+        }
+        else if (data) {
+          console.log('no github');
+          hashHistory.push('/TeamLogin');
+        }
+        else hashHistory.push('/Signup')
       }
     })
   }
