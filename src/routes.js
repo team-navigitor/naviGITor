@@ -35,6 +35,7 @@ export default class Routes extends Component {
              <IndexRoute component = {Logo} />
              <Route path = "GitTree" component = {GitTree} />
              <Route path = "LocalGitTree" component = {LocalGitTree} />
+           {/* <Route path = "Analytics" component = {Analytics} /> */}
              <Route path = "Terminal" component = {TerminalView} />
              <Route path = "LocalGraph" component = {LocalGraph} />
              <Route path = "Profile" component = {Profile} />
