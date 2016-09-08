@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import $ from 'jquery';
+import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
 import dagTree from './createLocalGitTree';
+
+cydagre( cytoscape, dagre );
 
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const path = require('path');
@@ -26,7 +29,7 @@ export default class GitTree extends Component {
 				globalGitNodes.push({
 					data: {
 						ancestor: globalGitHistory[i]['parent'][0],
-						author: globalGitHistory[i]['author'].trim(),
+						author: globalGitHistory[i]['author'],
 						id: globalGitHistory[i]['SHA'],
 						event: globalGitHistory[i]['event'],
 						commit: globalGitHistory[i]['message']
@@ -52,7 +55,7 @@ export default class GitTree extends Component {
 		}
 		for (var i = 0; i < globalGitHistory.length; i++) {
 			// loop through git merge activity and connect current node with parent nodes
-			if (globalGitHistory[i].event.trim() === 'merge') {
+			if (globalGitHistory[i].event === 'merge') {
 				if(globalGitHistory[i].parent[0] !== globalGitHistory[i].parent[1]) {
 					globalGitEdges.push({
 						data: {
@@ -75,7 +78,7 @@ export default class GitTree extends Component {
 
 			// loop through all other events and connect current node to parent node
 			// else if (globalGitHistory[i]['event'] !== 'checkout') {
-			else if(!globalGitHistory[i].event.trim() === 'merge' || !/^checkout/.test(globalGitHistory[i]['event'])) {
+			else if(!globalGitHistory[i].event === 'merge' || !/^checkout/.test(globalGitHistory[i]['event'])) {
 				globalGitEdges.push({
 					data: {
 						source: globalGitHistory[i].parent[0],
