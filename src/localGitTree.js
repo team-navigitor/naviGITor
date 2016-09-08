@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import $ from 'jquery';
+import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
 import dagTree from './createLocalGitTree';
+
+cydagre( cytoscape, dagre );
 
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const path = require('path');
