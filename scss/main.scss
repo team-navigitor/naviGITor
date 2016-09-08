@@ -64,9 +64,16 @@ body {
   }
 }
 
-// Not sure if this is still needed
-// .folder-button {
-// 	width: 100%;
-// 	color: #2874A6;
-// 	text-align: left;
-// }
+.graph-page-container {
+	width: 602px;
+	margin-left: auto;
+	margin-right: auto;
+	position: fixed;
+	top: 50px;
+}
+.graph-container {
+	width: 600px;
+	position: relative;
+	text-align: center;
+	color: gray;
+}
