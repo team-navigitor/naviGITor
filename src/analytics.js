@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import $ from 'jquery';
-import {BarChart} from 'react-easy-chart'
-//import rd3 from 'react-d3-library';
-//const BarChart = rd3.BarChart
+
+import $ from 'jquery'
+import {BarChart} from 'react-easy-chart';
+
 
 export default class Analytics extends Component {
 
@@ -13,7 +13,7 @@ export default class Analytics extends Component {
     days.room = sessionStorage.getItem('collection')
     let chart = [];
     chart.push({x: "Colin", y: 12}, {x: "Sarah", y: 6}, {x: "Steve", y: 9}, {x: "Binh", y: 14})
-    
+
     this.props.setAppState({commitsPerUser: chart})
     // $.ajax({
     //   data: days,
@@ -61,7 +61,7 @@ export default class Analytics extends Component {
         <form id='numDays'>
           <input id='daysInput' type='text' />
           <button id="submitDays" onClick={this.getCollection.bind(this)}>submit days</button>
-          
+
         </form>
         {bar}
       </div>
