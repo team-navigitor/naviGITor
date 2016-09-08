@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import $ from 'jquery'
+import {BarChart} from 'react-easy-chart';
+
 
 export default class Analytics extends Component {
 
   getCollection(e) {
+
     e.preventDefault()
     console.log('submit firing')
     let days = {}

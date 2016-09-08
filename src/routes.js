@@ -11,6 +11,7 @@ import LocalGitTree from './localGitTree';
 import TerminalView from './terminal/terminal.js'
 import TeamLogin from './teamLogin';
 import Analytics from './analytics';
+import LocalGraph from './localGraph';
 import Logo from './logopage';
 import Profile from './profilePage';
 // import Chat from './chat';
@@ -35,6 +36,7 @@ export default class Routes extends Component {
              <Route path = "LocalGitTree" component = {LocalGitTree} />
              <Route path = "Terminal" component = {TerminalView} />
              <Route path = "Analytics" component = {Analytics} />
+             <Route path = "LocalGraph" component = {LocalGraph} />
              <Route path = "Profile" component = {Profile} />
              {/* <Route path = "Chat" component = {Chat} /> */}
            </Route>
