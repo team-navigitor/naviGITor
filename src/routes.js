@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 const { Router, Route, Link, hashHistory, IndexRoute } = require('react-router');
 
 import App from './app';
-import Main from './main';
-import Login from './login';
-import Signup from './signup.js'
+
+import Main from './Pages/main';
+import Login from './Pages/login';
+import Signup from './Pages/signup';
+import TeamLogin from './Pages/teamLogin';
 
 import GitTree from './gitTree';
 import LocalGitTree from './localGitTree';
 import TerminalView from './terminal/terminal.js'
-import TeamLogin from './teamLogin';
 import Analytics from './analytics';
 import LocalGraph from './localGraph';
 import Logo from './logopage';
