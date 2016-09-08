@@ -1,4 +1,5 @@
 import cytoscape from 'cytoscape';
+import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
 export default function dagTree(gitTreeId, gitNodes, gitEdges) {
 	var cy = window.cy = cytoscape({

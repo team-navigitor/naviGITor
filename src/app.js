@@ -24,7 +24,7 @@ export default class App extends Component {
 			githubAvatar: '',
 			username: '',
 			globalData: [],
-			localData: [],
+			localData: []
 		}
 		this.setAppState = this.setAppState.bind(this);
 	}
