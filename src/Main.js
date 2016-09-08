@@ -13,7 +13,7 @@ export default class Main extends Component {
 
       <div id='main-container'>
         <div className='nav-bar-container'>
-            <img className='nav-bar-avatar' src={this.props.getAppState.profilePic}></img>
+            <img className='nav-bar-avatar' src={this.props.getAppState.githubAvatar}></img>
             <p>{this.props.getAppState.username}</p>
             <p>{this.props.getAppState.repoName}</p>
             <div className='nav-bar-divider'></div>

@@ -12,20 +12,20 @@ export default class Signup extends Component {
 
   regClicked(e) {
     e.preventDefault();
-      if (document.getElementById('password1').value !== document.getElementById('password2').value) return console.log('Password doesn\'t match')
-      let newUser = {
-        username: document.getElementById('userNameInput').value,
-        email: document.getElementById('email').value,
-        password: document.getElementById('password1').value,
-        github: document.getElementById('githubUsername').value
-      }
-      $.ajax({
-        url: 'http://navigitorsite.herokuapp.com/signup',
-        method: 'POST',
-        data: newUser,
-        success: console.log('success!')
-      })
-      hashHistory.push('/TeamLogin');
+    if (document.getElementById('password1').value !== document.getElementById('password2').value) return console.log('Password doesn\'t match')
+    let newUser = {
+      username: document.getElementById('userNameInput').value,
+      email: document.getElementById('email').value,
+      password: document.getElementById('password1').value,
+      github: document.getElementById('githubUsername').value
+    }
+    $.ajax({
+      url: 'http://navigitorsite.herokuapp.com/signup',
+      method: 'POST',
+      data: newUser,
+      success: console.log('success!')
+    })
+    hashHistory.push('/TeamLogin');
   }
 
   	render() {
