@@ -7,7 +7,7 @@ import { ipcRenderer } from 'electron';
 import io from 'socket.io-client';
 
 // Socket handling for app. Must be global to current page for ipcRenderer + React
-let socket = io('http://localhost:3000');
+let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
 
 
@@ -68,17 +68,13 @@ export default class GitTree extends Component {
 	}
 
 	componentDidMount() {
+		console.log('I have entered gitTree componentDidMount');
+		this.props.getAppState.globalData.forEach(function(commit) {
+			return commit
+		});
+
 		let incomingGitNodes = [];
 		let incomingGitEdges = [];
-
-		/** Steve enters the room
-		*   He then makes a Git action
-		*   incomingCommit will listen to ANY CHANGES and REFRESH the entire page
-		*
-		*   TODO:
-		*   1. If tree is visible, load tree once and not load any more data
-		*   2. Then add any incoming nodes with cy.add();
-		**/
 
 		socket.on('incomingCommit', function(data){
 			var incomingData = JSON.parse(data);

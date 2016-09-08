@@ -8,7 +8,15 @@ console.log('I am outside nodeModal');
 
 $(document).ready(function() {
 	ipcRenderer.send('nodeModalWindowReady');
+
 	ipcRenderer.on('nodeModalWindow', function(event, data){
-		console.log('hello from modalFrminside' + data.message)
+		$('.node-id').append(JSON.stringify(data.id));
+		$('.node-parent').append(JSON.stringify(data.ancestor));
+		$('.node-commit').append(JSON.stringify(data.commit));
+		$('.node-author').append(JSON.stringify(data.author));
+		$('.node-event').append(JSON.stringify(data.event));
+	
+
+		console.log('hello from modalFrminside' + JSON.stringify(data));
 	})
 });
