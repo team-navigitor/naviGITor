@@ -31,7 +31,7 @@ export default class Main extends Component {
             </ul>
           </div>
 
-	      <div className='view-container'>{this.props.children && React.cloneElement(this.props.children, { setAppState: this.props.setAppState, getAppState: this.props.getAppState } )}</div>
+	      <div className='view-container'>{React.cloneElement(this.props.children, { setAppState: this.props.setAppState, getAppState: this.props.getAppState } )}</div>
       </div>
     );
   }
