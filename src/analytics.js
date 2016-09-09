@@ -52,14 +52,13 @@ export default class Analytics extends Component {
       />
   }
     return (
-        <div id='analytics-container'>
-            <h5>Get commits for the following number of days:</h5>
-            <form id='numDays'>
-              <input id='daysInput' type='text' />
-              <button id="submitDays" onClick={this.getCollection.bind(this)}>submit days</button>
-              
-            </form>
-            {bar}
+      <div className='chart-container'>
+        <div id='days-form-container'>
+        <form id='numDays' className='days-form' onSubmit={this.getCollection.bind(this)}>
+            <h5>See commits per user for the last <input id='daysInput' type='text' /> days:</h5>             
+            </form>           
+        </div>      
+        {bar}
         </div>
     )
   }
