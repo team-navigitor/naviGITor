@@ -33,7 +33,7 @@ export default class GitTree extends Component {
 						id: globalGitHistory[i]['SHA'],
 						event: globalGitHistory[i]['eventType'],
 						commit: globalGitHistory[i]['message'],
-						nameAndMessage: globalGitHistory[i]['user'].substring(0, globalGitHistory[i]['user'].indexOf('<') - 1) + ': ' + globalGitHistory[i]['message']
+						nameAndMessage: globalGitHistory[i]['user'] + ': ' + globalGitHistory[i]['message']
 					},
 					grabbable: false,
 					classes: 'merge'
@@ -49,7 +49,7 @@ export default class GitTree extends Component {
 						id: globalGitHistory[i]['SHA'],
 						event: globalGitHistory[i]['eventType'],
 						commit: globalGitHistory[i]['message'],
-						nameAndMessage: globalGitHistory[i]['user'].substring(0, globalGitHistory[i]['user'].indexOf('<') - 1) + ': ' + globalGitHistory[i]['message']
+						nameAndMessage: globalGitHistory[i]['user'] + ': ' + globalGitHistory[i]['message']
 					},
 					grabbable: false,
 				});
@@ -92,22 +92,22 @@ export default class GitTree extends Component {
 
 		/* listens for an git commit event from main.js webContent.send
 		 then sends commit string to the server via socket */
-		ipcRenderer.on('parsedCommit', function(event, localGit){
+		ipcRenderer.on('incomingCommit', function(event, incomingGit){
 			cy.nodes().removeClass('new');
 			cy.edges().removeClass('new');
 
 			cy.add([
 				{
 			    data: {
-			    	id: localGit.SHA,
-			    	commit: localGit.message
+			    	id: incomingGit.SHA,
+			    	commit: incomingGit.message
 			    }
 				},
 				{
 			    data: {
-			    	id: 'edge ' + localGit.message,
-			    	source: localGit.parent[0],
-			    	target: localGit.SHA
+			    	id: 'edge ' + incomingGit.message,
+			    	source: incomingGit.parent[0],
+			    	target: incomingGit.SHA
 			    }
 				}
 			])

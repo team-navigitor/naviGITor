@@ -39,7 +39,7 @@ export default class App extends Component {
 		//TeamMemberLocalCommit - need to test
 		socket.on('incomingCommit', function(data){
 			console.log('broadcast loud and clear: ' + data);
-			this.setAppState({ globalData: this.state.globalData.concat(data) });
+			this.setAppState({ globalData: this.state.globalData.concat([JSON.parse(data)])});
 		}.bind(this));
 
 		//OwnGitlogLocalFile - Tested
