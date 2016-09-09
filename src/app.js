@@ -11,7 +11,6 @@ import $ from 'jquery';
 
 let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
-import Routes from './routes';
 
 
 export default class App extends Component {
@@ -41,7 +40,11 @@ export default class App extends Component {
 		//TeamMemberLocalCommit - need to test
 		socket.on('incomingCommit', function(data){
 			console.log('broadcast loud and clear: ' + data);
-			this.setAppState({ globalData: this.state.globalData.concat(data) });
+
+			// Sent incoming commit to main processor to git tree
+			ipcRenderer.send('newCommitToRender', JSON.parse(data));
+
+			this.setAppState({ globalData: this.state.globalData.concat([JSON.parse(data)])});
 		}.bind(this));
 
 		//OwnGitlogLocalFile - Tested
@@ -82,5 +85,3 @@ export default class App extends Component {
     )
 	}
 }
-
-ReactDOM.render((<Routes />), document.getElementById('app'));

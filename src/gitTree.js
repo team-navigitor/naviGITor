@@ -25,14 +25,15 @@ export default class GitTree extends Component {
 		// loop through all local git activity, and store as nodes
 		for (var i = 0; i < globalGitHistory.length; i++) {
 			// if node has merge event, add merge class to add css properties
-			if (globalGitHistory[i].event === 'commit (merge)') {
+			if (globalGitHistory[i].eventType === 'commit (merge)') {
 				globalGitNodes.push({
 					data: {
 						ancestor: globalGitHistory[i]['parent'][0],
-						author: globalGitHistory[i]['author'],
+						author: globalGitHistory[i]['user'],
 						id: globalGitHistory[i]['SHA'],
-						event: globalGitHistory[i]['event'],
-						commit: globalGitHistory[i]['message']
+						event: globalGitHistory[i]['eventType'],
+						commit: globalGitHistory[i]['message'],
+						nameAndMessage: globalGitHistory[i]['user'] + ': ' + globalGitHistory[i]['message']
 					},
 					grabbable: false,
 					classes: 'merge'
@@ -44,10 +45,11 @@ export default class GitTree extends Component {
 				globalGitNodes.push({
 					data: {
 						ancestor: globalGitHistory[i]['parent'][0],
-						author: globalGitHistory[i]['author'],
+						author: globalGitHistory[i]['user'],
 						id: globalGitHistory[i]['SHA'],
-						event: globalGitHistory[i]['event'],
-						commit: globalGitHistory[i]['message']
+						event: globalGitHistory[i]['eventType'],
+						commit: globalGitHistory[i]['message'],
+						nameAndMessage: globalGitHistory[i]['user'] + ': ' + globalGitHistory[i]['message']
 					},
 					grabbable: false,
 				});
@@ -55,7 +57,7 @@ export default class GitTree extends Component {
 		}
 		for (var i = 0; i < globalGitHistory.length; i++) {
 			// loop through git merge activity and connect current node with parent nodes
-			if (globalGitHistory[i].event === 'merge') {
+			if (globalGitHistory[i].eventType === 'merge') {
 				if(globalGitHistory[i].parent[0] !== globalGitHistory[i].parent[1]) {
 					globalGitEdges.push({
 						data: {
@@ -66,7 +68,7 @@ export default class GitTree extends Component {
 				}
 			}
 			// if committed a fixed merge conflict, add merge class to edges
-			else if (globalGitHistory[i].event === 'commit (merge)') {
+			else if (globalGitHistory[i].eventType === 'commit (merge)') {
 				globalGitEdges.push({
 					data: {
 						source: globalGitHistory[i].parent[0],
@@ -78,7 +80,7 @@ export default class GitTree extends Component {
 
 			// loop through all other events and connect current node to parent node
 			// else if (globalGitHistory[i]['event'] !== 'checkout') {
-			else if(!globalGitHistory[i].event === 'merge' || !/^checkout/.test(globalGitHistory[i]['event'])) {
+			else if(!globalGitHistory[i].eventType === 'merge' || !/^checkout/.test(globalGitHistory[i]['event'])) {
 				globalGitEdges.push({
 					data: {
 						source: globalGitHistory[i].parent[0],
@@ -90,22 +92,26 @@ export default class GitTree extends Component {
 
 		/* listens for an git commit event from main.js webContent.send
 		 then sends commit string to the server via socket */
-		ipcRenderer.on('parsedCommit', function(event, localGit){
+		ipcRenderer.on('newGlobalGitNode', function(event, incomingGit){
 			cy.nodes().removeClass('new');
 			cy.edges().removeClass('new');
 
 			cy.add([
 				{
 			    data: {
-			    	id: localGit.SHA,
-			    	commit: localGit.message
+			    	ancestor: incomingGit['parent'][0],
+			    	author: incomingGit['user'],
+			    	id: incomingGit['SHA'],
+			    	event: incomingGit['eventType'],
+			    	commit: incomingGit['message'],
+			    	nameAndMessage: incomingGit['user'] + ': ' + incomingGit['message']
 			    }
 				},
 				{
 			    data: {
-			    	id: 'edge ' + localGit.message,
-			    	source: localGit.parent[0],
-			    	target: localGit.SHA
+			    	id: 'edge ' + incomingGit.message,
+			    	source: incomingGit.parent[0],
+			    	target: incomingGit.SHA
 			    }
 				}
 			])

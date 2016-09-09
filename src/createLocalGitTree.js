@@ -5,7 +5,7 @@ import { ipcRenderer } from 'electron';
 
 cydagre( cytoscape, dagre );
 
-export default function dagTree(gitTreeId, gitNodes, gitEdges) {
+export default function dagTree(gitTreeId, gitNodes, gitEdges, githubAvatar) {
 	var cy = window.cy = cytoscape({
 		container: document.getElementById(gitTreeId),
 		boxSelectionEnabled: false,
@@ -16,13 +16,12 @@ export default function dagTree(gitTreeId, gitNodes, gitEdges) {
 		style: cytoscape.stylesheet()
 		.selector('node')
 		  .css({
-		    'content': 'data(commit)',
+		    'content': 'data(nameAndMessage)',
 		    'width': 65,
 		    'height': 65,
 		    'text-opacity': 0.5,
 		    'text-valign': 'center',
 		    'text-halign': 'right',
-		    'background-image': 'https://github.com/binhxn.png',
 		    'border-width': 3,
 		    'background-fit': 'cover',
 		    'border-color': '#ccc'
@@ -75,8 +74,6 @@ export default function dagTree(gitTreeId, gitNodes, gitEdges) {
 
 	cy.on('click', 'node', function(evt) {
 		let nodeEventData = evt.cyTarget._private.data;
-		// console.log(nodeEventData);
-		// console.log(nodeEventData.event);
 
 		ipcRenderer.send('nodeModal', nodeEventData);
 	});

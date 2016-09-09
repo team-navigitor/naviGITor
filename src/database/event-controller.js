@@ -24,7 +24,7 @@ var EventController = {}
 //create post method for EventController
 EventController.saveEvent = function(arg) {
   let gitData = JSON.parse([arg.data]);
-  console.log('author from db' + gitData.author)
+  console.log('author from db' + gitData.user)
     //create Event model using room property passed from argument as the collection name
     let Event = mongoose.model(arg.room, eventSchema);
     //create new instance of event
@@ -48,10 +48,10 @@ EventController.saveEvent = function(arg) {
     // //else if a single instance of Git event
     // } else {
       var eventToAdd = new Event({
-      user: gitData.author,
+      user: gitData.user,
       SHA: gitData.SHA,
       parent: gitData.parent,
-      eventType: gitData.event,
+      eventType: gitData.eventType,
       message: gitData.message,
       time: parseInt(gitData.time)
       });

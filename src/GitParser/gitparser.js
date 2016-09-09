@@ -13,9 +13,9 @@ gitParser.parseGit = (commitStr, path) => {
   commitObj.author = '';
   commitObj.time = '';
   var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
-  commitObj.event = commitStr.match(eventTest)[0].substring(6);
+  commitObj.eventType = commitStr.match(eventTest)[0].substring(6);
   //
-  if(commitObj.event.trim() === 'merge' || /^checkout/.test(commitObj.event)){
+  if(commitObj.eventType.trim() === 'merge' || /^checkout/.test(commitObj.eventType)){
     commitObj.parent.push(commitObj.SHA);
     commitObj.SHA = null;
   } else {
@@ -33,14 +33,14 @@ gitParser.parseGit = (commitStr, path) => {
     else console.log('not a commit, diff: ' + commitObj.diff)
   
 
-  commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + 1 + commitObj.event.length)).trim();
+  commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.eventType) + 1 + commitObj.eventType.length)).trim();
 
   var i = 81;
   while(commitStr.charAt(i) !== '>') {
-    commitObj.author += commitStr.charAt(i);
+    commitObj.user += commitStr.charAt(i);
     i++;
   }
-  commitObj.author += '>';
+  commitObj.user += '>';
   i++;
 
   while(commitStr.charAt(i) !== '-') {

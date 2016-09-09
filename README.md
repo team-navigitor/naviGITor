@@ -49,7 +49,7 @@ React components will be layed out in the __src__ folder from the root directory
 Express/Socket.io components will be in the __server__ folder from the root directory
 
 
-## TBD: Deploy
+## Deploy
 Build sources with webpack
 ```
 npm run build
