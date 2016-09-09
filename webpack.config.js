@@ -5,7 +5,7 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: [
     'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr',
-    "./src/app.js"
+    "./src/routes.js"
   ],
   output: {
     path: path.resolve('./dist'),

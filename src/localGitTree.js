@@ -29,10 +29,11 @@ export default class LocalGitTree extends Component {
 				localGitNodes.push({
 					data: {
 						ancestor: localGitHistory[i]['parent'][0],
-						author: localGitHistory[i]['author'].trim(),
+						author: localGitHistory[i]['user'],
 						id: localGitHistory[i]['SHA'],
 						event: localGitHistory[i]['event'],
-						commit: localGitHistory[i]['message']
+						commit: localGitHistory[i]['message'],
+						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + ': ' + localGitHistory[i]['message']
 					},
 					grabbable: false,
 					classes: 'merge'
@@ -44,12 +45,14 @@ export default class LocalGitTree extends Component {
 				localGitNodes.push({
 					data: {
 						ancestor: localGitHistory[i]['parent'][0],
-						author: localGitHistory[i]['author'].trim(),
+						author: localGitHistory[i]['user'].trim(),
 						id: localGitHistory[i]['SHA'],
 						event: localGitHistory[i]['event'],
-						commit: localGitHistory[i]['message']
+						commit: localGitHistory[i]['message'],
+						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + localGitHistory[i]['message']
 					},
 					grabbable: false,
+					'background-image': this.props.getAppState.githubAvatar
 				});
 			}
 		}
@@ -97,8 +100,12 @@ export default class LocalGitTree extends Component {
 			cy.add([
 				{
 			    data: {
-			    	id: localGit.SHA,
-			    	commit: localGit.message
+			    	ancestor: localGit['parent'][0],
+			    	author: localGit['user'],
+			    	id: localGit['SHA'],
+			    	event: localGit['event'],
+			    	commit: localGit['message'],
+			    	nameAndMessage: localGit['user'] + ': ' + localGitHistory[i]['message']
 			    }
 				},
 				{
