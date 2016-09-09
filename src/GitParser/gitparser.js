@@ -1,13 +1,15 @@
 const gitParser = {};
-const execFileSync = require ('child_process').execFileSync;
+const execSync = require('child_process').execSync;
+
+
 // helper function to parse git data into an object from string
 gitParser.parseGit = (commitStr, path) => {
-  
+
   commitStr.replace(/(\r\n|\n|\r)/gm,"");
   var commitObj = {};
   commitObj.parent = [commitStr.substring(0, 40)];
   commitObj.SHA = commitStr.substring(41, 81);
-  commitObj.diff = ''
+  commitObj.diff = '';
   commitObj.author = '';
   commitObj.time = '';
   var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
@@ -17,11 +19,19 @@ gitParser.parseGit = (commitStr, path) => {
     commitObj.parent.push(commitObj.SHA);
     commitObj.SHA = null;
   } else {
-    let execCmd = 'git diff ' + commitObj.SHA + '^!'
-    execFileSync(execCmd, path, (err, stdout, stderr) => {
-    commitObj.diff = stdout;
-  })
-  }
+    let execCmd = 'git diff ' + commitObj.SHA + '^!';
+    
+    console.log('path: ' + path + ' sha: ' + commitObj.SHA + 'cmd: ' + execCmd)
+    
+    commitObj.diff = execSync(execCmd, {cwd: path})
+    
+    
+    
+      //console.log('diff in exec: ' + commitObj.diff)
+    }
+    if (commitObj.SHA) console.log('commit diff: ' + commitObj.diff)
+    else console.log('not a commit, diff: ' + commitObj.diff)
+  
 
   commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + 1 + commitObj.event.length)).trim();
 
