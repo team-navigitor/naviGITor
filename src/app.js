@@ -11,8 +11,6 @@ import $ from 'jquery';
 
 let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
-import Routes from './routes';
-
 
 export default class App extends Component {
 	constructor(props) {
@@ -81,5 +79,3 @@ export default class App extends Component {
     )
 	}
 }
-
-ReactDOM.render((<Routes />), document.getElementById('app'));

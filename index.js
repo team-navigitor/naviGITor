@@ -38,7 +38,7 @@ function createWindow () {
   *** For Deployment ***
   *********************/
   // replace dev.html with index.html in root directory
-  mainWindow.loadURL(`file://${__dirname}/dev.html`)
+  mainWindow.loadURL(`file://${__dirname}/index.html`)
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()

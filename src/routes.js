@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 const { Router, Route, Link, hashHistory, IndexRoute } = require('react-router');
+import ReactDOM from 'react-dom';
 
 import App from './app';
 
@@ -11,11 +12,9 @@ import TeamLogin from './Pages/teamLogin';
 import GitTree from './gitTree';
 import LocalGitTree from './localGitTree';
 import TerminalView from './terminal/terminal.js'
-// import Analytics from './analytics';
 import LocalGraph from './localGraph';
 import Logo from './logopage';
 import Profile from './profilePage';
-// import Chat from './chat';
 
 
 export default class Routes extends Component {
@@ -30,7 +29,6 @@ export default class Routes extends Component {
            <IndexRoute component = {Login} />
            <Route path = "Signup" component = {Signup} />
            <Route path = "TeamLogin" component = {TeamLogin} />
-
            <Route path = "Main" component = {Main}>
              <IndexRoute component = {Logo} />
              <Route path = "GitTree" component = {GitTree} />
@@ -38,10 +36,11 @@ export default class Routes extends Component {
              <Route path = "Terminal" component = {TerminalView} />
              <Route path = "LocalGraph" component = {LocalGraph} />
              <Route path = "Profile" component = {Profile} />
-             {/* <Route path = "Chat" component = {Chat} /> */}
            </Route>
          </Route>
       </Router>
     );
   }
 }
+
+ReactDOM.render((<Routes />), document.getElementById('app'));
