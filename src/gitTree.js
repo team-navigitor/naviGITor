@@ -92,15 +92,19 @@ export default class GitTree extends Component {
 
 		/* listens for an git commit event from main.js webContent.send
 		 then sends commit string to the server via socket */
-		ipcRenderer.on('incomingCommit', function(event, incomingGit){
+		ipcRenderer.on('newGlobalGitNode', function(event, incomingGit){
 			cy.nodes().removeClass('new');
 			cy.edges().removeClass('new');
 
 			cy.add([
 				{
 			    data: {
-			    	id: incomingGit.SHA,
-			    	commit: incomingGit.message
+			    	ancestor: incomingGit['parent'][0],
+			    	author: incomingGit['user'],
+			    	id: incomingGit['SHA'],
+			    	event: incomingGit['event'],
+			    	commit: incomingGit['message'],
+			    	nameAndMessage: incomingGit['user'] + ': ' + incomingGit['message']
 			    }
 				},
 				{

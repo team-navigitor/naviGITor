@@ -39,6 +39,9 @@ export default class App extends Component {
 		//TeamMemberLocalCommit - need to test
 		socket.on('incomingCommit', function(data){
 			console.log('broadcast loud and clear: ' + data);
+
+			ipcRenderer.send('newCommitToRender', JSON.parse(data));
+
 			this.setAppState({ globalData: this.state.globalData.concat([JSON.parse(data)])});
 		}.bind(this));
 

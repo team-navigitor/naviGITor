@@ -100,8 +100,12 @@ export default class LocalGitTree extends Component {
 			cy.add([
 				{
 			    data: {
-			    	id: localGit.SHA,
-			    	commit: localGit.message
+			    	ancestor: localGit['parent'][0],
+			    	author: localGit['user'],
+			    	id: localGit['SHA'],
+			    	event: localGit['event'],
+			    	commit: localGit['message'],
+			    	nameAndMessage: localGit['user'] + ': ' + localGitHistory[i]['message']
 			    }
 				},
 				{
