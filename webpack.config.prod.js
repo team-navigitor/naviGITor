@@ -1,11 +1,11 @@
 const webpack = require('webpack');
 
+
 module.exports = {
   devtool: 'inline-source-map',
-  entry: "./src/app.js",
+  entry: "./src/routes.js",
   output: {
     path: './build',
-    publicPath: './build',
     filename: 'bundle.js'
   },
   plugins: [

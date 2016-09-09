@@ -29,9 +29,9 @@ export default class GitTree extends Component {
 				globalGitNodes.push({
 					data: {
 						ancestor: globalGitHistory[i]['parent'][0],
-						author: globalGitHistory[i]['author'],
+						author: globalGitHistory[i]['user'],
 						id: globalGitHistory[i]['SHA'],
-						event: globalGitHistory[i]['event'],
+						event: globalGitHistory[i]['eventType'],
 						commit: globalGitHistory[i]['message']
 					},
 					grabbable: false,
@@ -44,9 +44,9 @@ export default class GitTree extends Component {
 				globalGitNodes.push({
 					data: {
 						ancestor: globalGitHistory[i]['parent'][0],
-						author: globalGitHistory[i]['author'],
+						author: globalGitHistory[i]['user'],
 						id: globalGitHistory[i]['SHA'],
-						event: globalGitHistory[i]['event'],
+						event: globalGitHistory[i]['eventType'],
 						commit: globalGitHistory[i]['message']
 					},
 					grabbable: false,
