@@ -21,10 +21,10 @@ export default class App extends Component {
 			orgName: '',
 			repoName: '',
 			newestGitEvent: '',
-			profilePic: '',
+			githubAvatar: '',
 			username: '',
 			globalData: [],
-			localData: [],
+			localData: []
 		}
 		this.setAppState = this.setAppState.bind(this);
 	}
@@ -66,9 +66,9 @@ export default class App extends Component {
 	// need to test this func being called from other components
 	setAppState(obj){
 		this.setState.bind(this)(obj);
-		console.log('data coming in ' +JSON.stringify(obj));
+		// console.log('data coming in ' +JSON.stringify(obj));
 		if (obj['orgName']) {
-			console.log('yes obj is orgName '+obj['orgName']);
+			// console.log('yes obj is orgName '+obj['orgName']);
 			this.setSocketRoom(obj);
 		}
 	}

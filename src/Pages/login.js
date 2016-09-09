@@ -26,7 +26,7 @@ export default class Login extends Component {
       success: function(data) {
         if (data.github) {
           console.log('github: ' + data.github)
-          this.props.setAppState({github: 'https://avatars.githubusercontent.com/'+data.github})
+          this.props.setAppState({githubAvatar: 'https://avatars.githubusercontent.com/'+data.github})
           hashHistory.push('/TeamLogin');
         }
         else if (data) {
@@ -34,7 +34,7 @@ export default class Login extends Component {
           hashHistory.push('/TeamLogin');
         }
         else hashHistory.push('/Signup')
-      }
+      }.bind(this)
     })
   }
 
