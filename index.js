@@ -158,7 +158,7 @@ ipcMain.on('nodeModalWindowReady', function(event){
   win.webContents.send('nodeModalWindow', nodeClickData);
 });
 
-// For incomingGitNode
+// Transfer incomingGitNode to gitTree
 ipcMain.on('newCommitToRender', function(event, data) {
   mainWindow.webContents.send('newGlobalGitNode', data);
 });
