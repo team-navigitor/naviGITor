@@ -29,10 +29,11 @@ export default class GitTree extends Component {
 				globalGitNodes.push({
 					data: {
 						ancestor: globalGitHistory[i]['parent'][0],
-						author: globalGitHistory[i]['author'],
+						author: globalGitHistory[i]['user'],
 						id: globalGitHistory[i]['SHA'],
-						event: globalGitHistory[i]['event'],
-						commit: globalGitHistory[i]['message']
+						event: globalGitHistory[i]['eventType'],
+						commit: globalGitHistory[i]['message'],
+						nameAndMessage: globalGitHistory[i]['user'] + ': ' + globalGitHistory[i]['message']
 					},
 					grabbable: false,
 					classes: 'merge'
@@ -44,10 +45,11 @@ export default class GitTree extends Component {
 				globalGitNodes.push({
 					data: {
 						ancestor: globalGitHistory[i]['parent'][0],
-						author: globalGitHistory[i]['author'],
+						author: globalGitHistory[i]['user'],
 						id: globalGitHistory[i]['SHA'],
-						event: globalGitHistory[i]['event'],
-						commit: globalGitHistory[i]['message']
+						event: globalGitHistory[i]['eventType'],
+						commit: globalGitHistory[i]['message'],
+						nameAndMessage: globalGitHistory[i]['user'] + ': ' + globalGitHistory[i]['message']
 					},
 					grabbable: false,
 				});
@@ -90,22 +92,26 @@ export default class GitTree extends Component {
 
 		/* listens for an git commit event from main.js webContent.send
 		 then sends commit string to the server via socket */
-		ipcRenderer.on('parsedCommit', function(event, localGit){
+		ipcRenderer.on('newGlobalGitNode', function(event, incomingGit){
 			cy.nodes().removeClass('new');
 			cy.edges().removeClass('new');
 
 			cy.add([
 				{
 			    data: {
-			    	id: localGit.SHA,
-			    	commit: localGit.message
+			    	ancestor: incomingGit['parent'][0],
+			    	author: incomingGit['user'],
+			    	id: incomingGit['SHA'],
+			    	event: incomingGit['event'],
+			    	commit: incomingGit['message'],
+			    	nameAndMessage: incomingGit['user'] + ': ' + incomingGit['message']
 			    }
 				},
 				{
 			    data: {
-			    	id: 'edge ' + localGit.message,
-			    	source: localGit.parent[0],
-			    	target: localGit.SHA
+			    	id: 'edge ' + incomingGit.message,
+			    	source: incomingGit.parent[0],
+			    	target: incomingGit.SHA
 			    }
 				}
 			])

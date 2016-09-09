@@ -38,7 +38,11 @@ export default class App extends Component {
 		//TeamMemberLocalCommit - need to test
 		socket.on('incomingCommit', function(data){
 			console.log('broadcast loud and clear: ' + data);
-			this.setAppState({ globalData: this.state.globalData.concat(data) });
+
+			// Sent incoming commit to main processor to git tree
+			ipcRenderer.send('newCommitToRender', JSON.parse(data));
+
+			this.setAppState({ globalData: this.state.globalData.concat([JSON.parse(data)])});
 		}.bind(this));
 
 		//OwnGitlogLocalFile - Tested
