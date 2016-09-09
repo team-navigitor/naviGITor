@@ -60,16 +60,16 @@ UserController.verify = (req, callback) => {
             bcrypt.compare(userPwd, hashedPwd, (err, result) => {
                 if (result) {
                     verUser = true;
-                    if (person.github) callback({person: github})
+                    if (person.github) callback({person: person.github})
                     else (callback(verUser))
                 } else {
                     console.log('invalid password');
                     verUser = false;
                     callback(verUser)
                 }
-            })
+            });
         }
-    })
+    });
 }
 
 module.exports = UserController

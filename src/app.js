@@ -9,7 +9,7 @@ import io from 'socket.io-client';
 import { ipcRenderer } from 'electron';
 import $ from 'jquery';
 
-let socket = io('http://localhost:3000');
+let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
 import Routes from './routes';
 
@@ -21,10 +21,10 @@ export default class App extends Component {
 			orgName: '',
 			repoName: '',
 			newestGitEvent: '',
-			profilePic: '',
+			githubAvatar: '',
 			username: '',
 			globalData: [],
-			localData: [],
+			localData: []
 		}
 		this.setAppState = this.setAppState.bind(this);
 	}
@@ -67,18 +67,17 @@ export default class App extends Component {
 	// need to test this func being called from other components
 	setAppState(obj){
 		this.setState.bind(this)(obj);
-		console.log('data coming in ' +JSON.stringify(obj));
+		// console.log('data coming in ' +JSON.stringify(obj));
 		if (obj['orgName']) {
-			console.log('yes obj is orgName '+obj['orgName']);
+			// console.log('yes obj is orgName '+obj['orgName']);
 			this.setSocketRoom(obj);
 		}
 	}
 
 	render() {
-		console.log('this.state.localdata ', this.state.localData)
     return (
 			<div>
-			{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
+				{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
 			</div>
     )
 	}

@@ -1,44 +1,50 @@
 import React, {Component} from 'react';
-import $ from 'jquery';
-import {BarChart} from 'react-easy-chart'
-//import rd3 from 'react-d3-library';
-//const BarChart = rd3.BarChart
+import $ from 'jquery'
+import {BarChart} from 'react-easy-chart';
 
 //adding comments
 export default class Analytics extends Component {
 
   getCollection(e) {
-    e.preventDefault()
+    
+    e.preventDefault();
     const days = {}
     days.time = Date.now() - ($('#daysInput').val() * 86400000)
     days.room = sessionStorage.getItem('collection')
-    $.ajax({
-      data: days,
-      method: 'POST',
-      url: 'http://localhost:3000/days',
-      success: function(data) {
-        let users = {};
-        data.forEach(el => {
-          let name = el.user.substring(1, el.user.lastIndexOf(' '))
-          if (users[name]) users[name] ++;
-          else users[name] = 1
-        })
-        let chart = [];
-        // for (let key in users) {
-        //   console.log('key: ', key)
-        //   chart.push({x: key, y: users[key]})
-        // }
-        chart.push({x: "Colin", y: 12}, {x: "Sarah", y: 6}, {x: "Steve", y: 9}, {x: "Binh", y: 14})
-        let jason = JSON.stringify(chart)
-        this.props.setAppState({commitsPerUser: chart})
-      }.bind(this)
-    })
+    let chart = [];
+    chart.push({x: "Colin", y: 12}, {x: "Sarah", y: 6}, {x: "Steve", y: 9}, {x: "Binh", y: 14})
+
+    this.props.setAppState({commitsPerUser: chart})
+    // $.ajax({
+    //   data: days,
+    //   method: 'POST',
+    //   // url: 'http://localhost:3000/days',
+    //   success: function(data) {
+    //     let users = {};
+    //     data.forEach(el => {
+    //       let name = el.user.substring(1, el.user.lastIndexOf(' '))
+    //       if (users[name]) users[name] ++;
+    //       else users[name] = 1
+    //     })
+    //     let chart = [];
+    //     // for (let key in users) {
+    //     //   console.log('key: ', key)
+    //     //   chart.push({x: key, y: users[key]})
+    //     // }
+    //     chart.push({x: "Colin", y: 12}, {x: "Sarah", y: 6}, {x: "Steve", y: 9}, {x: "Binh", y: 14})
+    //     let jason = JSON.stringify(chart)
+    //     this.props.setAppState({commitsPerUser: chart})
+    //   }.bind(this)
+    //})
+
   }
 
   render() {
     let bar = null;
+
       if (this.props.getAppState.commitsPerUser) {
         const style = {textAlign: 'center'}
+
       bar = <BarChart
       data={this.props.getAppState.commitsPerUser}
       colorBars
