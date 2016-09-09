@@ -5,7 +5,7 @@ import { ipcRenderer } from 'electron';
 
 cydagre( cytoscape, dagre );
 
-export default function dagTree(gitTreeId, gitNodes, gitEdges, githubAvatar) {
+export default function dagTree(gitTreeId, gitNodes, gitEdges) {
 	var cy = window.cy = cytoscape({
 		container: document.getElementById(gitTreeId),
 		boxSelectionEnabled: false,
