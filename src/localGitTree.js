@@ -25,13 +25,13 @@ export default class LocalGitTree extends Component {
 		// loop through all local git activity, and store as nodes
 		for (var i = 0; i < localGitHistory.length; i++) {
 			// if node has merge event, add merge class to add css properties
-			if (localGitHistory[i].event === 'commit (merge)') {
+			if (localGitHistory[i].eventType === 'commit (merge)') {
 				localGitNodes.push({
 					data: {
 						ancestor: localGitHistory[i]['parent'][0],
 						author: localGitHistory[i]['user'],
 						id: localGitHistory[i]['SHA'],
-						event: localGitHistory[i]['event'],
+						event: localGitHistory[i]['eventType'],
 						commit: localGitHistory[i]['message'],
 						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + ': ' + localGitHistory[i]['message']
 					},
@@ -47,7 +47,7 @@ export default class LocalGitTree extends Component {
 						ancestor: localGitHistory[i]['parent'][0],
 						author: localGitHistory[i]['user'].trim(),
 						id: localGitHistory[i]['SHA'],
-						event: localGitHistory[i]['event'],
+						event: localGitHistory[i]['eventType'],
 						commit: localGitHistory[i]['message'],
 						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + localGitHistory[i]['message']
 					},
@@ -58,7 +58,7 @@ export default class LocalGitTree extends Component {
 		}
 		for (var i = 0; i < localGitHistory.length; i++) {
 			// loop through git merge activity and connect current node with parent nodes
-			if (localGitHistory[i].event.trim() === 'merge') {
+			if (localGitHistory[i].eventType.trim() === 'merge') {
 				if(localGitHistory[i].parent[0] !== localGitHistory[i].parent[1]) {
 					localGitEdges.push({
 						data: {
@@ -69,7 +69,7 @@ export default class LocalGitTree extends Component {
 				}
 			}
 			// if committed a fixed merge conflict, add merge class to edges
-			else if (localGitHistory[i].event === 'commit (merge)') {
+			else if (localGitHistory[i].eventType === 'commit (merge)') {
 				localGitEdges.push({
 					data: {
 						source: localGitHistory[i].parent[0],
@@ -81,7 +81,7 @@ export default class LocalGitTree extends Component {
 
 			// loop through all other events and connect current node to parent node
 			// else if (localGitHistory[i]['event'] !== 'checkout') {
-			else if(!localGitHistory[i].event.trim() === 'merge' || !/^checkout/.test(localGitHistory[i]['event'])) {
+			else if(!localGitHistory[i].eventType.trim() === 'merge' || !/^checkout/.test(localGitHistory[i]['event'])) {
 				localGitEdges.push({
 					data: {
 						source: localGitHistory[i].parent[0],
@@ -103,7 +103,7 @@ export default class LocalGitTree extends Component {
 			    	ancestor: localGit['parent'][0],
 			    	author: localGit['user'],
 			    	id: localGit['SHA'],
-			    	event: localGit['event'],
+			    	event: localGit['eventType'],
 			    	commit: localGit['message'],
 			    	nameAndMessage: localGit['user'] + ': ' + localGitHistory[i]['message']
 			    }

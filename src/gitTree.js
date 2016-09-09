@@ -25,7 +25,7 @@ export default class GitTree extends Component {
 		// loop through all local git activity, and store as nodes
 		for (var i = 0; i < globalGitHistory.length; i++) {
 			// if node has merge event, add merge class to add css properties
-			if (globalGitHistory[i].event === 'commit (merge)') {
+			if (globalGitHistory[i].eventType === 'commit (merge)') {
 				globalGitNodes.push({
 					data: {
 						ancestor: globalGitHistory[i]['parent'][0],
@@ -57,7 +57,7 @@ export default class GitTree extends Component {
 		}
 		for (var i = 0; i < globalGitHistory.length; i++) {
 			// loop through git merge activity and connect current node with parent nodes
-			if (globalGitHistory[i].event === 'merge') {
+			if (globalGitHistory[i].eventType === 'merge') {
 				if(globalGitHistory[i].parent[0] !== globalGitHistory[i].parent[1]) {
 					globalGitEdges.push({
 						data: {
@@ -68,7 +68,7 @@ export default class GitTree extends Component {
 				}
 			}
 			// if committed a fixed merge conflict, add merge class to edges
-			else if (globalGitHistory[i].event === 'commit (merge)') {
+			else if (globalGitHistory[i].eventType === 'commit (merge)') {
 				globalGitEdges.push({
 					data: {
 						source: globalGitHistory[i].parent[0],
@@ -80,7 +80,7 @@ export default class GitTree extends Component {
 
 			// loop through all other events and connect current node to parent node
 			// else if (globalGitHistory[i]['event'] !== 'checkout') {
-			else if(!globalGitHistory[i].event === 'merge' || !/^checkout/.test(globalGitHistory[i]['event'])) {
+			else if(!globalGitHistory[i].eventType === 'merge' || !/^checkout/.test(globalGitHistory[i]['event'])) {
 				globalGitEdges.push({
 					data: {
 						source: globalGitHistory[i].parent[0],
@@ -102,7 +102,7 @@ export default class GitTree extends Component {
 			    	ancestor: incomingGit['parent'][0],
 			    	author: incomingGit['user'],
 			    	id: incomingGit['SHA'],
-			    	event: incomingGit['event'],
+			    	event: incomingGit['eventType'],
 			    	commit: incomingGit['message'],
 			    	nameAndMessage: incomingGit['user'] + ': ' + incomingGit['message']
 			    }
