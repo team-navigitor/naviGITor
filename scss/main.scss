@@ -1,5 +1,8 @@
+//Fonts
+@import url(https://fonts.googleapis.com/css?family=Catamaran|Work+Sans);
+
 // Variables
-@import 'variables/colors';
+@import 'variables/_colors';
 
 // Modules
 @import 'modules/login';
@@ -8,6 +11,7 @@
 @import 'modules/terminal';
 @import 'modules/chat-room';
 @import 'modules/analytics/team-commits';
+@import 'modules/graphs';
 
 // General Styles
 body {
@@ -18,17 +22,6 @@ body {
 
 #app {
   height: 100vh;
-}
-// Will need to clean up and move to _login.scss file
-// ****** teamLogin.js *****
-#teamLogin-container {
-	.team-h5 {
-		margin-bottom: 25px;
-	}
-	h3 {
-		margin-bottom: 50px;
-		letter-spacing: 2px;
-	}
 }
 
 // Main.js View
@@ -63,18 +56,4 @@ body {
   &:active {
   	outline: none;
   }
-}
-
-.graph-page-container {
-	width: 602px;
-	margin-left: auto;
-	margin-right: auto;
-	position: fixed;
-	top: 50px;
-}
-.graph-container {
-	width: 600px;
-	position: relative;
-	text-align: center;
-	color: gray;
 }
