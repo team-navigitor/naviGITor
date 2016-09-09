@@ -29,10 +29,11 @@ export default class LocalGitTree extends Component {
 				localGitNodes.push({
 					data: {
 						ancestor: localGitHistory[i]['parent'][0],
-						author: localGitHistory[i]['author'].trim(),
+						author: localGitHistory[i]['author'],
 						id: localGitHistory[i]['SHA'],
 						event: localGitHistory[i]['event'],
-						commit: localGitHistory[i]['message']
+						commit: localGitHistory[i]['message'],
+						nameAndMessage: localGitHistory[i]['author'].substring(0, localGitHistory[i]['author'].indexOf('<') - 1) + ': ' + ': ' + localGitHistory[i]['message']
 					},
 					grabbable: false,
 					classes: 'merge'
@@ -47,9 +48,11 @@ export default class LocalGitTree extends Component {
 						author: localGitHistory[i]['author'].trim(),
 						id: localGitHistory[i]['SHA'],
 						event: localGitHistory[i]['event'],
-						commit: localGitHistory[i]['message']
+						commit: localGitHistory[i]['message'],
+						nameAndMessage: localGitHistory[i]['author'].substring(0, localGitHistory[i]['author'].indexOf('<') - 1) + ': ' + localGitHistory[i]['message']
 					},
 					grabbable: false,
+					'background-image': this.props.getAppState.githubAvatar
 				});
 			}
 		}

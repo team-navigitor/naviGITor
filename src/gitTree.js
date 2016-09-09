@@ -32,7 +32,8 @@ export default class GitTree extends Component {
 						author: globalGitHistory[i]['user'],
 						id: globalGitHistory[i]['SHA'],
 						event: globalGitHistory[i]['eventType'],
-						commit: globalGitHistory[i]['message']
+						commit: globalGitHistory[i]['message'],
+						nameAndMessage: globalGitHistory[i]['user'].substring(0, globalGitHistory[i]['user'].indexOf('<') - 1) + ': ' + globalGitHistory[i]['message']
 					},
 					grabbable: false,
 					classes: 'merge'
@@ -47,7 +48,8 @@ export default class GitTree extends Component {
 						author: globalGitHistory[i]['user'],
 						id: globalGitHistory[i]['SHA'],
 						event: globalGitHistory[i]['eventType'],
-						commit: globalGitHistory[i]['message']
+						commit: globalGitHistory[i]['message'],
+						nameAndMessage: globalGitHistory[i]['user'].substring(0, globalGitHistory[i]['user'].indexOf('<') - 1) + ': ' + globalGitHistory[i]['message']
 					},
 					grabbable: false,
 				});
