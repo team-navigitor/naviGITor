@@ -9,14 +9,14 @@ gitParser.parseGit = commitStr => {
   commitObj.user = '';
   commitObj.time = '';
   var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
-  commitObj.event = commitStr.match(eventTest)[0].substring(6);
+  commitObj.eventType = commitStr.match(eventTest)[0].substring(6);
   //
-  if(commitObj.event.trim() === 'merge' || /^checkout/.test(commitObj.event)){
+  if(commitObj.eventType.trim() === 'merge' || /^checkout/.test(commitObj.eventType)){
     commitObj.parent.push(commitObj.SHA);
     commitObj.SHA = null;
   }
 
-  commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.event) + 1 + commitObj.event.length)).trim();
+  commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.eventType) + 1 + commitObj.eventType.length)).trim();
 
   var i = 81;
   while(commitStr.charAt(i) !== '>') {
