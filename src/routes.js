@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 const { Router, Route, Link, hashHistory, IndexRoute } = require('react-router');
-import ReactDOM from 'react-dom';
 
 import App from './app';
 
