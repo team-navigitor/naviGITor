@@ -15,7 +15,12 @@ let eventSchema = new mongoose.Schema({
   parent: [String],
   eventType: String,
   message: String,
-  time: Number
+  time: Number,
+  diff: String,
+  diff_stats: {
+    diff_adds: Number,
+    diff_subs: Number
+  }
 });
 
 //initialize EventController as empty object
@@ -53,9 +58,14 @@ EventController.saveEvent = function(arg) {
       parent: gitData.parent,
       eventType: gitData.eventType,
       message: gitData.message,
-      time: parseInt(gitData.time)
+      time: parseInt(gitData.time),
+      diff: gitData.diff,
+      diffStats: {
+        diffAdds: gitData.diffstats.adds,
+        diffSubs: gitData.diffstats.subs
+      }
       });
-        console.log('newevent: ', eventToAdd)
+        //console.log('newevent: ', eventToAdd)
         //save event to collection or create new collection
         //Event.create(eventToAdd);
         eventToAdd.save(function(err){

@@ -1,10 +1,11 @@
 const gitParser = {};
 const execSync = require('child_process').execSync;
 
-
+    function byteCount(s) {
+      return encodeURI(s).split(/%..|./).length - 1;
+      }
 // helper function to parse git data into an object from string
 gitParser.parseGit = (commitStr, path) => {
-
   commitStr.replace(/(\r\n|\n|\r)/gm,"");
   var commitObj = {};
   commitObj.parent = [commitStr.substring(0, 40)];
@@ -20,19 +21,20 @@ gitParser.parseGit = (commitStr, path) => {
     commitObj.SHA = null;
   } else {
     let execCmd = 'git diff ' + commitObj.SHA + '^!';
-    
-    console.log('path: ' + path + ' sha: ' + commitObj.SHA + 'cmd: ' + execCmd)
-    
-    commitObj.diff = execSync(execCmd, {cwd: path})
-    
-    
-    
-      //console.log('diff in exec: ' + commitObj.diff)
+    commitObj.diff = execSync(execCmd, {cwd: path}).toString();
+    commitObj.diffStats = {
+      adds: 0,
+      subs: 0
     }
-    if (commitObj.SHA) console.log('commit diff: ' + commitObj.diff)
-    else console.log('not a commit, diff: ' + commitObj.diff)
+    let statsArr = commitObj.diff.split('\n')
+    for (let i = 0; i < statsArr.length; i++) {
+      if (statsArr[i][0] === '+') commitObj.diffStats.adds++;
+      else if (statsArr[i][0] === '-') commitObj.diffStats.subs++;
+    }
+  }
+    //if (commitObj.SHA) console.log('commit diff: ' + commitObj.diff)
+    // else console.log('not a commit, diff: ' + commitObj.diff)
   
-
   commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.eventType) + 1 + commitObj.eventType.length)).trim();
 
   var i = 81;

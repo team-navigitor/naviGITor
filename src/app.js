@@ -51,6 +51,7 @@ export default class App extends Component {
 		ipcRenderer.on('parsedCommitAll', function(event, arg){
 			let data = {};
 			data['localData'] = arg;
+			console.log(data.localData[0])
 			this.setAppState(data);
 		}.bind(this));
 

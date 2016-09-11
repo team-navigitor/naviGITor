@@ -135,6 +135,7 @@ function openDirChoice() {
 let win = '';
 let nodeClickData = '';
 ipcMain.on('nodeModal', function (event, nodeEvent) {
+  console.log('nodeEvent: ' + nodeEvent)
   const modalPath = (`file://${__dirname}/src/test.html`);
   nodeClickData = nodeEvent;
   win = new BrowserWindow({
