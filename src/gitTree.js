@@ -21,7 +21,7 @@ export default class GitTree extends Component {
 				globalGitHistory = this.props.getAppState.globalData,
 				globalGitNodes = [],
 				globalGitEdges = [];
-
+				
 		// loop through all local git activity, and store as nodes
 		for (var i = 0; i < globalGitHistory.length; i++) {
 			// if node has merge event, add merge class to add css properties
@@ -42,6 +42,7 @@ export default class GitTree extends Component {
 
 			// all other nodes are normal
 			else if (globalGitHistory[i].SHA) {
+				alert(Object.keys(globalGitHistory[i]))
 				globalGitNodes.push({
 					data: {
 						ancestor: globalGitHistory[i]['parent'][0],
@@ -49,7 +50,9 @@ export default class GitTree extends Component {
 						id: globalGitHistory[i]['SHA'],
 						event: globalGitHistory[i]['eventType'],
 						commit: globalGitHistory[i]['message'],
-						nameAndMessage: globalGitHistory[i]['user'] + ': ' + globalGitHistory[i]['message']
+						nameAndMessage: globalGitHistory[i]['user'] + ': ' + globalGitHistory[i]['message'],
+						diff: globalGitHistory[i]['diff'],
+						diffStats: globalGitHistory['diffStats']
 					},
 					grabbable: false,
 				});
@@ -104,7 +107,9 @@ export default class GitTree extends Component {
 			    	id: incomingGit['SHA'],
 			    	event: incomingGit['eventType'],
 			    	commit: incomingGit['message'],
-			    	nameAndMessage: incomingGit['user'] + ': ' + incomingGit['message']
+			    	nameAndMessage: incomingGit['user'] + ': ' + incomingGit['message'],
+					diff: incomingGit['diff'],
+					diffStats: incomingGit['diffStats']				
 			    }
 				},
 				{

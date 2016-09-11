@@ -83,7 +83,7 @@ function openDirChoice() {
   else {
     // to resolve to home path and append path given from renderer process
     var gitPath = (path.resolve('~', projectPath.toString()));
-
+    console.log('gitPath: ' + gitPath)
     var branchSources = Rx.Observable.bindNodeCallback(fs.readdir);
     let branchSourcesObserver = branchSources(gitPath + '/.git/logs/refs/heads')
     .mergeMap(x => Rx.Observable.from(x));
@@ -99,7 +99,7 @@ function openDirChoice() {
           .map(x => x.split('\n'))
           .flatMap(x => x)
           .filter(x => x.length > 40)
-          .map(x => gitParser.parseGit(x))
+          .map(x => gitParser.parseGit(x, gitPath))
           .toArray(x => x)
           .subscribe(x => mainWindow.webContents.send('parsedCommitAll', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitFullLogDone'));
         // });
@@ -111,7 +111,7 @@ function openDirChoice() {
         .flatMap(x => x)
         .filter(x => x.length > 40)
         .last()
-        .map(x => gitParser.parseGit(x))
+        .map(x => gitParser.parseGit(x, gitPath))
         .subscribe(x => mainWindow.webContents.send('parsedCommit', x));
         // .subscribe(x => console.log(x));
       });
@@ -135,6 +135,7 @@ function openDirChoice() {
 let win = '';
 let nodeClickData = '';
 ipcMain.on('nodeModal', function (event, nodeEvent) {
+  console.log('nodeEvent: ' + nodeEvent)
   const modalPath = (`file://${__dirname}/src/test.html`);
   nodeClickData = nodeEvent;
   win = new BrowserWindow({

@@ -10,13 +10,14 @@ $(document).ready(function() {
 	ipcRenderer.send('nodeModalWindowReady');
 
 	ipcRenderer.on('nodeModalWindow', function(event, data){
+		
 		$('.node-id').append(JSON.stringify(data.id));
 		$('.node-parent').append(JSON.stringify(data.ancestor));
 		$('.node-commit').append(JSON.stringify(data.commit));
 		$('.node-author').append(JSON.stringify(data.author));
 		$('.node-event').append(JSON.stringify(data.event));
-	
-
+		if (data.diff !== undefined) $('#nodeWindow').append('<tr><td>Diff:</td><td class="node-diff">' + data.diff + 'Adds: ' + Object.keys(data) + '</td></tr>')
+		
 		console.log('hello from modalFrminside' + JSON.stringify(data));
 	})
 });
