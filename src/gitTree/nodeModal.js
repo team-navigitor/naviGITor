@@ -8,6 +8,7 @@ $(document).ready(function() {
 	ipcRenderer.send('nodeModalWindowReady');
 
 	ipcRenderer.on('nodeModalWindow', function(event, data){
+
 		$('.node-id').append(JSON.stringify(data.id));
 		$('.node-parent').append(JSON.stringify(data.ancestor));
 		$('.node-commit').append(JSON.stringify(data.commit));
@@ -15,7 +16,7 @@ $(document).ready(function() {
 		$('.node-event').append(JSON.stringify(data.event));
 		$('.node-date').append(JSON.stringify(data.date));
 		$('.node-time').append(JSON.stringify(data.time));
-
+		if (data.diff !== undefined) $('#nodeModal').append('<tr><td>Diff:</td><td class="node-adds">Lines added: ' + data.diffStats.adds + '</td></tr><td class="node-eubs">Lines deleted: ' + data.diffStats.subs + '</td></tr>')
 		console.log('hello from modalFrminside' + JSON.stringify(data));
 	})
 });

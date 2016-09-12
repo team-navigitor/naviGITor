@@ -26,10 +26,11 @@ UserController.add = (req, res, next) => {
     NewUser.save((err, req) => {
         if (err) {
             console.error('err: ', err)
-            // res.send('error!!!!')
         }
+
     });
 }
+
 
 //create method to verify user
 UserController.verify = (req, callback) => {
@@ -42,12 +43,12 @@ UserController.verify = (req, callback) => {
         return verUser;
     }
     //find user in collection
-    User.findOne({'user': req.body.name}, 'password', (err, person) => {
+    User.findOne({'user': req.body.name}, 'password github', (err, person) => {
         console.log('finding firing')
         //if user not found
         if (!(person)) {
             verUser = false;
-            console.log('no person found')
+            console.log('no person found ')
             callback(verUser)
         }
         else {

@@ -1,0 +1,51 @@
+.days-form-container {
+    display: flex;
+    flex-direction: column;
+}
+h5 {
+    font-size: 18px;
+    padding-top: 20px;
+    margin-left: 10px;
+}
+.days-form {
+	input {
+        border: none;
+		border-bottom: 2px solid $login-gray;
+		color: $login-gray;
+		font-size: 18px;
+		height: 20px;
+		letter-spacing: 1px;
+		margin-bottom: 0px;
+        margin-left: 0px;
+		width: 5%;
+        text-align: center;
+        
+        &:focus {
+			outline:none;
+		}
+    }
+    button {
+        
+    background-color: $white;
+    border: 2px solid $login-gray;
+	// border-bottom: 2px solid $login-gray;
+    // border-left: 2px solid $login-gray;
+	font-size: 12px;
+	height: 40px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	
+	letter-spacing: 1px;
+	width: 10%;
+
+    &:focus {
+        outline:none;
+    }
+
+    }
+    
+}
+
+// ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+//   color: $login-gray;
+// }

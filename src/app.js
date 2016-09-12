@@ -32,6 +32,7 @@ export default class App extends Component {
 		/* listens for a git commit event from main.js webContent.send then sends commit string to the server via socket */
 		//OwnLocalCommit - Tested
 		ipcRenderer.on('parsedCommit', function(event, arg){
+			console.log('room: ', socketRoom)
 			if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 			this.setAppState({ localData: this.state.localData.concat(arg) });
 		}.bind(this));
@@ -50,6 +51,7 @@ export default class App extends Component {
 		ipcRenderer.on('parsedCommitAll', function(event, arg){
 			let data = {};
 			data['localData'] = arg;
+			console.log(data.localData[0])
 			this.setAppState(data);
 		}.bind(this));
 

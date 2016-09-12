@@ -17,17 +17,18 @@ export default class TeamGitTree extends Component {
 	}
 
 	componentDidMount() {
+
 		let gitTreeId = 'team-git-tree',
 				teamGitHistory = this.props.getAppState.teamData,
 				teamGitNodes = [],
 				teamGitEdges = [];
-
 		// loop through all local git activity, and store as nodes
 		for (var i = 0; i < teamGitHistory.length; i++) {
 			// if node has merge event, add merge class to add css properties
 			if (teamGitHistory[i].eventType === 'commit (merge)') {
 				teamGitNodes.push({
 					data: {
+
 						ancestor: teamGitHistory[i]['parent'][0],
 						author: teamGitHistory[i]['user'],
 						id: teamGitHistory[i]['SHA'],
@@ -41,6 +42,7 @@ export default class TeamGitTree extends Component {
 			}
 
 			// all other nodes are normal
+
 			else if (teamGitHistory[i].SHA) {
 				teamGitNodes.push({
 					data: {
@@ -49,7 +51,9 @@ export default class TeamGitTree extends Component {
 						id: teamGitHistory[i]['SHA'],
 						event: teamGitHistory[i]['eventType'],
 						commit: teamGitHistory[i]['message'],
-						nameAndMessage: teamGitHistory[i]['user'] + ': ' + teamGitHistory[i]['message']
+						nameAndMessage: teamGitHistory[i]['user'] + ': ' + teamGitHistory[i]['message'],
+						diff: teamGitHistory[i]['diff'],
+						diffStats: teamGitHistory[i]['diffStats']
 					},
 					grabbable: false,
 				});
@@ -102,9 +106,11 @@ export default class TeamGitTree extends Component {
 			    	ancestor: incomingGit['parent'][0],
 			    	author: incomingGit['user'],
 			    	id: incomingGit['SHA'],
-			    	event: incomingGit['eventType'],
+			    	event: incomingGit['event'],
 			    	commit: incomingGit['message'],
-			    	nameAndMessage: incomingGit['user'] + ': ' + incomingGit['message']
+			    	nameAndMessage: incomingGit['user'] + ': ' + incomingGit['message'],
+					diff: incomingGit['diff'],
+					diffStats: incomingGit['diffStats']				
 			    }
 				},
 				{
