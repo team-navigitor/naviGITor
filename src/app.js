@@ -22,7 +22,7 @@ export default class App extends Component {
 			newestGitEvent: '',
 			githubAvatar: '',
 			username: '',
-			globalData: [],
+			teamData: [],
 			localData: []
 		}
 		this.setAppState = this.setAppState.bind(this);
@@ -44,7 +44,7 @@ export default class App extends Component {
 			// Sent incoming commit to main processor to git tree
 			ipcRenderer.send('newCommitToRender', JSON.parse(data));
 
-			this.setAppState({ globalData: this.state.globalData.concat([JSON.parse(data)])});
+			this.setAppState({ teamData: this.state.teamData.concat([JSON.parse(data)])});
 		}.bind(this));
 
 		//OwnGitlogLocalFile - Tested
@@ -57,7 +57,7 @@ export default class App extends Component {
 
 		//TeamGitLogFromDB - need to test
 		socket.on('completeDBLog', function(data){
-			this.setAppState({ globalData: data });
+			this.setAppState({ teamData: data });
 		}.bind(this));
 	}
 
@@ -81,7 +81,7 @@ export default class App extends Component {
 	render() {
     return (
 			<div>
-				{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
+				{React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
 			</div>
     )
 	}

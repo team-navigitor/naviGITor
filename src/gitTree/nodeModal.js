@@ -4,8 +4,6 @@ var $ = require('jquery');
 // import $ from 'jquery';
 
 
-console.log('I am outside nodeModal');
-
 $(document).ready(function() {
 	ipcRenderer.send('nodeModalWindowReady');
 

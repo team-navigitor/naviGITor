@@ -19,7 +19,7 @@ export default class Main extends Component {
             <div className='nav-bar-divider'></div>
             <ul>
               <li><Link to='/Main/Profile'><i className="fa fa-user" aria-hidden="true"></i>My Profile</Link></li>
-              <li><Link to='/Main/GitTree'><i className="fa fa-tree" aria-hidden="true"></i>Global Git Tree</Link></li>
+              <li><Link to='/Main/TeamGitTree'><i className="fa fa-tree" aria-hidden="true"></i>Global Git Tree</Link></li>
               <li><Link to='/Main/LocalGitTree'><i className="fa fa-code-fork" aria-hidden="true"></i>Local Git Tree</Link></li>
 
               {/* <li><Link to='/Main/Analytics'><i className="fa fa-bar-chart" aria-hidden="true"></i>Analytics</Link></li> */}
@@ -31,7 +31,7 @@ export default class Main extends Component {
             </ul>
           </div>
 
-	      <div className='view-container'>{this.props.children && React.cloneElement(this.props.children, { setAppState: this.props.setAppState, getAppState: this.props.getAppState } )}</div>
+	      <div className='view-container'>{React.cloneElement(this.props.children, { setAppState: this.props.setAppState, getAppState: this.props.getAppState } )}</div>
       </div>
     );
   }
