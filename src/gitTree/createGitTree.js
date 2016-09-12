@@ -5,7 +5,7 @@ import { ipcRenderer } from 'electron';
 
 cydagre( cytoscape, dagre );
 
-export default function dagTree(gitTreeId, gitNodes, gitEdges, githubAvatar) {
+export default function createGitTree(gitTreeId, gitNodes, gitEdges) {
 	var cy = window.cy = cytoscape({
 		container: document.getElementById(gitTreeId),
 		boxSelectionEnabled: false,
@@ -24,15 +24,15 @@ export default function dagTree(gitTreeId, gitNodes, gitEdges, githubAvatar) {
 		    'text-halign': 'right',
 		    'border-width': 3,
 		    'background-fit': 'cover',
-		    'border-color': '#ccc'
+		    'border-color': '#c0e8d8'
 		  })
 		.selector('edge')
 		  .css({
 		    'width': 4,
 				'curve-style': 'bezier',
 				'target-arrow-shape': 'triangle',
-				'line-color': '#ccc',
-				'target-arrow-color': '#ccc'
+				'line-color': '#c0e8d8',
+				'target-arrow-color': '#c0e8d8'
 		  })
 		.selector('node.new')
 		  .css({

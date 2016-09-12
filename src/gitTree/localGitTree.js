@@ -4,7 +4,7 @@ import $ from 'jquery';
 import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
-import dagTree from './createLocalGitTree';
+import createGitTree from './createGitTree';
 
 cydagre( cytoscape, dagre );
 
@@ -126,7 +126,7 @@ export default class LocalGitTree extends Component {
 			});
 		});
 
-		dagTree(gitTreeId, localGitNodes, localGitEdges);
+		createGitTree(gitTreeId, localGitNodes, localGitEdges);
 	}
 
 	render() {
