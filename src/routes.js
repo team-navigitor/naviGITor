@@ -9,8 +9,8 @@ import Login from './Pages/login';
 import Signup from './Pages/signup';
 import TeamLogin from './Pages/teamLogin';
 
-import TeamGitTree from './teamGitTree';
-import LocalGitTree from './localGitTree';
+import TeamGitTree from './gitTree/teamGitTree';
+import LocalGitTree from './gitTree/localGitTree';
 import TerminalView from './terminal/terminal.js';
 
 import LocalGraph from './localGraph';
