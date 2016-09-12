@@ -14,7 +14,7 @@ $(document).ready(function() {
 		$('.node-commit').append(JSON.stringify(data.commit));
 		$('.node-author').append(JSON.stringify(data.author));
 		$('.node-event').append(JSON.stringify(data.event));
-		if (data.diff !== undefined) $('#nodeWindow').append('<tr><td>Diff:</td><td class="node-adds">Lines added: ' + data.diffStats.adds + '</td></tr><td class="node-eubs">Lines deleted: ' + data.diffStats.subs + '</td></tr>')
+		if (data.diff !== undefined) $('#nodeModal').append('<tr><td>Diff:</td><td class="node-adds">Lines added: ' + data.diffStats.adds + '</td></tr><td class="node-eubs">Lines deleted: ' + data.diffStats.subs + '</td></tr>')
 		
 		console.log('hello from modalFrminside' + JSON.stringify(data));
 	})

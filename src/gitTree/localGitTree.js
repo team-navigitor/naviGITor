@@ -33,7 +33,7 @@ export default class LocalGitTree extends Component {
 						id: localGitHistory[i]['SHA'],
 						event: localGitHistory[i]['eventType'],
 						commit: localGitHistory[i]['message'],
-						//nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + ': ' + localGitHistory[i]['message'],
+						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + ': ' + localGitHistory[i]['message'],
 					},
 					grabbable: false,
 					classes: 'merge'
@@ -49,10 +49,9 @@ export default class LocalGitTree extends Component {
 						id: localGitHistory[i]['SHA'],
 						event: localGitHistory[i]['eventType'],
 						commit: localGitHistory[i]['message'],
-						//nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + localGitHistory[i]['message'],
+						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + localGitHistory[i]['message'],
 						diff: localGitHistory[i]['diff'],
 						diffStats: localGitHistory[i]['diffStats'],
-						//diffSubs: localGitHistory[i]['diff']['diffSubs']
 					},
 					grabbable: false,
 					'background-image': this.props.getAppState.githubAvatar

@@ -17,40 +17,24 @@ export default class TeamGitTree extends Component {
 	}
 
 	componentDidMount() {
-<<<<<<< HEAD:src/gitTree.js
-		let gitTreeId = 'global-git-tree',
-				globalGitHistory = this.props.getAppState.globalData,
-				globalGitNodes = [],
-				globalGitEdges = [];
-				
-=======
+
 		let gitTreeId = 'team-git-tree',
 				teamGitHistory = this.props.getAppState.teamData,
 				teamGitNodes = [],
 				teamGitEdges = [];
-
->>>>>>> 63130098b6a5d1f469eb281d1e14eab9bb787df9:src/gitTree/teamGitTree.js
 		// loop through all local git activity, and store as nodes
 		for (var i = 0; i < teamGitHistory.length; i++) {
 			// if node has merge event, add merge class to add css properties
 			if (teamGitHistory[i].eventType === 'commit (merge)') {
 				teamGitNodes.push({
 					data: {
-<<<<<<< HEAD:src/gitTree.js
-						ancestor: globalGitHistory[i]['parent'][0],
-						author: globalGitHistory[i]['user'],
-						id: globalGitHistory[i]['SHA'],
-						event: globalGitHistory[i]['event'],
-						commit: globalGitHistory[i]['message'],
-						nameAndMessage: globalGitHistory[i]['user'] + ': ' + globalGitHistory[i]['message']
-=======
+
 						ancestor: teamGitHistory[i]['parent'][0],
 						author: teamGitHistory[i]['user'],
 						id: teamGitHistory[i]['SHA'],
 						event: teamGitHistory[i]['eventType'],
 						commit: teamGitHistory[i]['message'],
 						nameAndMessage: teamGitHistory[i]['user'] + ': ' + teamGitHistory[i]['message']
->>>>>>> 63130098b6a5d1f469eb281d1e14eab9bb787df9:src/gitTree/teamGitTree.js
 					},
 					grabbable: false,
 					classes: 'merge'
@@ -58,20 +42,7 @@ export default class TeamGitTree extends Component {
 			}
 
 			// all other nodes are normal
-<<<<<<< HEAD:src/gitTree.js
-			else if (globalGitHistory[i].SHA) {
-				alert(Object.keys(globalGitHistory[i]))
-				globalGitNodes.push({
-					data: {
-						ancestor: globalGitHistory[i]['parent'][0],
-						author: globalGitHistory[i]['user'],
-						id: globalGitHistory[i]['SHA'],
-						event: globalGitHistory[i]['event'],
-						commit: globalGitHistory[i]['message'],
-						nameAndMessage: globalGitHistory[i]['user'] + ': ' + globalGitHistory[i]['message'],
-						diff: globalGitHistory[i]['diff'],
-						diffStats: globalGitHistory['diffStats']
-=======
+
 			else if (teamGitHistory[i].SHA) {
 				teamGitNodes.push({
 					data: {
@@ -80,8 +51,9 @@ export default class TeamGitTree extends Component {
 						id: teamGitHistory[i]['SHA'],
 						event: teamGitHistory[i]['eventType'],
 						commit: teamGitHistory[i]['message'],
-						nameAndMessage: teamGitHistory[i]['user'] + ': ' + teamGitHistory[i]['message']
->>>>>>> 63130098b6a5d1f469eb281d1e14eab9bb787df9:src/gitTree/teamGitTree.js
+						nameAndMessage: teamGitHistory[i]['user'] + ': ' + teamGitHistory[i]['message'],
+						diff: teamGitHistory[i]['diff'],
+						diffStats: teamGitHistory[i]['diffStats']
 					},
 					grabbable: false,
 				});
