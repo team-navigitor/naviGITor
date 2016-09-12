@@ -43,7 +43,7 @@ export default class App extends Component {
 			// Sent incoming commit to main processor to git tree
 			ipcRenderer.send('newCommitToRender', JSON.parse(data));
 
-			this.setAppState({ globalData: this.state.globalData.concat([JSON.parse(data)])});
+			this.setAppState({ teamData: this.state.teamData.concat([JSON.parse(data)])});
 		}.bind(this));
 
 		//OwnGitlogLocalFile - Tested
@@ -55,7 +55,7 @@ export default class App extends Component {
 
 		//TeamGitLogFromDB - need to test
 		socket.on('completeDBLog', function(data){
-			this.setAppState({ globalData: data });
+			this.setAppState({ teamData: data });
 		}.bind(this));
 	}
 
