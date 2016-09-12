@@ -78,7 +78,7 @@ export default class App extends Component {
 	render() {
     return (
 			<div>
-				{this.props.children && React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
+				{React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
 			</div>
     )
 	}
