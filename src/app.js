@@ -21,7 +21,7 @@ export default class App extends Component {
 			newestGitEvent: '',
 			githubAvatar: '',
 			username: '',
-			globalData: [],
+			teamData: [],
 			localData: []
 		}
 		this.setAppState = this.setAppState.bind(this);
@@ -31,6 +31,7 @@ export default class App extends Component {
 		/* listens for a git commit event from main.js webContent.send then sends commit string to the server via socket */
 		//OwnLocalCommit - Tested
 		ipcRenderer.on('parsedCommit', function(event, arg){
+			console.log('room: ', socketRoom)
 			if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
 			this.setAppState({ localData: this.state.localData.concat(arg) });
 		}.bind(this));
@@ -42,19 +43,20 @@ export default class App extends Component {
 			// Sent incoming commit to main processor to git tree
 			ipcRenderer.send('newCommitToRender', JSON.parse(data));
 
-			this.setAppState({ globalData: this.state.globalData.concat([JSON.parse(data)])});
+			this.setAppState({ teamData: this.state.teamData.concat([JSON.parse(data)])});
 		}.bind(this));
 
 		//OwnGitlogLocalFile - Tested
 		ipcRenderer.on('parsedCommitAll', function(event, arg){
 			let data = {};
 			data['localData'] = arg;
+			console.log(data.localData[0])
 			this.setAppState(data);
 		}.bind(this));
 
 		//TeamGitLogFromDB - need to test
 		socket.on('completeDBLog', function(data){
-			this.setAppState({ globalData: data });
+			this.setAppState({ teamData: data });
 		}.bind(this));
 	}
 

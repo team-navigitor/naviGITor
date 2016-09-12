@@ -24,8 +24,8 @@ export default class TeamLogin extends Component {
     var data = {};
     data['orgName'] = document.getElementById('login-org').value;
     data['repoName'] = document.getElementById('login-repo').value;
-    sessionStorage.setItem('collection', data.orgName + data.repoName)
-    console.log("data from child "+JSON.stringify(data));
+    sessionStorage.setItem('collection', data.orgName + '.' + data.repoName + 'live')
+    //console.log("data from child "+JSON.stringify(data));
     this.props.setAppState(data);
     hashHistory.push('/Main');
   }

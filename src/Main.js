@@ -8,7 +8,7 @@ export default class Main extends Component {
   }
 
   render() {
-    console.log('curent state: '+JSON.stringify(this.props.getAppState.globalData))
+    //console.log('curent state: '+JSON.stringify(this.props.getAppState))
     return (
 
       <div id='main-container'>
@@ -19,19 +19,14 @@ export default class Main extends Component {
             <div className='nav-bar-divider'></div>
             <ul>
               <li><Link to='/Main/Profile'><i className="fa fa-user" aria-hidden="true"></i>My Profile</Link></li>
-              <li><Link to='/Main/TeamGitTree'><i className="fa fa-tree" aria-hidden="true"></i>Global Git Tree</Link></li>
+              <li><Link to='/Main/GitTree'><i className="fa fa-tree" aria-hidden="true"></i>Global Git Tree</Link></li>
               <li><Link to='/Main/LocalGitTree'><i className="fa fa-code-fork" aria-hidden="true"></i>Local Git Tree</Link></li>
-
-              {/* <li><Link to='/Main/Analytics'><i className="fa fa-bar-chart" aria-hidden="true"></i>Analytics</Link></li> */}
-
-              <li><Link to='/Main/LocalGraph'><i className="fa fa-bar-chart" aria-hidden="true"></i>Local Analytics</Link></li>
-
 							<li><Link to='/Main/Terminal'><i className="fa fa-terminal" aria-hidden="true"></i>Terminal</Link></li>
               <li><Link to='/'><i className="fa fa-sign-out" aria-hidden="true"></i>Log Out</Link></li>
             </ul>
           </div>
 
-	      <div className='view-container'>{React.cloneElement(this.props.children, { setAppState: this.props.setAppState, getAppState: this.props.getAppState } )}</div>
+	      <div className='view-container'>{this.props.children && React.cloneElement(this.props.children, { setAppState: this.props.setAppState, getAppState: this.props.getAppState } )}</div>
       </div>
     );
   }

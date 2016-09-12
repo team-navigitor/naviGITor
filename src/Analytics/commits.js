@@ -3,23 +3,20 @@ const gitFork = child.fork('./git-fork.js');
 const GitParser = require('../GitParser/gitparser.js');
 const $ = require('jquery');
 const rd3 = require('react-d3-library')
+
 let Commits = {}
 
-gitDiff.pastDays = (days) => {
+Commits.pastDays = (days) => {
     const time = Date.now() - (days * 86400000);
     let users = {};
     await $.ajax({
         method: 'GET',
         url: 'http://localhost:3000/days',
         data: time,
-    }).then((data => {
-        data.forEach(el => {
-            console.log(el)
-            if (users[el.name]) users[el.name] ++;
-            else users[el.name] = 0;
-        })
-    }))
-    return users;
+        success: data => {
+            console.log(data)
+        }
+    })
 }
 
 gitFork.send('git diff 786c4002028ecda77283b62e677428021af0791f^!')

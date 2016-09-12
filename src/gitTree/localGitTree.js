@@ -4,7 +4,7 @@ import $ from 'jquery';
 import cydagre from 'cytoscape-dagre';
 import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
-import dagTree from './createLocalGitTree';
+import createGitTree from './createGitTree';
 
 cydagre( cytoscape, dagre );
 
@@ -33,7 +33,7 @@ export default class LocalGitTree extends Component {
 						id: localGitHistory[i]['SHA'],
 						event: localGitHistory[i]['eventType'],
 						commit: localGitHistory[i]['message'],
-						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + ': ' + localGitHistory[i]['message']
+						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + ': ' + localGitHistory[i]['message'],
 					},
 					grabbable: false,
 					classes: 'merge'
@@ -49,7 +49,9 @@ export default class LocalGitTree extends Component {
 						id: localGitHistory[i]['SHA'],
 						event: localGitHistory[i]['eventType'],
 						commit: localGitHistory[i]['message'],
-						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + localGitHistory[i]['message']
+						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + localGitHistory[i]['message'],
+						diff: localGitHistory[i]['diff'],
+						diffStats: localGitHistory[i]['diffStats'],
 					},
 					grabbable: false,
 					'background-image': this.props.getAppState.githubAvatar
@@ -105,7 +107,9 @@ export default class LocalGitTree extends Component {
 			    	id: localGit['SHA'],
 			    	event: localGit['eventType'],
 			    	commit: localGit['message'],
-			    	nameAndMessage: localGit['user'] + ': ' + localGitHistory[i]['message']
+			    	nameAndMessage: localGit['user'] + ': ' + localGitHistory[i]['message'],
+					diff: localGit['diff'],
+					diffStats: localGit['diffStats']
 			    }
 				},
 				{
@@ -126,7 +130,7 @@ export default class LocalGitTree extends Component {
 			});
 		});
 
-		dagTree(gitTreeId, localGitNodes, localGitEdges);
+		createGitTree(gitTreeId, localGitNodes, localGitEdges);
 	}
 
 	render() {
