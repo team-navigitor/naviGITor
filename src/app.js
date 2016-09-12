@@ -22,7 +22,7 @@ export default class App extends Component {
 			newestGitEvent: '',
 			githubAvatar: '',
 			username: '',
-			globalData: [],
+			teamData: [],
 			localData: []
 		}
 		this.setAppState = this.setAppState.bind(this);
