@@ -15,7 +15,12 @@ let eventSchema = new mongoose.Schema({
   parent: [String],
   eventType: String,
   message: String,
-  time: Number
+  time: Number,
+  diff: String,
+  diff_stats: {
+    diff_adds: Number,
+    diff_subs: Number
+  }
 });
 
 //initialize EventController as empty object
@@ -53,9 +58,14 @@ EventController.saveEvent = function(arg) {
       parent: gitData.parent,
       eventType: gitData.eventType,
       message: gitData.message,
-      time: parseInt(gitData.time)
+      time: parseInt(gitData.time),
+      diff: gitData.diff,
+      diffStats: {
+        diffAdds: gitData.diffstats.adds,
+        diffSubs: gitData.diffstats.subs
+      }
       });
-        console.log('newevent: ', eventToAdd)
+        //console.log('newevent: ', eventToAdd)
         //save event to collection or create new collection
         //Event.create(eventToAdd);
         eventToAdd.save(function(err){
@@ -78,12 +88,14 @@ EventController.getRepo = (arg, callback) => {
 }
 
 EventController.getByTime = (arg, callback) => {
-    let time = Math.floor(arg.time / 1000)
-
-    let coll = mongoose.model(arg.room + 's', eventSchema)
-    coll.find({time: {$gt: time}}, 'user data time', (err, data) => {
+    let ttime = Math.floor(arg.body.time / 1000)
+    let coll = mongoose.model(arg.body.room + 's', eventSchema)
+    coll.find({time: {$gt: ttime}}, 'user', (err, data) => {
         if (err) console.log('getByTime error: ', err)
-        callback(data)
+        else {
+          console.log('get by time firing with: ', data);
+          callback(data)
+        }      
     })
 }
 // EventController.getUser = (arg, callback) => {

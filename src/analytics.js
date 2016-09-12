@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-
 import $ from 'jquery'
 import {BarChart} from 'react-easy-chart';
 
-
+//adding comments
 export default class Analytics extends Component {
 
   getCollection(e) {
+    
     e.preventDefault();
     const days = {}
     days.time = Date.now() - ($('#daysInput').val() * 86400000)
@@ -36,12 +36,15 @@ export default class Analytics extends Component {
     //     this.props.setAppState({commitsPerUser: chart})
     //   }.bind(this)
     //})
+
   }
 
   render() {
     let bar = null;
-    if (this.props.getAppState.commitsPerUser) {
-      const style = {textAlign: 'center'}
+
+      if (this.props.getAppState.commitsPerUser) {
+        const style = {textAlign: 'center'}
+
       bar = <BarChart
       data={this.props.getAppState.commitsPerUser}
       colorBars
@@ -53,18 +56,16 @@ export default class Analytics extends Component {
       axisLabels={{y: 'Commits'}}
       yTickNumber={5}
       />
-    }
-
+  }
     return (
-      <div id='analytics-container'>
-        <h5>Get commits for the following number of days:</h5>
-        <form id='numDays'>
-          <input id='daysInput' type='text' />
-          <button id="submitDays" onClick={this.getCollection.bind(this)}>submit days</button>
-
-        </form>
+      <div className='chart-container'>
+        <div id='days-form-container'>
+        <form id='numDays' className='days-form' onSubmit={this.getCollection.bind(this)}>
+            <h5>See commits per user for the last <input id='daysInput' type='text' /> days:</h5>             
+            </form>           
+        </div>      
         {bar}
-      </div>
-    );
+        </div>
+    )
   }
 }
