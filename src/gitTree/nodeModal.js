@@ -13,7 +13,8 @@ $(document).ready(function() {
 		$('.node-commit').append(JSON.stringify(data.commit));
 		$('.node-author').append(JSON.stringify(data.author));
 		$('.node-event').append(JSON.stringify(data.event));
-	
+		$('.node-date').append(JSON.stringify(data.date));
+		$('.node-time').append(JSON.stringify(data.time));
 
 		console.log('hello from modalFrminside' + JSON.stringify(data));
 	})
