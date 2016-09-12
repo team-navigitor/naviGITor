@@ -16,7 +16,7 @@ export default function createGitTree(gitTreeId, gitNodes, gitEdges) {
 		style: cytoscape.stylesheet()
 		.selector('node')
 		  .css({
-		    'content': 'data(nameAndMessage)',
+		    'content': 'data(commit)',
 		    'width': 65,
 		    'height': 65,
 		    'text-opacity': 0.5,
