@@ -28,8 +28,6 @@ export default class Login extends Component {
       success: function(data) {
         if (data.github) {
           ipcRenderer.send('avatarUrl', data.github);
-          // gitParser.setGithubUrl('https://avatars.githubusercontent.com/' + data.github);
-          // console.log('github: ' + data.github);
           this.props.setAppState({username: user.name});
           this.props.setAppState({githubAvatar: 'https://avatars.githubusercontent.com/'+data.github});
           hashHistory.push('/TeamLogin');

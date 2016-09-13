@@ -15,6 +15,7 @@ let eventSchema = new mongoose.Schema({
   parent: [String],
   eventType: String,
   message: String,
+  avatarUrl: String,
   time: Number,
   diff: String,
   diff_stats: {

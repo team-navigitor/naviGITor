@@ -119,7 +119,7 @@ function openDirChoice() {
         .flatMap(x => x)
         .filter(x => x.length > 40)
         .last()
-        .map(x => gitParser.parseGit(x, gitPath))
+        .map(x => gitParser.parseGit(x, gitPath, githubUrl))
         .subscribe(x => mainWindow.webContents.send('parsedCommit', x));
         // .subscribe(x => console.log(x));
       });

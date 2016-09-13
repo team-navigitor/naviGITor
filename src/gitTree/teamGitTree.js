@@ -53,7 +53,8 @@ export default class TeamGitTree extends Component {
 						commit: teamGitHistory[i]['message'],
 						nameAndMessage: teamGitHistory[i]['user'] + ': ' + teamGitHistory[i]['message'],
 						diff: teamGitHistory[i]['diff'],
-						diffStats: teamGitHistory[i]['diffStats']
+						diffStats: teamGitHistory[i]['diffStats'],
+						bg: teamGitHistory[i]['avatarUrl']
 					},
 					grabbable: false,
 				});
@@ -109,8 +110,9 @@ export default class TeamGitTree extends Component {
 			    	event: incomingGit['event'],
 			    	commit: incomingGit['message'],
 			    	nameAndMessage: incomingGit['user'] + ': ' + incomingGit['message'],
-					diff: incomingGit['diff'],
-					diffStats: incomingGit['diffStats']				
+						diff: incomingGit['diff'],
+						diffStats: incomingGit['diffStats'],
+						bg: incomingGit['avatarUrl']
 			    }
 				},
 				{
