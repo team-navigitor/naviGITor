@@ -17,7 +17,7 @@ export default class LocalGraph extends Component {
 
     this.props.getAppState.localData.
       map(function(commit){ return new Date(commit.time * 1000).
-        toString().slice(4,15);}).
+        toString().slice(4,11);}).
           forEach(function(x) { count[x] = ( count[x] || 0 ) + 1; });
 
     for (var prop in count) {
@@ -34,6 +34,7 @@ export default class LocalGraph extends Component {
             <BarChart
               axes
               grid
+              axisLabels={{ x: 'Date', y: 'Commits' }}
               margin={{top: 30, right: 0, bottom: 30, left: 100}}
               height={500}
               width={500}

@@ -34,6 +34,8 @@ export default class LocalGitTree extends Component {
 						event: localGitHistory[i]['eventType'],
 						commit: localGitHistory[i]['message'],
 						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + ': ' + localGitHistory[i]['message'],
+						date: new Date(localGitHistory[i]['time'] * 1000).toString().slice(0,15),
+						time: new Date(localGitHistory[i]['time'] * 1000).toString().slice(16,21)
 					},
 					grabbable: false,
 					classes: 'merge'
@@ -50,6 +52,8 @@ export default class LocalGitTree extends Component {
 						event: localGitHistory[i]['eventType'],
 						commit: localGitHistory[i]['message'],
 						nameAndMessage: localGitHistory[i]['user'].substring(0, localGitHistory[i]['user'].indexOf('<') - 1) + ': ' + localGitHistory[i]['message'],
+						date: new Date(localGitHistory[i]['time'] * 1000).toString().slice(0,15),
+						time: new Date(localGitHistory[i]['time'] * 1000).toString().slice(16,21),
 						diff: localGitHistory[i]['diff'],
 						diffStats: localGitHistory[i]['diffStats'],
 					},
@@ -108,8 +112,10 @@ export default class LocalGitTree extends Component {
 			    	event: localGit['eventType'],
 			    	commit: localGit['message'],
 			    	nameAndMessage: localGit['user'] + ': ' + localGitHistory[i]['message'],
-					diff: localGit['diff'],
-					diffStats: localGit['diffStats']
+						date: new Date(localGitHistory[i]['time'] * 1000).toString().slice(0,15),
+						time: new Date(localGitHistory[i]['time'] * 1000).toString().slice(16,21),
+						diff: localGit['diff'],
+						diffStats: localGit['diffStats']
 			    }
 				},
 				{
