@@ -34,6 +34,7 @@ module.exports = {
     new webpack.NoErrorsPlugin()
   ],
   node: {
+    // Resolve error with child process
     child_process: 'empty',
     __dirname: false,
     __filename: false
