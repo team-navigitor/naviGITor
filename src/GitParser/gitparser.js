@@ -7,7 +7,6 @@ const execSync = require('child_process').execSync;
 
 // helper function to parse git data into an object from string
 gitParser.parseGit = (commitStr, path, url) => {
-  console.log('i am githubUrl ' + url);
   commitStr.replace(/(\r\n|\n|\r)/gm,"");
   var commitObj = {};
   commitObj.parent = [commitStr.substring(0, 40)];
