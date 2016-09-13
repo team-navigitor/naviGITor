@@ -14,6 +14,7 @@ export default class LocalGraph extends Component {
     var data = [];
     var count = {};
     var colors = ['#318864', '#4B9777', '#65A68B', '#7EB59E', '#98C4B2', '#B2D2C5'];
+    var width = 0;
 
     this.props.getAppState.localData.
       map(function(commit){ return new Date(commit.time * 1000).
@@ -25,6 +26,16 @@ export default class LocalGraph extends Component {
       data.push( { 'x': prop, 'y': count[prop], 'color': colors[color] } );
     }
 
+    console.log('length '+data.length);
+    if (data.length <= 10) { width.length = 500 };
+    if (data.length > 10 && data.length <= 25) { width = data.length * 50 };
+    if (data.length > 25) {
+      width = 1000;
+      data = data.slice(0, 30);
+    }
+    console.log('data '+data);
+    console.log('wdith '+width);
+
     return (
 
       <div className='graph-page-container'>
@@ -35,9 +46,9 @@ export default class LocalGraph extends Component {
               axes
               grid
               axisLabels={{ x: 'Date', y: 'Commits' }}
-              margin={{top: 30, right: 0, bottom: 30, left: 100}}
+              margin={{top: 30, right: 0, bottom: 30, left: 60}}
               height={500}
-              width={500}
+              width={width}
               data={data}
                     />
           </div>
