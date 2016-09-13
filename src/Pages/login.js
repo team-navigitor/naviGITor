@@ -4,6 +4,8 @@ import $ from 'jquery'
 import { hashHistory } from 'react-router';
 import Signup from './signup';
 import TeamLogin from './teamLogin';
+import { ipcRenderer } from 'electron';
+const gitParser = require('../gitParser/gitparser.js');
 
 
 
@@ -25,7 +27,9 @@ export default class Login extends Component {
       data: user,
       success: function(data) {
         if (data.github) {
-          console.log('github: ' + data.github);
+          ipcRenderer.send('avatarUrl', data.github);
+          // gitParser.setGithubUrl('https://avatars.githubusercontent.com/' + data.github);
+          // console.log('github: ' + data.github);
           this.props.setAppState({username: user.name});
           this.props.setAppState({githubAvatar: 'https://avatars.githubusercontent.com/'+data.github});
           hashHistory.push('/TeamLogin');

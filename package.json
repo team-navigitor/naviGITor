@@ -10,7 +10,7 @@
     "start": "node ./server/server.js",
     "test": "mocha --compilers js:babel-core/register --recursive",
     "build": "NODE_ENV=production webpack -p --config webpack.config.prod.js --progress",
-    "package": "electron-packager . naviGITor --platform=darwin --arch=all --overwrite --icon=./images/navigitorIcon.icns"
+    "package": "electron-packager . naviGITor --prune --platform=darwin --arch=all --overwrite --icon=./images/navigitorIcon.icns"
   },
   "dependencies": {
     "bcrypt": "0.8.7",

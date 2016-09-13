@@ -34,6 +34,7 @@ module.exports = {
     new webpack.NoErrorsPlugin()
   ],
   node: {
+    child_process: 'empty',
     __dirname: false,
     __filename: false
   },
