@@ -1,17 +1,20 @@
 const gitParser = {};
 const execSync = require('child_process').execSync;
 
-    function byteCount(s) {
-      return encodeURI(s).split(/%..|./).length - 1;
-      }
+// function byteCount(s) {
+//   return encodeURI(s).split(/%..|./).length - 1;
+// }
+
 // helper function to parse git data into an object from string
-gitParser.parseGit = (commitStr, path) => {
+gitParser.parseGit = (commitStr, path, url) => {
+  console.log('i am githubUrl ' + url);
   commitStr.replace(/(\r\n|\n|\r)/gm,"");
   var commitObj = {};
   commitObj.parent = [commitStr.substring(0, 40)];
   commitObj.SHA = commitStr.substring(41, 81);
   commitObj.diff = '';
   commitObj.user = '';
+  commitObj.avatarUrl = 'https://avatars.githubusercontent.com/' + url;
   commitObj.time = '';
   var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
   commitObj.eventType = commitStr.match(eventTest)[0].substring(6);

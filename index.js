@@ -69,6 +69,14 @@ app.on('activate', function () {
 })
 
 /******************************************************************************
+        *** Github Avatar Url ***
+*******************************************************************************/
+let githubUrl = '';
+ipcMain.on('avatarUrl', function(event, url) {
+  githubUrl = url;
+});
+
+/******************************************************************************
         *** File Watching and Emitting Events to Rendering Process ***
         Following methods, when triggered, calls git parser to parse log event
         then send that event and data to the render process in app.js
@@ -100,7 +108,7 @@ function openDirChoice() {
           .map(x => x.split('\n'))
           .flatMap(x => x)
           .filter(x => x.length > 40)
-          .map(x => gitParser.parseGit(x, gitPath))
+          .map(x => gitParser.parseGit(x, gitPath, githubUrl))
           .toArray(x => x)
           .subscribe(x => mainWindow.webContents.send('parsedCommitAll', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitFullLogDone'));
         // });
@@ -112,7 +120,7 @@ function openDirChoice() {
         .flatMap(x => x)
         .filter(x => x.length > 40)
         .last()
-        .map(x => gitParser.parseGit(x, gitPath))
+        .map(x => gitParser.parseGit(x, gitPath, githubUrl))
         .subscribe(x => mainWindow.webContents.send('parsedCommit', x));
         // .subscribe(x => console.log(x));
       });
@@ -126,7 +134,6 @@ function openDirChoice() {
     function ()  { console.log('onCompleted'); });
     }
 };
-
 
 
 /******************************************************************************
