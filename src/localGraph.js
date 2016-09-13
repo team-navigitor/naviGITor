@@ -26,15 +26,12 @@ export default class LocalGraph extends Component {
       data.push( { 'x': prop, 'y': count[prop], 'color': colors[color] } );
     }
 
-    console.log('length '+data.length);
     if (data.length <= 10) { width.length = 500 };
     if (data.length > 10 && data.length <= 25) { width = data.length * 50 };
     if (data.length > 25) {
       width = 1000;
       data = data.slice(0, 30);
     }
-    console.log('data '+data);
-    console.log('wdith '+width);
 
     return (
 
