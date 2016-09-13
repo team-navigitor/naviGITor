@@ -25,17 +25,18 @@ export default class Login extends Component {
       data: user,
       success: function(data) {
         if (data.github) {
-          console.log('github: ' + data.github)
-          this.props.setAppState({githubAvatar: 'https://avatars.githubusercontent.com/'+data.github})
+          console.log('github: ' + data.github);
+          this.props.setAppState({username: user.name});
+          this.props.setAppState({githubAvatar: 'https://avatars.githubusercontent.com/'+data.github});
           hashHistory.push('/TeamLogin');
         }
         else if (data) {
           console.log('no github ');
           hashHistory.push('/TeamLogin');
         }
-        else hashHistory.push('/Signup')
+        else hashHistory.push('/Signup');
       }.bind(this)
-    })
+    });
   }
 
   submitPassword(e){

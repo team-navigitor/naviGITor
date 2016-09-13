@@ -11,7 +11,7 @@ gitParser.parseGit = (commitStr, path) => {
   commitObj.parent = [commitStr.substring(0, 40)];
   commitObj.SHA = commitStr.substring(41, 81);
   commitObj.diff = '';
-  commitObj.author = '';
+  commitObj.user = '';
   commitObj.time = '';
   var eventTest = /(-)\d\d\d\d[^:]*|(\+)\d\d\d\d[^:]*/;
   commitObj.eventType = commitStr.match(eventTest)[0].substring(6);
