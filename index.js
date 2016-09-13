@@ -10,6 +10,7 @@ const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
 const Shell = require ('shelljs');
 const fs = require('fs');
 const Rx = require('rxjs/Rx');
+const remote = require('electron').remote;
 
 
 
@@ -139,13 +140,21 @@ ipcMain.on('nodeModal', function (event, nodeEvent) {
   nodeClickData = nodeEvent;
   win = new BrowserWindow({
     parent: mainWindow,
+    modal: true,
     width: 450,
     height: 200,
-    maxWidth: 470,
-    maxHeight: 220
+    maxWidth: 700,
+    maxHeight: 500,
+    frame: false,
+    transparent: true
   });
 
-  win.on('close', function () { win = null });
+  // document.getElementById("exit-button").addEventListener("click", function (e) {
+  //    var window = remote.getCurrentWindow();
+  //    window.close();
+  // });
+
+  // win.on('close', function () { win = null });
   win.loadURL(modalPath);
 
   win.show();
