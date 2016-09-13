@@ -141,7 +141,7 @@ ipcMain.on('nodeModal', function (event, nodeEvent) {
   win = new BrowserWindow({
     parent: mainWindow,
     modal: true,
-    width: 450,
+    width: 400,
     height: 200,
     maxWidth: 700,
     maxHeight: 500,
@@ -149,12 +149,9 @@ ipcMain.on('nodeModal', function (event, nodeEvent) {
     transparent: true
   });
 
-  // document.getElementById("exit-button").addEventListener("click", function (e) {
-  //    var window = remote.getCurrentWindow();
-  //    window.close();
-  // });
-
-  // win.on('close', function () { win = null });
+  ipcMain.on('closeModal', function(){
+    win.destroy();
+  });
   win.loadURL(modalPath);
 
   win.show();

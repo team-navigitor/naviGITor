@@ -11,13 +11,6 @@
     background: rgba(64, 64, 64, 0.9);
   }
 
-  #content-container {
-    font-family: 'Catamaran', sans-serif;
-    margin: 1em;
-    color: #CCCCCC;
-    font-size: .9em;
-  }
-
   #exit-button {
     float: right;
     background-color: Transparent;
@@ -25,19 +18,32 @@
     border: none;
     color: #c0e8d8;
     font-size: 1em;
-    margin-right: 1em;
+    margin-right: 0;
+    margin-top: 0;
   }
-  #nodeModal {
-    width: 100%;
+
+  #content-container {
+	  font-family: 'Work Sans', sans-serif;
+    color: #CCCCCC;
+    font-size: .9em;
+    margin-left: .9em;
+    margin-right: .9em;
+    margin-top: .9em;
   }
+
   .contrast {
     color: #c0e8d8;
+    font-size: 1.5em;
+  }
+
+  #nodeModal {
+    width: 100%;
   }
 </style>
 <body>
   <button id='exit-button'><i class="fa fa-times fa-lg" aria-hidden="true"></i></button>
   <div id='content-container'>
-   <h4 class='contrast' id='header'>COMMIT INFORMATION</h4>
+   <p class='contrast' id='header'>COMMIT INFORMATION</p>
    <table id="nodeModal">
      <tr>
        <td width='30%'>AUTHOR</td>

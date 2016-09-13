@@ -17,4 +17,9 @@ $(document).ready(function() {
 		if (data.diff !== undefined) $('.node-deleted').append(data.diffStats.subs)
 		console.log('hello from modalFrminside' + JSON.stringify(data));
 	})
+
+	document.getElementById("exit-button").addEventListener("click", function (e) {
+		 ipcRenderer.send('closeModal');
+	});
+
 });
