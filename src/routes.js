@@ -12,7 +12,7 @@ import TeamLogin from './Pages/teamLogin';
 import TeamGitTree from './gitTree/teamGitTree';
 import LocalGitTree from './gitTree/localGitTree';
 import TerminalView from './terminal/terminal.js';
-
+import TeamAnalytics from './analytics.js';
 import LocalGraph from './localGraph';
 import Logo from './logopage';
 import Profile from './profilePage';
@@ -35,7 +35,7 @@ export default class Routes extends Component {
              <IndexRoute component = {Logo} />
              <Route path = "TeamGitTree" component = {TeamGitTree} />
              <Route path = "LocalGitTree" component = {LocalGitTree} />
-
+             <Route path = "TeamAnalytics" component = {TeamAnalytics} />
              <Route path = "Terminal" component = {TerminalView} />
              <Route path = "LocalGraph" component = {LocalGraph} />
              <Route path = "Profile" component = {Profile} />

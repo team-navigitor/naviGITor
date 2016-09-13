@@ -23,7 +23,9 @@ export default function createGitTree(gitTreeId, gitNodes, gitEdges) {
 		    'text-valign': 'center',
 		    'text-halign': 'right',
 		    'border-width': 3,
-		    'background-image': 'https://avatars.githubusercontent.com/binhxn',
+		    'background-image': function(el) {
+	    		return el.data('bg');
+		    },
 		    'background-fit': 'cover',
 		    'border-color': '#c0e8d8'
 		  })
@@ -38,7 +40,9 @@ export default function createGitTree(gitTreeId, gitNodes, gitEdges) {
 		.selector('node.new')
 		  .css({
 		    'border-style': 'double',
-		    'background-image': 'https://avatars.githubusercontent.com/Harla101',
+		    'background-image': function(el) {
+	    		return el.data('bg');
+		    },
 				'border-color': '#19C383',
 				'border-width': 7,
 				'line-color': '#19C383',

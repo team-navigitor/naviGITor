@@ -10,6 +10,7 @@ const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
 const Shell = require ('shelljs');
 const fs = require('fs');
 const Rx = require('rxjs/Rx');
+const remote = require('electron').remote;
 
 
 
@@ -68,6 +69,14 @@ app.on('activate', function () {
 })
 
 /******************************************************************************
+        *** Github Avatar Url ***
+*******************************************************************************/
+let githubUrl = '';
+ipcMain.on('avatarUrl', function(event, url) {
+  githubUrl = url;
+});
+
+/******************************************************************************
         *** File Watching and Emitting Events to Rendering Process ***
         Following methods, when triggered, calls git parser to parse log event
         then send that event and data to the render process in app.js
@@ -99,7 +108,7 @@ function openDirChoice() {
           .map(x => x.split('\n'))
           .flatMap(x => x)
           .filter(x => x.length > 40)
-          .map(x => gitParser.parseGit(x, gitPath))
+          .map(x => gitParser.parseGit(x, gitPath, githubUrl))
           .toArray(x => x)
           .subscribe(x => mainWindow.webContents.send('parsedCommitAll', x), e => console.log('Error on fullGitLog: ' + e), () => console.log('gitFullLogDone'));
         // });
@@ -111,7 +120,7 @@ function openDirChoice() {
         .flatMap(x => x)
         .filter(x => x.length > 40)
         .last()
-        .map(x => gitParser.parseGit(x, gitPath))
+        .map(x => gitParser.parseGit(x, gitPath, githubUrl))
         .subscribe(x => mainWindow.webContents.send('parsedCommit', x));
         // .subscribe(x => console.log(x));
       });
@@ -127,7 +136,6 @@ function openDirChoice() {
 };
 
 
-
 /******************************************************************************
         *** Cytoscape Node Modal ***
 *******************************************************************************/
@@ -139,13 +147,18 @@ ipcMain.on('nodeModal', function (event, nodeEvent) {
   nodeClickData = nodeEvent;
   win = new BrowserWindow({
     parent: mainWindow,
-    width: 450,
+    modal: true,
+    width: 400,
     height: 200,
-    maxWidth: 470,
-    maxHeight: 220
+    maxWidth: 700,
+    maxHeight: 500,
+    frame: false,
+    transparent: true
   });
 
-  win.on('close', function () { win = null });
+  ipcMain.on('closeModal', function(){
+    win.destroy();
+  });
   win.loadURL(modalPath);
 
   win.show();
