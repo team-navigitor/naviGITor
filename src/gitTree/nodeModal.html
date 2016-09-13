@@ -2,42 +2,78 @@
 <html>
 <head>
   <title>Node Details</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Catamaran|Quattrocento+Sans|Work+Sans" rel="stylesheet">
+  <script src="https://use.fontawesome.com/0b16edf27c.js"></script>
 </head>
 <style>
   body {
-    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    background: rgba(64, 64, 64, 0.9);
+  }
+
+  #exit-button {
+    float: right;
+    background-color: Transparent;
+    outline: none;
+    border: none;
+    color: #c0e8d8;
+    font-size: 1em;
+    margin-right: 0;
+    margin-top: 0;
+  }
+
+  #content-container {
+	  font-family: 'Work Sans', sans-serif;
+    color: #CCCCCC;
+    font-size: .9em;
+    margin-left: .9em;
+    margin-right: .9em;
+    margin-top: .9em;
+  }
+
+  .contrast {
+    color: #c0e8d8;
+    font-size: 1.5em;
+  }
+
+  #nodeModal {
+    width: 100%;
   }
 </style>
 <body>
-  <!-- <div id="nodeWindow">
-    <p>ID: <span class="node-id"></span><p>
-    <p>Commit: <span class="node-commit"></span><p>
-    <p>Author: <span class="node-author"></span><p>
-    <p>Event: <span class="node-event"></span><p>
-  </div> -->
-
-  <table id="nodeModal">
-    <tr>
-      <td>ID:</td>
-      <td class="node-id"></td>
-    </tr>
-    <tr>
-      <td>Parent:</td>
-      <td class="node-parent"></td>
-    </tr>
-    <tr>
-      <td>Commit:</td>
-      <td class="node-commit"></td>
-    </tr>
-    <tr>
-      <td>Author:</td>
-      <td class="node-author"></td>
-    </tr>
-    <tr>
-      <td>Event:</td>
-      <td class="node-event"></td>
-    </tr>
-  </table>
+  <button id='exit-button'><i class="fa fa-times fa-lg" aria-hidden="true"></i></button>
+  <div id='content-container'>
+   <p class='contrast' id='header'>COMMIT INFORMATION</p>
+   <table id="nodeModal">
+     <tr>
+       <td width='30%'>AUTHOR</td>
+       <td width='70%' class="node-author"></td>
+     </tr>
+     <tr>
+       <td>NAME</td>
+       <td class="node-commit"></td>
+     </tr>
+     <tr>
+       <td>DATE</td>
+       <td class="node-date"></td>
+     </tr>
+     <tr>
+       <td>TIME</td>
+       <td class="node-time"></td>
+     </tr>
+     <tr>
+       <td>EVENT</td>
+       <td class="node-event"></td>
+     </tr>
+     <tr>
+       <td>LINES ++</td>
+       <td class="node-added"></td>
+     </tr>
+     <tr>
+       <td>LINES --</td>
+       <td class="node-deleted"></td>
+     </tr>
+   </table>
 </body>
 
 <script type="text/javascript" src="./nodeModal.js"></script>
