@@ -7,7 +7,7 @@ const gitParser = require('./src/gitParser/gitparser.js');
 const exec = child.exec();
 const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
 //var ls = child.fork('fork.js');
-const Shell = require ('shelljs');
+
 const fs = require('fs');
 const Rx = require('rxjs/Rx');
 const remote = require('electron').remote;
@@ -183,25 +183,21 @@ ipcMain.on('newCommitToRender', function(event, data) {
 
 // receive input from terminal
 
-ipcMain.on('term-input', (event, input) => {
-  fork.send(input)
-})
+// ipcMain.on('term-input', (event, input) => {
+//   fork.send(input)
+// })
 
 // ipcMain.on('send-dir', dir => {
 //   console.log('ipc main send-dir firing')
 //   mainWindow.webContents.send('send-dir', dir)
 // })
 
-ipcMain.on('get-dir', () => {
-  //const fork = child.fork(`${__dirname}/fork.js`);
-  console.log('ipc main get-dir firing')
-  fork.send('get-dir')
-})
-fork.on('message', m => {
-  if(m.dirOnly) {
-    console.log(m.dirOnly)
-    mainWindow.webContents.send('send-dir', m)
-  }
-  else mainWindow.webContents.send('reply', m)
-  //mainWindow.webContents.send('reply', m)
-})
+  ipcMain.on('term-input', (event, arg) => {
+    console.log('input rec')
+    fork.send({ message: arg });
+    fork.removeAllListeners('message');
+    fork.on('message', (message) => {
+      // Send what is diplayed in terminal
+    });
+  });
+
