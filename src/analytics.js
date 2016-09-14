@@ -9,38 +9,29 @@ export default class Analytics extends Component {
     
     e.preventDefault();
     const days = {}
-    days.time = Date.now() - ($('#daysInput').val() * 86400000)
-    days.room = sessionStorage.getItem('collection')
+    let time = Math.floor((Date.now() - ($('#daysInput').val() * 86400000)) / 1000)
+    console.log('user time: ' + time)
     let chart = [];
-    chart.push({x: "Colin", y: 12}, {x: "Sarah", y: 6}, {x: "Steve", y: 9}, {x: "Binh", y: 14})
-
+    let users = {};
+    this.props.getAppState.teamData.filter(el => {
+      console.log
+      console.log('time ' + el.time)
+      return el.time > time;
+    }).forEach(elem => {
+      console.log('new elem ' + elem.user)
+      let user = elem.user.substring(0, elem.user.indexOf('<') - 1)
+      if (users[user]) users[user]++;
+      else users[user] = 1;
+    })
+    for (let key in users) {
+      chart.push({x: key, y: users[key]})
+    }
+    console.log(chart)
     this.props.setAppState({commitsPerUser: chart})
-    // $.ajax({
-    //   data: days,
-    //   method: 'POST',
-    //   // url: 'http://localhost:3000/days',
-    //   success: function(data) {
-    //     let users = {};
-    //     data.forEach(el => {
-    //       let name = el.user.substring(1, el.user.lastIndexOf(' '))
-    //       if (users[name]) users[name] ++;
-    //       else users[name] = 1
-    //     })
-    //     let chart = [];
-    //     // for (let key in users) {
-    //     //   console.log('key: ', key)
-    //     //   chart.push({x: key, y: users[key]})
-    //     // }
-    //     chart.push({x: "Colin", y: 12}, {x: "Sarah", y: 6}, {x: "Steve", y: 9}, {x: "Binh", y: 14})
-    //     let jason = JSON.stringify(chart)
-    //     this.props.setAppState({commitsPerUser: chart})
-    //   }.bind(this)
-    //})
-
   }
 
   render() {
-    let bar;
+    let bar = null;
 
       if (this.props.getAppState.commitsPerUser) {
         const style = {textAlign: 'center'}
@@ -56,9 +47,9 @@ export default class Analytics extends Component {
       axisLabels={{y: 'Commits'}}
       yTickNumber={5}
       />
-      
+  } else {
+    bar = <img height='250px' width='250px' src="./images/darknaviGitorLogo_1.png" />
   }
-  else bar = <img src="./images/darknaviGitorLogo_1.png" height={200} width={200}/>
     return (
       <div className='chart-container'>
         <div id='days-form-container'>
