@@ -8,25 +8,20 @@ export default class Analytics extends Component {
   getCollection(e) {
     
     e.preventDefault();
-    const days = {}
-    let time = Math.floor((Date.now() - ($('#daysInput').val() * 86400000)) / 1000)
-    console.log('user time: ' + time)
+    let time = Math.floor((Date.now() - ($('#daysInput').val() * 86400000)) / 1000);
     let chart = [];
     let users = {};
     this.props.getAppState.teamData.filter(el => {
-      console.log
-      console.log('time ' + el.time)
       return el.time > time;
     }).forEach(elem => {
       console.log('new elem ' + elem.user)
-      let user = elem.user.substring(0, elem.user.indexOf('<') - 1)
-      if (users[user]) users[user]++;
-      else users[user] = 1;
+      let name = elem.user.substring(0, elem.user.indexOf('<') - 1)
+      if (users[name]) users[name]++;
+      else users[name] = 1;
     })
     for (let key in users) {
       chart.push({x: key, y: users[key]})
     }
-    console.log(chart)
     this.props.setAppState({commitsPerUser: chart})
   }
 
