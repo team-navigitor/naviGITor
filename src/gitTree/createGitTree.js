@@ -24,6 +24,7 @@ export default function createGitTree(gitTreeId, gitNodes, gitEdges) {
 		    'text-halign': 'right',
 		    'border-width': 3,
 		    'background-image': function(el) {
+		    	console.log(el.data('bg'));
 	    		return el.data('bg');
 		    },
 		    'background-fit': 'cover',
