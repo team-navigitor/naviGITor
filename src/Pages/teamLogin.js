@@ -34,7 +34,7 @@ export default class TeamLogin extends Component {
     return (
         <div className='login-container' id='teamLogin-container'>
         <h3>PROJECT INFORMATION</h3>
-          <h5 >Select the local file where your project is located:</h5>
+          <h5 >Select the directory where your project is located:</h5>
           <button className="login-button" onClick = {this.dirChoice}>FIND FOLDER</button>
 
           <form onSubmit={this.handleData} className="login-form">
