@@ -54,7 +54,9 @@ export default class TeamGitTree extends Component {
 						nameAndMessage: teamGitHistory[i]['user'] + ': ' + teamGitHistory[i]['message'],
 						diff: teamGitHistory[i]['diff'],
 						diffStats: teamGitHistory[i]['diffStats'],
-						bg: teamGitHistory[i]['avatarUrl']
+						bg: teamGitHistory[i]['avatarUrl'],
+						date: new Date(teamGitHistory[i]['time'] * 1000).toString().slice(0,15),
+						time: new Date(teamGitHistory[i]['time'] * 1000).toString().slice(16,21)
 					},
 					grabbable: false,
 				});
@@ -112,7 +114,9 @@ export default class TeamGitTree extends Component {
 			    	nameAndMessage: incomingGit['user'] + ': ' + incomingGit['message'],
 						diff: incomingGit['diff'],
 						diffStats: incomingGit['diffStats'],
-						bg: incomingGit['avatarUrl']
+						bg: incomingGit['avatarUrl'],
+						date: new Date(incomingGit['time'] * 1000).toString().slice(0,15),
+						time: new Date(incomingGit['time'] * 1000).toString().slice(16,21)
 			    }
 				},
 				{
