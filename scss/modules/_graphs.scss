@@ -1,13 +1,16 @@
-.graph-page-container {
-	width: 602px;
-	margin-left: auto;
-	margin-right: auto;
-	position: fixed;
-	top: 50px;
-}
 .graph-container {
-	width: 600px;
-	position: relative;
-	text-align: center;
-	color: gray;
+	left: 50%;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 550px;
+
+	h2 {
+		margin-top: 0;
+	}
+
+	h2,
+	p {
+		text-align: center;
+	}
 }

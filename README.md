@@ -34,7 +34,7 @@ Open a new tab
 npm run electron
 ```
 	
-#### Testing
+## Testing
 
 	npm run test
 
