@@ -3,7 +3,7 @@ import $ from 'jquery'
 import {BarChart} from 'react-easy-chart';
 
 //adding comments
-export default class Analytics extends Component {
+export default class TeamAnalytics extends Component {
 
   getCollection(e) {
     
