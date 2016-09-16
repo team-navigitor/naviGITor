@@ -1,10 +1,6 @@
 const gitParser = {};
 const execSync = require('child_process').execSync;
 
-// function byteCount(s) {
-//   return encodeURI(s).split(/%..|./).length - 1;
-// }
-
 // helper function to parse git data into an object from string
 gitParser.parseGit = (commitStr, path, url) => {
   commitStr.replace(/(\r\n|\n|\r)/gm,"");
@@ -34,8 +30,6 @@ gitParser.parseGit = (commitStr, path, url) => {
       else if (statsArr[i][0] === '-') commitObj.diffStats.subs++;
     }
   }
-    //if (commitObj.SHA) console.log('commit diff: ' + commitObj.diff)
-    // else console.log('not a commit, diff: ' + commitObj.diff)
   
   commitObj.message = commitStr.substring((commitStr.indexOf(commitObj.eventType) + 1 + commitObj.eventType.length)).trim();
 

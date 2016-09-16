@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import $ from 'jquery';
-import cydagre from 'cytoscape-dagre';
-import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
 import createGitTree from './createGitTree';
-
-cydagre( cytoscape, dagre );
 
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const path = require('path');
@@ -17,13 +13,14 @@ export default class TeamGitTree extends Component {
 	}
 
 	componentDidMount() {
-
 		let gitTreeId = 'team-git-tree',
 				teamGitHistory = this.props.getAppState.teamData,
 				teamGitNodes = [],
 				teamGitEdges = [];
+
 		// loop through all local git activity, and store as nodes
 		for (var i = 0; i < teamGitHistory.length; i++) {
+
 			// if node has merge event, add merge class to add css properties
 			if (teamGitHistory[i].eventType === 'commit (merge)') {
 				teamGitNodes.push({
@@ -42,7 +39,6 @@ export default class TeamGitTree extends Component {
 			}
 
 			// all other nodes are normal
-
 			else if (teamGitHistory[i].SHA) {
 				teamGitNodes.push({
 					data: {
@@ -74,6 +70,7 @@ export default class TeamGitTree extends Component {
 					});
 				}
 			}
+
 			// if committed a fixed merge conflict, add merge class to edges
 			else if (teamGitHistory[i].eventType === 'commit (merge)') {
 				teamGitEdges.push({
@@ -86,7 +83,6 @@ export default class TeamGitTree extends Component {
 			}
 
 			// loop through all other events and connect current node to parent node
-			// else if (teamGitHistory[i]['event'] !== 'checkout') {
 			else if(!teamGitHistory[i].eventType === 'merge' || !/^checkout/.test(teamGitHistory[i]['event'])) {
 				teamGitEdges.push({
 					data: {
@@ -97,8 +93,12 @@ export default class TeamGitTree extends Component {
 			}
 		}
 
-		/* listens for an git commit event from main.js webContent.send
-		 then sends commit string to the server via socket */
+		/**
+		 * Listens for git commit event - 'newGlobalGitNode' - from index.js
+		 * @param {String} - event
+		 * @param {Object} - incomingGit
+		 * @return {Object} - returns abstracted object values with commit information
+		 */
 		ipcRenderer.on('newGlobalGitNode', function(event, incomingGit){
 			cy.nodes().removeClass('new');
 			cy.edges().removeClass('new');
