@@ -15,12 +15,12 @@ export default class LocalGraph extends Component {
 
     // parses through local data saved in state and returns data to graph
     this.props.getAppState.localData
-    .map(function (commit) {
-      return new Date(commit.time * 1000).toString().slice(4, 11)
-    })
-    .forEach(function (x) {
-      count[x] = (count[x] || 0) + 1;
-    });
+      .map(function (commit) {
+        return new Date(commit.time * 1000).toString().slice(4, 11)
+      })
+        .forEach(function (x) {
+          count[x] = (count[x] || 0) + 1;
+        });
 
     // creates graph-ready data object & assigns random color from 'colors' var to bar
     for (const prop in count) {
