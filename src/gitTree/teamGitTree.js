@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import $ from 'jquery';
-// import cydagre from 'cytoscape-dagre';
-// import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
 import createGitTree from './createGitTree';
-
-// cydagre( cytoscape, dagre );
 
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const path = require('path');
@@ -101,6 +97,7 @@ export default class TeamGitTree extends Component {
 		 * Listens for git commit event - 'newGlobalGitNode' - from index.js
 		 * @param {String} - event
 		 * @param {Object} - incomingGit
+		 * @return {Object} - returns abstracted object values with commit information
 		 */
 		ipcRenderer.on('newGlobalGitNode', function(event, incomingGit){
 			cy.nodes().removeClass('new');

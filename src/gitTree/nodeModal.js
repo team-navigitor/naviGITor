@@ -9,7 +9,7 @@ $(document).ready(function() {
 	 * Listens for node click event - 'newGlobalGitNode' - to open modal with statistics
 	 * @param {String} - event
 	 * @param {Object} - data
-	 * @return {String} appends to HTML elements in modal
+	 * @return {Object} - appends abstracted object values to HTML elements in modal
 	 */
 	ipcRenderer.on('nodeModalWindow', function(event, data){
 		$('.node-commit').append(data.commit);

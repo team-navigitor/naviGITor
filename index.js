@@ -6,7 +6,6 @@ const path = require('path');
 const gitParser = require('./src/gitParser/gitparser.js');
 const exec = child.exec();
 const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
-//var ls = child.fork('fork.js');
 const Shell = require ('shelljs');
 const fs = require('fs');
 const Rx = require('rxjs/Rx');
