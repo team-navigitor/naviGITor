@@ -3,12 +3,18 @@
 	position: absolute;
 	top: 50%;
 	transform: translate(-50%, -50%);
+
+	img {
+		display: block;
+		margin: 0 auto;
+	}
 }
 #days-form-container {
   display: flex;
   flex-direction: column;
 
 	h5 {
+		text-align: center;
     font-size: 18px;
     padding-top: 20px;
     margin-top: 0;
