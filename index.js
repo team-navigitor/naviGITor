@@ -3,15 +3,11 @@ const child = require('child_process');
 const { ipcMain, dialog } = require('electron');
 const chokidar = require('chokidar');
 const path = require('path');
-<<<<<<< HEAD
 const gitParser = require('./src/gitParser/gitparser.js');
 const exec = child.exec();
 const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
-//var ls = child.fork('fork.js');
 
-=======
-const gitParser = require('./src/GitParser/gitparser');
->>>>>>> 96148c3e60278bddbf8e849ef9ce87b3ebd995b1
+
 const fs = require('fs');
 const Rx = require('rxjs/Rx');
 
