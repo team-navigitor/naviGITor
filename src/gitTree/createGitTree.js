@@ -79,6 +79,11 @@ export default function createGitTree(gitTreeId, gitNodes, gitEdges) {
 		}
 	});
 
+	/**
+	 * Listens for local git commit event - 'parsedCommit' - from index.js
+	 * @param {Object} - evt
+	 * @return {Object} - returns abstracted object values on clicked node
+	 */
 	cy.on('click', 'node', function(evt) {
 		let nodeEventData = evt.cyTarget._private.data;
 
