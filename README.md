@@ -1,8 +1,8 @@
-# navigITor
+<img src="./images/darknaviGitorWord.png" width="600"/>
 
 __navigITor__ is a visualization of a team-based Git workflow that updates in real-time when users emit Git events. 
 
-<img src="./images/navigitor-gif.gif" />
+<img src="./images/navigitor-gif.gif" style="display:block; margin:0 auto;" width="600"/>
 
 Technologies used in this project include:
 
