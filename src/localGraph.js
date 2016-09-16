@@ -57,5 +57,5 @@ export default class LocalGraph extends Component {
 
 LocalGraph.propTypes = {
   getAppState: React.PropTypes.shape,
-  localData: React.PropTypes.arrayOf,
+  localData: React.PropTypes.arrayOf(React.PropTypes.string),
 };
