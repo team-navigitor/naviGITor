@@ -64,7 +64,7 @@ export default class TeamAnalytics extends Component {
     return (
       <div className='chart-container'>
         <div id='days-form-container'>
-        <form id='numDays' className='days-form' onSubmit={this.getCollection.bind(this)}>
+        <form id='numDays' className='days-form' onSubmit={this.getEventsByTime.bind(this)}>
             <h5>See commits per user for the last <input id='daysInput' type='text' /> days:</h5>             
             </form>           
         </div>      

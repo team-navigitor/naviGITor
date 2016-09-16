@@ -6,12 +6,8 @@ const path = require('path');
 const gitParser = require('./src/gitParser/gitparser.js');
 const exec = child.exec();
 const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
-
-
 const fs = require('fs');
 const Rx = require('rxjs/Rx');
-
-const fork = child.fork(`${__dirname}/src/terminal/fork.js`);
 
 
 /* *****************************************************************************
