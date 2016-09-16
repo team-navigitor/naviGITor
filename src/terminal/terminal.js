@@ -31,7 +31,6 @@ export default class TerminalView extends Component {
 
 		//define initial term prompt
 		ipcRenderer.on('send-dir', (event, dir) => {
-			console.log(dir)
 			term.write(dir.dirOnly + '$ ')
 		})
 		//call prompt to initialize terminal.
@@ -41,7 +40,6 @@ export default class TerminalView extends Component {
 		//write reply to terminal
 		ipcRenderer.on('reply', (event, stdout) => {
 			if (stdout.res !== '') {
-				console.log(JSON.stringify(stdout))
 				let node = document.getElementById("terminal");
 				let counter = 0;
 				let replyArr = stdout.res.split('\n');
@@ -49,7 +47,7 @@ export default class TerminalView extends Component {
 					term.write('\r\n' + el);
 					counter++;
 				});
-			
+
 				if (counter >= 10) node.scrollTop = node.scrollHeight;
 			}
 			ipcRenderer.send('get-dir');
