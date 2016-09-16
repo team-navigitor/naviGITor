@@ -1,5 +1,3 @@
-'use strict';
-
 import io from 'socket.io-client';
 import { ipcRenderer } from 'electron';
 import React, { Component } from 'react';
