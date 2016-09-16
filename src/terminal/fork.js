@@ -5,12 +5,10 @@ const exec = require('child_process').exec;
 //const ptyFork = fork(pty)
 process.on('message', (m) => {
     if(m === 'get-dir') {
-        console.log('getting dir')
         let pwd = getDir()
         let user = '';
         exec('id -u -n', (err, stdout, stderr) => {
             const assignUser = input => {
-                console.log(input);
                 user = input;
             };
             assignUser(stdout)
@@ -26,14 +24,12 @@ process.on('message', (m) => {
     }
     //if (err) console.error(err)
     else{
-        console.log('fork msg rec')
     let res = '';
     let pwd = '';
     const arr = m.split(' ');
     var command = arr.shift();
     if (command === 'git') {
         exec(m, (error, stdout, stderr) => {
-            console.log('err: ', stderr)
             error ? res = stderr : res = stdout;
             pwd = getDir();
             process.send({
@@ -53,16 +49,9 @@ process.on('message', (m) => {
         })
     }
     }
-    //var out = process.stdout.on(m);
-    //console.log('out: ', out)
-    //console.log(process.stdin.write('$' + m + '\n'))
-    //process.send('hi')
+
 })
 
-// process.on('gett-dir', () => {
-//     console.log('fork send-dir firing')
-//     process.send('send-dir', 'hi')
-// })
 
 getDir = () => {
     fullDir = shell.pwd().stdout.split('/');

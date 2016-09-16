@@ -12,7 +12,6 @@ import $ from 'jquery';
 let socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
 
-
 export default class App extends Component {
 	constructor(props) {
 		super(props);

@@ -31,7 +31,6 @@ export default class Routes extends Component {
            <IndexRoute component = {Login} />
            <Route path = "Signup" component = {Signup} />
            <Route path = "TeamLogin" component = {TeamLogin} />
-
            <Route path = "Main" component = {Main}>
              <IndexRoute component = {Logo} />
              <Route path = "TeamGitTree" component = {TeamGitTree} />
@@ -40,12 +39,12 @@ export default class Routes extends Component {
              <Route path = "Terminal" component = {TerminalView} />
              <Route path = "LocalGraph" component = {LocalGraph} />
              <Route path = "Profile" component = {Profile} />
-
            </Route>
          </Route>
       </Router>
     );
   }
 }
+
 
 ReactDOM.render((<Routes />), document.getElementById('app'));
