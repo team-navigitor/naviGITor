@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import $ from 'jquery';
-import cydagre from 'cytoscape-dagre';
-import dagre from 'dagre';
 import { ipcRenderer } from 'electron';
 import createGitTree from './createGitTree';
-
-cydagre( cytoscape, dagre );
 
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const path = require('path');
@@ -24,6 +20,7 @@ export default class LocalGitTree extends Component {
 
 		// loop through all local git activity, and store as nodes
 		for (var i = 0; i < localGitHistory.length; i++) {
+
 			// if node has merge event, add merge class to add css properties
 			if (localGitHistory[i].eventType === 'commit (merge)') {
 				localGitNodes.push({
@@ -98,8 +95,12 @@ export default class LocalGitTree extends Component {
 			}
 		}
 
-		/* listens for an git commit event from main.js webContent.send
-		 then sends commit string to the server via socket */
+		/**
+		 * Listens for local git commit event - 'parsedCommit' - from index.js
+		 * @param {String} - event
+		 * @param {Object} - incomingGit
+		 * @return {Object} - returns abstracted object values with commit information
+		 */
 		ipcRenderer.on('parsedCommit', function(event, localGit){
 			cy.nodes().removeClass('new');
 			cy.edges().removeClass('new');
