@@ -3,7 +3,7 @@
 <head>
   <title>Node Details</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Catamaran|Quattrocento+Sans|Work+Sans" rel="stylesheet">
   <script src="https://use.fontawesome.com/0b16edf27c.js"></script>
 </head>
 <style>
@@ -20,6 +20,7 @@
     font-size: 1em;
     margin-right: 0;
     margin-top: 0;
+    -webkit-app-region: no-drag;
   }
 
   #content-container {
@@ -40,7 +41,7 @@
     width: 100%;
   }
 </style>
-<body>
+<body style="-webkit-app-region: drag">
   <button id='exit-button'><i class="fa fa-times fa-lg" aria-hidden="true"></i></button>
   <div id='content-container'>
    <p class='contrast' id='header'>COMMIT INFORMATION</p>
