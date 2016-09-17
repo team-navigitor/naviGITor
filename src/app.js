@@ -1,87 +1,74 @@
-//SCSS file
-import '../scss/main.scss';
-
-'use strict';
-
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import { ipcRenderer } from 'electron';
-import $ from 'jquery';
+import React, { Component } from 'react';
+import '../scss/main.scss';
 
-let socket = io('http://navigitorsite.herokuapp.com');
+const socket = io('http://navigitorsite.herokuapp.com');
 let socketRoom = null;
 
 export default class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			orgName: '',
-			repoName: '',
-			newestGitEvent: '',
-			githubAvatar: '',
-			username: '',
-			teamData: [],
-			localData: []
-		}
-		this.setAppState = this.setAppState.bind(this);
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      orgName: '',
+      repoName: '',
+      newestGitEvent: '',
+      githubAvatar: '',
+      username: '',
+      teamData: [],
+      localData: [],
+    };
+    this.setAppState = this.setAppState.bind(this);
+  }
 
-	componentDidMount() {
-		/* listens for a git commit event from main.js webContent.send then sends commit string to the server via socket */
-		//OwnLocalCommit - Tested
-		ipcRenderer.on('parsedCommit', function(event, arg){
-			console.log('room: ', socketRoom)
-			if(socketRoom) socket.emit('broadcastGit', {'room': socketRoom, 'data': JSON.stringify(arg, null, 1)});
-			this.setAppState({ localData: this.state.localData.concat(arg) });
-		}.bind(this));
+  componentDidMount() {
+    // receives historical data of entire team's git logs from DB; saves to state
+    socket.on('completeDBLog', function (data) {
+      this.setAppState({ teamData: data });
+    }.bind(this));
 
-		//TeamMemberLocalCommit - need to test
-		socket.on('incomingCommit', function(data){
-			console.log('broadcast loud and clear: ' + data);
+    // receives historical data from user's local git log file; saves to state
+    ipcRenderer.on('parsedCommitAll', function (event, arg) {
+      const data = {};
+      data.localData = arg;
+      this.setAppState(data);
+    }.bind(this));
 
-			// Sent incoming commit to main processor to git tree
-			ipcRenderer.send('newCommitToRender', JSON.parse(data));
+		// listens for real-time updates (live commits) from user's local git file; saves to state
+    ipcRenderer.on('parsedCommit', function (event, arg) {
+      if (socketRoom) socket.emit('broadcastGit', { room: socketRoom, data: JSON.stringify(arg, null, 1) });
+      this.setAppState({ localData: this.state.localData.concat(arg) });
+    }.bind(this));
 
-			this.setAppState({ teamData: this.state.teamData.concat([JSON.parse(data)])});
-		}.bind(this));
+		// listens for real-time updates (live commits) from a team member's local git files; saves to state
+    socket.on('incomingCommit', function (data) {
+    // Sent incoming commit to main processor to git tree
+      ipcRenderer.send('newCommitToRender', JSON.parse(data));
+      this.setAppState({ teamData: this.state.teamData.concat([JSON.parse(data)]) });
+    }.bind(this));
+  }
 
-		//OwnGitlogLocalFile - Tested
-		ipcRenderer.on('parsedCommitAll', function(event, arg){
-			let data = {};
-			data['localData'] = arg;
-			console.log(data.localData[0])
-			this.setAppState(data);
-		}.bind(this));
+  // plugs user into same room with team members
+  setSocketRoom(obj) {
+    if (socketRoom) socket.emit('unsubscribe', { room: socketRoom });
+    socket.emit('subscribe', { room: `${obj.orgName}.${obj.repoName}live` });
+    socketRoom = `${obj.orgName}.${obj.repoName}live`;
+  }
 
-		//TeamGitLogFromDB - need to test
-		socket.on('completeDBLog', function(data){
-			this.setAppState({ teamData: data });
-		}.bind(this));
-	}
+  // method to be passed down to child components for them to access state
+  setAppState(obj) {
+    this.setState.bind(this)(obj);
+    if (obj.orgName) this.setSocketRoom(obj);
+  }
 
-	// Socket handling for app. Must be global to current page for ipcRenderer + React
-	setSocketRoom(obj) {
-		if(socketRoom) socket.emit("unsubscribe", { room: socketRoom });
-		socket.emit("subscribe", { room: `${obj.orgName}.${obj.repoName}live` });
-		socketRoom = `${obj.orgName}.${obj.repoName}live`;
-	}
-
-	// need to test this func being called from other components
-	setAppState(obj){
-		this.setState.bind(this)(obj);
-		// console.log('data coming in ' +JSON.stringify(obj));
-		if (obj['orgName']) {
-			// console.log('yes obj is orgName '+obj['orgName']);
-			this.setSocketRoom(obj);
-		}
-	}
-
-	render() {
+  render() {
     return (
-			<div>
-				{React.cloneElement(this.props.children, { setAppState: this.setAppState, getAppState: this.state } )}
-			</div>
-    )
-	}
+      <div>
+        {React.cloneElement(this.props.children, {
+          setAppState: this.setAppState,
+          getAppState: this.state,
+        })}
+      </div>
+    );
+  }
 }
