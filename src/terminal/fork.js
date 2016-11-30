@@ -1,5 +1,6 @@
-const shell = require('shelljs');
+
 const fork = require('child_process').fork;
+
 const exec = require('child_process').exec;
 //const pty = ('pty.js')
 //const ptyFork = fork(pty)
@@ -51,7 +52,6 @@ process.on('message', (m) => {
     }
 
 })
-
 
 getDir = () => {
     fullDir = shell.pwd().stdout.split('/');

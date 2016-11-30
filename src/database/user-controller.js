@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const User = require('./user-model.js')
 const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
-var MONGO_URI = 'mongodb://navigitor:browncouch123@ds019826.mlab.com:19826/navigitor'
+/********* DATABASE LINK HERE *********/
 // var MONGO_URI = 'mongodb://localhost/navigitor'
 mongoose.connect(MONGO_URI);
 mongoose.connection.on('connected', function() {console.log('user connected on mLab')})
